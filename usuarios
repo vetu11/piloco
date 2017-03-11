@@ -1,0 +1,22 @@
+[
+ {
+  "posicion": 0, 
+  "ultimoUso": 1488668255.477, 
+  "ajustes": {
+   "picante": false, 
+   "hastaElFondo": false, 
+   "rondas": 30
+  }, 
+  "id": 254234845
+ }, 
+ {
+  "posicion": 0, 
+  "ultimoUso": 1488839463.302, 
+  "ajustes": {
+   "picante": false, 
+   "hastaElFondo": false, 
+   "rondas": 30
+  }, 
+  "id": 315451984
+ }
+]
