@@ -67,3 +67,15 @@ class Usuario:
             if e["posicion"] == 2:
                 self.usuariosActivos[indice]["posicion"] = 0
             indice = indice + 1
+
+
+"""
+POSICIONES:
+POSICION = 0: fuera de partida, después de acabarla o de escribir /start
+POSICION = 1: esperando lista de jugadores por parte de este usuario
+POSICION = 2: en partida
+POSICION = 3: en ajustes/personalizar.
+POSICION = 4: esperando nuevo mensaje de tipo normal
+POSICION = 5: esperando nuevo mensaje de tipo RI (reaparición instantánea)
+POSICION = 6: esperando nuevo mensaje de tipo RNI (reaparicón no instantánea)
+"""

@@ -2,11 +2,13 @@
 print "Importando librerias..."
 import json, logging
 
-offlineMode = False #sin implementar
+#offlineMode = False           #sin implementar
 
 from cosas import Partida, TOKEN, Usuario, error, enviarMensaje
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import telegram
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, inlinequeryhandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+#podrían producirse errores por la elimincación de import telegram.
+
 print "Librerias importadas"
 
 print "Declarando bot..."
@@ -248,11 +250,20 @@ dispatcher.add_handler(nuevoHandler)
 
 def comandoNewMessage(bot,update):
     try:
-        bot.send_message(chat_id=update.message.from_user.id,text="Ahora mandame el nuevo mensaje que quieras añadir y "
-                                                                  "se revisará más tarde.\n*IMPORTANTE:* debes cumplir "
-                                                                  "ciertas normas para que el bot lo pueda enviar, usa "
-                                                                  "/rules para verlas.",parse_mode=telegram.ParseMode.MARKDOWN)
-        #TODO:pone en un nuevo estado a este usuario, hay que añadir ese estado en mensajes.
+        msg = "Bien, ahora elige el tipo de mensaje que quieres hacer."
+
+        keyboard = [[InlineKeyboardButton("normal", callback_data="normal"),
+                     InlineKeyboardButton("RI", callback_data="RI"),
+                     InlineKeyboardButton("RNI", callback_data="RNI")],
+
+                    [InlineKeyboardButton("AYUDA POFABÓ", callback_data="help")]]
+
+        update.message.reply_text(msg, reply_markup=InlineKeyboardMarkup(keyboard))
+        #bot.send_message(chat_id=update.message.from_user.id,text="Ahora mandame el nuevo mensaje que quieras añadir y "
+        #                                                          "se revisará más tarde.\n*IMPORTANTE:* debes cumplir "
+        #                                                          "ciertas normas para que el bot lo pueda enviar, usa "
+        #                                                          "/rules para verlas.",parse_mode=telegram.ParseMode.MARKDOWN)
+        #TODO: Resolver respuestas posibiles.
     except Exception,e:
         error(e,bot,update)
 nuevoHandler = CommandHandler("newMessage", comandoNewMessage)
