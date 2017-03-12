@@ -2,8 +2,7 @@
 print "Importando librerias..."
 import json, logging
 
-offlineMode = False
-
+offlineMode = False #sin implementar
 
 from cosas import Partida, TOKEN, Usuario, error, enviarMensaje
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
@@ -245,6 +244,31 @@ def comandoDelPlayer(bot,update):
     except Exception,e:
         error(e,bot,update)
 nuevoHandler = CommandHandler("delplayer",comandoDelPlayer)
+dispatcher.add_handler(nuevoHandler)
+
+def comandoNewMessage(bot,update):
+    try:
+        bot.send_message(chat_id=update.message.from_user.id,text="Ahora mandame el nuevo mensaje que quieras añadir y "
+                                                                  "se revisará más tarde.\n*IMPORTANTE:* debes cumplir "
+                                                                  "ciertas normas para que el bot lo pueda enviar, usa "
+                                                                  "/rules para verlas.",parse_mode=telegram.ParseMode.MARKDOWN)
+        #TODO:pone en un nuevo estado a este usuario, hay que añadir ese estado en mensajes.
+    except Exception,e:
+        error(e,bot,update)
+nuevoHandler = CommandHandler("newMessage", comandoNewMessage)
+dispatcher.add_handler(nuevoHandler)
+
+def comandoRules(bot,update):
+    #TODO: el bot debería poner al usuario en un estado Neutro.
+    try:
+        id = update.message.from_user.id
+        msg = "*Las reglas son las siguientes:*\n-Tu mensaje no puede contener comillas sueltas. Si quieres escribi" \
+              "r comillas tendrás que poner *\\\"*\n-Para que el bot introduzca un nombre aleatorio debes escribir *" \
+              "{1}* para un primer nombre y *{2}* para un segundo si quieres.\n"
+        bot.send_message(chat_id=id,text=msg,parse_mode=telegram.ParseMode.MARKDOWN)
+    except Exception,e:
+        error(e,bot,update)
+nuevoHandler = CommandHandler("rules", comandoRules)
 dispatcher.add_handler(nuevoHandler)
 
 def mensaje(bot,update):
