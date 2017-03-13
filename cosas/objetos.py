@@ -45,11 +45,11 @@ class Usuario:
             self.usuariosActivos[posUsuLista]["ultimoUso"] = time.time()
             self.usuariosActivos[posUsuLista]["posicion"] = posicion
         else:
-            self.usuariosActivos.append({"id":idUsuario,"posicion":posicion,"ajustes":{"hastaElFondo":False,"picante":False,"rondas":30},"ultimoUso":time.time()})
+            self.usuariosActivos.append({"id":idUsuario,"posicion":posicion,"ajustes":{"hastaElFondo":False,"picante":False,"rondas":30},"ultimoUso":time.time(),"editando":None})
 
     def guardarUsuarios(self):
         with open("usuarios","w") as f:
-            json.dump(self.usuariosActivos,f,indent=True)
+            json.dump(self.usuariosActivos,f,indent=4)
 
     def borrarUsuarios(self):
         pos = 0
@@ -78,4 +78,5 @@ POSICION = 3: en ajustes/personalizar.
 POSICION = 4: esperando nuevo mensaje de tipo normal
 POSICION = 5: esperando nuevo mensaje de tipo RI (reaparición instantánea)
 POSICION = 6: esperando nuevo mensaje de tipo RNI (reaparicón no instantánea)
+POSOCION = 7: esperando segundo mensaje para RI o RNI.
 """
