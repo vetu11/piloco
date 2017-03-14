@@ -1,4 +1,4 @@
 from .objetos import Partida,Usuario
-from .sesiones import Sesion
 from .TOKEN import TOKEN
-from .funciones import nuevosMensajes,enviarMensaje,error
+from .funciones import nuevosMensajes, enviarMensaje, error, debbugPrint
+from .queryCallbacks import CB_newMessage_normal, CB_noDisponible, CB_newMessage_picante, CB_newMessage_hef, CB_newMessage_done

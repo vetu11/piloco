@@ -2,16 +2,18 @@
 print "Importando librerias..."
 import json, logging
 
-offlineMode = False
+#offlineMode = False           #sin implementar
 
+from cosas import Partida, TOKEN, Usuario, error, enviarMensaje, debbugPrint, CB_newMessage_normal, CB_noDisponible, CB_newMessage_picante, CB_newMessage_hef, CB_newMessage_done
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
+#podría dar error por eliminar import telegram.
 
-from cosas import Partida, TOKEN, Usuario, error, enviarMensaje
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import telegram
 print "Librerias importadas"
 
 print "Declarando bot..."
 updater = Updater(token=TOKEN)
+del TOKEN
 dispatcher = updater.dispatcher
 print "Bot updater y dispatcher declarados"
 
@@ -20,6 +22,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 print "Declarando objetos y variables..."
 Partidas = Partida()
 Usuarios = Usuario()
+with open("newMessages ") as f:
+    newMessages = json.load(f) # en esta variable meteremos los mensajes que quieran aportar los usuarios.
 print "Objetos y variables declarados"
 
 print "Borrando usuarios demasiado antiguos..."
@@ -60,8 +64,20 @@ def comandoCancel(bot,update):
        idUsuario = update.message.from_user.id
        Usuarios.actualizarUsuario(idUsuario,0)
        posicionPartida = Partidas.finder(idUsuario)
-       Partidas.partidasEnCurso.pop(posicionPartida)
+       posicionSesion = Usuarios.finder(idUsuario)
+
+       if posicionPartida == None:
+           pass
+       else:
+            Partidas.partidasEnCurso.pop(posicionPartida)
        bot.send_message(chat_id=update.message.chat_id, text="Cancelado.")
+
+       """Para evitar errores con los usuarios que están añadiendo mensajes:"""
+       #todo: el código de abajo daría problemas, hay que encontrar otra solución
+       # if Usuarios.usuariosActivos[posicionSesion]["editando"] != None:
+       #     newMessages.pop(Usuarios.usuariosActivos[posicionSesion]["editando"])
+       #     Usuarios.usuariosActivos[posicionSesion]["editando"] = None
+
     except Exception,e:
         error(e, bot, update)
 nuevoHandler = CommandHandler("cancel", comandoCancel)
@@ -203,14 +219,8 @@ nuevoHandler = CommandHandler("restart", comandoRestart)
 dispatcher.add_handler(nuevoHandler)
 
 def comandoAbout(bot,update):
-    bot.send_message(chat_id=update.message.from_user.id,text="Actualmente este bot está funcionando en la versión BET"
-                                                              "A 1.3\nNovedades:\n-Se han añadido mensajes\n-Se ha aña"
-                                                              "dido el comando /delplayer\n-Se ha añadido la opción par"
-                                                              "a editar el número de rondas por partida (/rondas)\n-Lig"
-                                                              "eras optimizaciónes de rendimiento.")
-    bot.send_message(chat_id=update.message.from_user.id,text="Si crees que este bot no se comporta como debería o si "
-                                                              "tienes alguna sugerencia escribe a @vetu11. Gracias por"
-                                                              " usar este bot.")
+    msg = "Actualmente este bot está funcionando en la versión *BETA 1.4*\n[Más info](github.com/vetu11/piloco)"
+    bot.send_message(chat_id=update.message.from_user.id,text=msg,parse_mode=ParseMode.MARKDOWN,disable_web_page_preview=True)
 nuevoHandler = CommandHandler("about",comandoAbout)
 dispatcher.add_handler(nuevoHandler)
 
@@ -247,35 +257,107 @@ def comandoDelPlayer(bot,update):
 nuevoHandler = CommandHandler("delplayer",comandoDelPlayer)
 dispatcher.add_handler(nuevoHandler)
 
+def comandoNewMessage(bot,update):
+    try:
+        #TODO: primero hay que comprobar si los usuarios están o no en una partida, sino se puede liar parda.
+
+        msg = "Bien, ahora elige el tipo de mensaje que quieres hacer.\n*RECUERDA:*\n-normal: simple, de un sólo mens" \
+              "aje.\n-RI: dos mensajes seguidos.\n-RNI: dos mensajes probablemente alejados."
+
+        keyboard = [[InlineKeyboardButton("normal", callback_data="newMessage_normal"),
+                     InlineKeyboardButton("RI", callback_data="newMessage_RI"),
+                     InlineKeyboardButton("RNI", callback_data="newMessage_RNI")],
+
+                    [InlineKeyboardButton("AYUDA POFABÓ 🆘", url="telegra.ph/Okay-03-12")]]
+
+        update.message.reply_text(msg, reply_markup=InlineKeyboardMarkup(keyboard),parse_mode=ParseMode.MARKDOWN)
+    except Exception,e:
+        error(e,bot,update)
+nuevoHandler = CommandHandler("newMessage", comandoNewMessage)
+dispatcher.add_handler(nuevoHandler)
+
+
 def mensaje(bot,update):
     try:
        print "Ejectutando mensaje para el usuario ", update.message.from_user.first_name
        idUsuario = update.message.from_user.id
        sesiones = Usuarios.usuariosActivos  # para comprobar la posición del usuario
        posicionUsuarioEnSesiones = Usuarios.finder(idUsuario)
+
        if posicionUsuarioEnSesiones == None:
-           print "ejecutando mensaje/if"
            bot.send_message(chat_id=idUsuario,text="Parece que tienes que usar /start.\nEstamos trabajando en soluciona"
                                                    "r esto.")
-       elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 1:
-           print "Ejecutando mensaje/añadir jugador"
+
+       elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 1: # AÑADIENDO JUGADORES A LA LISTA
            Partidas.partidasEnCurso[Partidas.finder(idUsuario)]["jugadores"].append(update.message.text)
            if len(Partidas.partidasEnCurso[Partidas.finder(idUsuario)]["jugadores"]) <2:
-               print "Ejecutando mensaje/añadir jugador/un jugador"
                mensaje = "Por favor, si quieres cancelar usa /cancel"
            else:
-               print "Ejecutando mensaje/añadir jugador/mas de un jugador"
                mensaje = "Cuando hayas terminado escribe /done\nPor favor, si quieres cancelar usa /cancel"
            bot.send_message(chat_id=update.message.chat_id,text=mensaje)
-           print Partidas.partidasEnCurso[Partidas.finder(idUsuario)]["jugadores"]
+
+
+       elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 4: # AÑADIENDO MENSAJES NUEVOS A LA LISTA
+
+            pos = len(newMessages)
+
+            newMessages.append({"id":None})
+            newMessages[pos]["tipo"] = "normal"
+            newMessages[pos]["variantes"] = []
+            newMessages[pos]["text"] = update.message.text
+
+            print "%s ha añadido un nuevo mensaje."%(update.message.from_user.id)
+
+            Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"] = pos
+
+            s = update.message.text
+            msg = 'Tu mensaje\n"%s"\nSelecciona categorías.' % s.encode('utf-8')
+
+            keyboard = [[InlineKeyboardButton("Picante ❎", callback_data="newMessage_picante"),
+                         InlineKeyboardButton("Hasta el fondo ❎", callback_data="newMessage_hef")],
+
+                        [InlineKeyboardButton("Hecho 👌", callback_data="newMessage_done")]]
+
+            update.message.reply_text(msg,reply_markup=InlineKeyboardMarkup(keyboard),parse_mode=ParseMode.MARKDOWN)
+
        else:
-           print "ejecutando mensaje/else"
            bot.send_message(chat_id=update.message.chat_id,text="No entiendo que quieres decir.")
+
     except Exception,e:
         error(e, bot, update)
+
 nuevoHandler = MessageHandler([Filters.text], mensaje)
 dispatcher.add_handler(nuevoHandler)
+
+
+def inlineKeyboardCallback(bot, update):
+    try:
+
+        data = update.callback_query.data
+
+        if data == "newMessage_normal":
+            CB_newMessage_normal(bot,update,Usuarios)
+        elif data == "newMessage_RI":
+            CB_noDisponible(bot, update, Usuarios)
+            #TODO
+        elif data == "newMessage_RI":
+            CB_noDisponible(bot, update, Usuarios)
+            #TODO
+        elif data == "newMessage_picante":
+            CB_newMessage_picante(bot, update, Usuarios, newMessages)
+        elif data == "newMessage_hef":
+            CB_newMessage_hef(bot, update, Usuarios, newMessages)
+        elif data == "newMessage_done":
+            CB_newMessage_done(bot, update, Usuarios)
+
+    except Exception,e:
+        error(e,bot,update) #todo: test no envía el mensaje: update ya no sirve cuando es query
+nuevoHandler = CallbackQueryHandler(inlineKeyboardCallback)
+dispatcher.add_handler(nuevoHandler)
+
 del nuevoHandler
+
+#TODO: añadir un error handler
 print "Handlers declarados"
 
 print "Iniciando bot..."
@@ -290,6 +372,18 @@ while True:
         print "Guardando usuarios..."
         Usuarios.guardarUsuarios()
         print "Usuarios guardados"
+
+        print "Guardando nuevos mensajes..."
+        i = 0
+        for e in newMessages:
+            if "variantes" in e:
+                if len(e["variantes"]) == 0:
+                    newMessages[i].pop("variantes")
+            i = i + 1
+
+        with open("newMessages","w") as f:
+            json.dump(newMessages,f,indent=4)
+        print "Nuevos mensajes guardados"
 
         print "Apagando bot..."
         updater.stop()
