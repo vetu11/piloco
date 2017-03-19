@@ -164,5 +164,5 @@
   {"id":94,"tipo":"RNI","text0":"{1} es el DJ hasta nuevo aviso, el decide que se pone.","text1":"{1} puede dejar de ser DJ."},
   {"id":154,"tipo":"RNI","text0":"¡{1} eres ruso! Habla con acento ruso hasta nuevo aviso.","text1":"{1} ya puedes hablar sin ruso ruso."},
   {"id":155,"tipo":"RNI","text0":"¡{1} eres latino! Habla con acento latino hasta nuevo aviso.","text1":"{1} ya puedes hablar sin acento latino."},
-  {"id":156,"tipo":"RNI","text0":"¡{1} eres alemán! Habla con acento chino hasta nuevo aviso.","text1":"{1} ya puedes hablar sin acento chino."}
+  {"id":156,"tipo":"RNI","text0":"¡{1} eres chino! Habla con acento chino hasta nuevo aviso.","text1":"{1} ya puedes hablar sin acento chino."}
 ]
