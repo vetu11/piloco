@@ -4,7 +4,7 @@ import json, logging
 
 #offlineMode = False           #sin implementar
 
-from cosas import Partida, TOKEN, Usuario, error, enviarMensaje, debbugPrint, CB_newMessage_normal, CB_noDisponible, CB_newMessage_picante, CB_newMessage_hef, CB_newMessage_done
+from cosas import Partida, TOKEN, Usuario, error, enviarMensaje, debbugPrint, CB_newMessage_normal, CB_noDisponible, CB_newMessage_picante, CB_newMessage_hef, CB_newMessage_done, CB_newMessage_RI, CB_newMessage_RNI
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 #podría dar error por eliminar import telegram.
@@ -113,7 +113,7 @@ def comandoNext(bot,update):
         if sesiones[posicionUsuarioEnSesiones]["posicion"] == 2:
             enviarMensaje(bot, update, Partidas, Usuarios)
         else:
-            bot.send_message(chat_id=update.message.chat_id, text="No tienes ninguna partida en curso.")
+            bot.send_message(chat_id=update.message.chat_id, text="No tienes ninguna partida en curso.", parse_mode=ParseMode.MARKDOWN)
     except Exception,e:
         error(e, bot, update)
 nuevoHandler = CommandHandler("next", comandoNext)
@@ -144,7 +144,7 @@ def comandoAjustes(bot,update):
         else:
             mensaje = mensaje + "Mensajes \"picantes\" *DESACTIVADOS*. Usa /pi para activarlos\n"
         mensaje = mensaje + "*" + str(usuarioAjustes["rondas"]) + "* rondas por partida. \"/rondas (aquí Nº de rondas)\" para ajustarlo"
-        bot.send_message(chat_id=update.message.from_user.id,text=mensaje,parse_mode=telegram.ParseMode.MARKDOWN)
+        bot.send_message(chat_id=update.message.from_user.id,text=mensaje,parse_mode=ParseMode.MARKDOWN)
     except Exception,e:
         error(e, bot, update)
 nuevoHandler = CommandHandler("settings", comandoAjustes)
@@ -254,7 +254,8 @@ def comandoDelPlayer(bot,update):
                                                                           " #")
     except Exception,e:
         error(e,bot,update)
-nuevoHandler = CommandHandler("delplayer",comandoDelPlayer)
+
+nuevoHandler = CommandHandler("delplayer", comandoDelPlayer)
 dispatcher.add_handler(nuevoHandler)
 
 def comandoNewMessage(bot,update):
@@ -273,6 +274,7 @@ def comandoNewMessage(bot,update):
         update.message.reply_text(msg, reply_markup=InlineKeyboardMarkup(keyboard),parse_mode=ParseMode.MARKDOWN)
     except Exception,e:
         error(e,bot,update)
+
 nuevoHandler = CommandHandler("newMessage", comandoNewMessage)
 dispatcher.add_handler(nuevoHandler)
 
@@ -320,6 +322,69 @@ def mensaje(bot,update):
 
             update.message.reply_text(msg,reply_markup=InlineKeyboardMarkup(keyboard),parse_mode=ParseMode.MARKDOWN)
 
+
+       elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 5:  # AÑADIENDO MENSAJES NUEVOS A LA LISTA
+
+           pos = len(newMessages)
+
+           newMessages.append({"id": None})
+           newMessages[pos]["tipo"] = "RI"
+           newMessages[pos]["variantes"] = []
+           newMessages[pos]["text0"] = update.message.text
+
+           Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"] = pos
+
+           s = update.message.text
+           msg = 'Tu mensaje\n"%s"\nEnvía ahora tu segundo mensaje' % s.encode('utf-8')
+
+
+           update.message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+
+           Usuarios.actualizarUsuario(idUsuario, 7)
+
+
+       elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 6:  # AÑADIENDO MENSAJES NUEVOS A LA LISTA
+
+           pos = len(newMessages)
+
+           newMessages.append({"id": None})
+           newMessages[pos]["tipo"] = "RNI"
+           newMessages[pos]["variantes"] = []
+           newMessages[pos]["text0"] = update.message.text
+
+           Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"] = pos
+
+           s = update.message.text
+           msg = 'Tu mensaje\n"%s"\nEnvía ahora tu segundo mensaje' % s.encode('utf-8')
+
+           update.message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+
+           Usuarios.actualizarUsuario(idUsuario, 7)
+
+
+       elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 7:  # AÑADIENDO MENSAJES NUEVOS A LA LISTA
+
+
+            pos = Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"]
+
+            newMessages[pos]["text1"] = update.message.text
+
+            print "%s ha añadido un nuevo mensaje." % (update.message.from_user.id)
+
+            l = newMessages[pos]["text0"]
+            s = update.message.text
+            msg = 'Tu mensaje\n"%s"\n"%s"\nSelecciona categorías.' % (s.encode('utf-8'),l.encode('utf-8'))
+
+            keyboard = [[InlineKeyboardButton("Picante ❎", callback_data="newMessage_picante"),
+                        InlineKeyboardButton("Hasta el fondo ❎", callback_data="newMessage_hef")],
+
+                       [InlineKeyboardButton("Hecho 👌", callback_data="newMessage_done")]]
+
+            update.message.reply_text(msg, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.MARKDOWN)
+
+
+
+
        else:
            bot.send_message(chat_id=update.message.chat_id,text="No entiendo que quieres decir.")
 
@@ -332,17 +397,14 @@ dispatcher.add_handler(nuevoHandler)
 
 def inlineKeyboardCallback(bot, update):
     try:
-
         data = update.callback_query.data
 
         if data == "newMessage_normal":
             CB_newMessage_normal(bot,update,Usuarios)
         elif data == "newMessage_RI":
-            CB_noDisponible(bot, update, Usuarios)
-            #TODO
-        elif data == "newMessage_RI":
-            CB_noDisponible(bot, update, Usuarios)
-            #TODO
+            CB_newMessage_RI(bot, update, Usuarios)
+        elif data == "newMessage_RNI":
+            CB_newMessage_RNI(bot, update, Usuarios)
         elif data == "newMessage_picante":
             CB_newMessage_picante(bot, update, Usuarios, newMessages)
         elif data == "newMessage_hef":
@@ -363,7 +425,6 @@ print "Handlers declarados"
 print "Iniciando bot..."
 updater.start_polling()
 print "Bot iniciado"
-
 
 while True:
     input_C = raw_input(">")

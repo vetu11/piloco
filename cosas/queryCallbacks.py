@@ -34,6 +34,40 @@ def CB_newMessage_normal(bot,update,Usuarios):
                           parse_mode=ParseMode.MARKDOWN)
 
 
+def CB_newMessage_RI(bot,update,Usuarios):
+    query = update.callback_query
+
+    Usuarios.actualizarUsuario(update.callback_query.from_user.id,5)
+
+    msg="Estas escribiendo un mensaje de tipo RI (dos mensajes seguidos). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
+        "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
+
+    keyboard = [[InlineKeyboardButton("AYUDA 🆘", url="telegra.ph/Okay-03-12")]]
+
+    bot.edit_message_text(text=msg,
+                          chat_id=query.message.chat_id,
+                          message_id=query.message.message_id,
+                          reply_markup=InlineKeyboardMarkup(keyboard),
+                          parse_mode=ParseMode.MARKDOWN)
+
+
+def CB_newMessage_RNI(bot,update,Usuarios):
+    query = update.callback_query
+
+    Usuarios.actualizarUsuario(update.callback_query.from_user.id,6)
+
+    msg="Estas escribiendo un mensaje de tipo RI (dos mensajes separados). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
+        "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
+
+    keyboard = [[InlineKeyboardButton("AYUDA 🆘", url="telegra.ph/Okay-03-12")]]
+
+    bot.edit_message_text(text=msg,
+                          chat_id=query.message.chat_id,
+                          message_id=query.message.message_id,
+                          reply_markup=InlineKeyboardMarkup(keyboard),
+                          parse_mode=ParseMode.MARKDOWN)
+
+
 def CB_newMessage_picante(bot, update, Usuarios, newMessages):
     query = update.callback_query
 
@@ -59,6 +93,7 @@ def CB_newMessage_picante(bot, update, Usuarios, newMessages):
     bot.edit_message_reply_markup(chat_id=query.message.chat_id,
                                   message_id=query.message.message_id,
                                   reply_markup=InlineKeyboardMarkup(keyboard))
+
 
 def CB_newMessage_hef(bot, update, Usuarios, newMessages):
     query = update.callback_query
@@ -86,7 +121,8 @@ def CB_newMessage_hef(bot, update, Usuarios, newMessages):
                                   message_id=query.message.message_id,
                                   reply_markup=InlineKeyboardMarkup(keyboard))
 
-def CB_newMessage_done(bot, update, Usuarios):
+def CB_newMessage_done(bot,
+                       update, Usuarios):
     query = update.callback_query
 
     msg = "Gracias por tu aportación, el mensaje se incluirá próximamente."
