@@ -1,5 +1,6 @@
 #coding=utf-8
 import random
+from telegram import ParseMode
 
 def elegirNombre(listaDeNombres):
     nombre1 = listaDeNombres[random.randint(0, len(listaDeNombres) - 1)]
@@ -93,7 +94,7 @@ def enviarMensaje(bot,update,Partidas,Usuarios):
             if x != None:
                 Partidas.partidasEnCurso[posicionPartida]["siguiente"]["reap"] = True
                 Partidas.partidasEnCurso[posicionPartida]["siguiente"]["text"] = x
-        bot.send_message(chat_id=update.message.chat_id, text=mensaje)
+        bot.send_message(chat_id=update.message.chat_id, text=mensaje, parse_mode=ParseMode.MARKDOWN)
 
 def error(e,bot,update):
     print "ERROR\n", e
