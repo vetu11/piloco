@@ -100,6 +100,3 @@ def error(e,bot,update):
     print "ERROR\n", e
     bot.send_message(chat_id=update.message.chat_id, text="Oh oh. Parece que ha ocurrido un error. Por favor, informa a"
                                                           " @vetu11.\nSi el error persiste usa /restart")
-
-def debbugPrint(txt):
-    print txt

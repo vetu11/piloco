@@ -3,7 +3,7 @@
 print "Importando librerias..."
 
 import json, logging, random
-from cosas import Partida, TOKEN, Usuario, error, enviarMensaje, debbugPrint, NewMessage, Revisar
+from cosas import Partida, TOKEN, Usuario, error, enviarMensaje, NewMessage, Revisar
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 import testFreeID
@@ -110,11 +110,6 @@ def comandoCancel(bot,update):
             Partidas.partidasEnCurso.pop(posicionPartida)
        bot.send_message(chat_id=update.message.chat_id, text="Cancelado.")
 
-       """Para evitar errores con los usuarios que están añadiendo mensajes:"""
-       #todo: el código de abajo daría problemas, hay que encontrar otra solución
-       # if Usuarios.usuariosActivos[posicionSesion]["editando"] != None:
-       #     newMessages.pop(Usuarios.usuariosActivos[posicionSesion]["editando"])
-       #     Usuarios.usuariosActivos[posicionSesion]["editando"] = None
 
     except Exception,e:
         error(e, bot, update)
@@ -257,7 +252,7 @@ nuevoHandler = CommandHandler("restart", comandoRestart)
 dispatcher.add_handler(nuevoHandler)
 
 def comandoAbout(bot,update):
-    msg = "Actualmente este bot está funcionando en la versión *v0.6.1*\n[Más info](github.com/vetu11/piloco)"
+    msg = "Actualmente este bot está funcionando en la versión *v0.6.2*\n[Más info](github.com/vetu11/piloco)"
     bot.send_message(chat_id=update.message.from_user.id,text=msg,parse_mode=ParseMode.MARKDOWN,disable_web_page_preview=True)
 nuevoHandler = CommandHandler("about",comandoAbout)
 dispatcher.add_handler(nuevoHandler)
@@ -304,18 +299,21 @@ dispatcher.add_handler(nuevoHandler)
 
 def comandoNewMessage(bot,update):
     try:
-        #TODO: primero hay que comprobar si los usuarios están o no en una partida, sino se puede liar parda.
+        if Usuarios.usuariosActivos[Usuarios.finder(update.message.from_user.id)]["posicion"] == 0:
 
-        msg = "Bien, ahora elige el tipo de mensaje que quieres hacer.\n*RECUERDA:*\n-normal: simple, de un sólo mens" \
-              "aje.\n-RI: dos mensajes seguidos.\n-RNI: dos mensajes probablemente alejados."
+            msg = "Bien, ahora elige el tipo de mensaje que quieres hacer.\n*RECUERDA:*\n-normal: simple, de un sólo mens" \
+                  "aje.\n-RI: dos mensajes seguidos.\n-RNI: dos mensajes probablemente alejados."
 
-        keyboard = [[InlineKeyboardButton("normal", callback_data="newMessage_normal"),
-                     InlineKeyboardButton("RI", callback_data="newMessage_RI"),
-                     InlineKeyboardButton("RNI", callback_data="newMessage_RNI")],
+            keyboard = [[InlineKeyboardButton("normal 💬", callback_data="newMessage_normal"),
+                         InlineKeyboardButton("RI 💬💬", callback_data="newMessage_RI"),
+                         InlineKeyboardButton("RNI 💬🕐💬", callback_data="newMessage_RNI")],
 
-                    [InlineKeyboardButton("AYUDA POFABÓ 🆘", url="telegra.ph/Okay-03-12")]]
+                        [InlineKeyboardButton("AYUDA POFABÓ 🆘", url="telegra.ph/Okay-03-12")]]
 
-        update.message.reply_text(msg, reply_markup=InlineKeyboardMarkup(keyboard),parse_mode=ParseMode.MARKDOWN)
+            update.message.reply_text(msg, reply_markup=InlineKeyboardMarkup(keyboard),parse_mode=ParseMode.MARKDOWN)
+        else:
+            update.message.reply_text("Para hacer esto necesito que salgas de la partida o cualquier otra cosa que esté"
+                                      "s haciendo. Usa /cancel para continuar.")
     except Exception,e:
         error(e,bot,update)
 
@@ -345,20 +343,12 @@ def mensaje(bot,update):
 
        elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 4: # AÑADIENDO MENSAJES NUEVOS A LA LISTA
 
-            pos = len(newMessages)
-
-            newMessages.append({"id":hex(random.randint(0, 10 ** 8)).replace("0x", "")})
-            newMessages[pos]["tipo"] = "normal"
-            newMessages[pos]["variantes"] = []
-            newMessages[pos]["text"] = update.message.text.encode('utf-8')
-            newMessages[pos]["revisar"] = {"puntos": (0,0), "revisado": []}
+            Usuarios.actualizarMensaje(idUsuario, text=update.message.text.encode('utf-8'))
 
             print "%s ha añadido un nuevo mensaje."%(update.message.from_user.id)
 
-            Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"] = pos
-
             s = update.message.text
-            msg = 'Tu mensaje\n"%s"\nSelecciona categorías.' % s.encode('utf-8')
+            msg = '*Tu mensaje:*\n"%s"\n*Selecciona categorías.*' % s.encode('utf-8')
 
             keyboard = [[InlineKeyboardButton("Picante ❎", callback_data="newMessage_picante"),
                          InlineKeyboardButton("Hasta el fondo ❎", callback_data="newMessage_hef")],
@@ -370,19 +360,10 @@ def mensaje(bot,update):
 
        elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 5:  # AÑADIENDO MENSAJES NUEVOS A LA LISTA
 
-           pos = len(newMessages)
-
-           newMessages.append({"id": hex(random.randint(0, 10 ** 8)).replace("0x", "")})
-           newMessages[pos]["tipo"] = "RI"
-           newMessages[pos]["variantes"] = []
-           newMessages[pos]["text0"] = update.message.text.encode('utf-8')
-           newMessages[pos]["revisar"] = {"puntos": (0, 0), "revisado": []}
-
-           Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"] = pos
+           Usuarios.actualizarMensaje(idUsuario, text=update.message.text.encode('utf-8'))
 
            s = update.message.text
-           msg = 'Tu mensaje\n"%s"\nEnvía ahora tu segundo mensaje' % s.encode('utf-8')
-
+           msg = '*Tu mensaje:*\n"%s"\n*Envía ahora tu segundo mensaje*' % s.encode('utf-8')
 
            update.message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
@@ -391,18 +372,10 @@ def mensaje(bot,update):
 
        elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 6:  # AÑADIENDO MENSAJES NUEVOS A LA LISTA
 
-           pos = len(newMessages)
-
-           newMessages.append({"id": hex(random.randint(0, 10 ** 8)).replace("0x", "")})
-           newMessages[pos]["tipo"] = "RNI"
-           newMessages[pos]["variantes"] = []
-           newMessages[pos]["text0"] = update.message.text.encode('utf-8')
-           newMessages[pos]["revisar"] = {"puntos": (0, 0), "revisado": []}
-
-           Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"] = pos
+           Usuarios.actualizarMensaje(idUsuario, text=update.message.text.encode('utf-8'))
 
            s = update.message.text
-           msg = 'Tu mensaje\n"%s"\nEnvía ahora tu segundo mensaje' % s.encode('utf-8')
+           msg = '*Tu mensaje:*\n"%s"\n*Envía ahora tu segundo mensaje*' % s.encode('utf-8')
 
            update.message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
@@ -411,16 +384,13 @@ def mensaje(bot,update):
 
        elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 7:  # AÑADIENDO MENSAJES NUEVOS A LA LISTA
 
-
-            pos = Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"]
-
-            newMessages[pos]["text1"] = update.message.text.encode('utf-8')
+            Usuarios.actualizarMensaje(idUsuario, text=update.message.text.encode('utf-8'))
 
             print "%s ha añadido un nuevo mensaje." % (update.message.from_user.id)
 
             l = update.message.text.encode('utf-8')
-            s = newMessages[pos]["text0"]
-            msg = 'Tu mensaje\n"%s"\n"%s"\nSelecciona categorías.' % (s,l)
+            s = Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"]["text0"]
+            msg = '*Tu mensaje*\n"%s"\n"%s"\n*Selecciona categorías.*' % (s,l)
 
             keyboard = [[InlineKeyboardButton("Picante ❎", callback_data="newMessage_picante"),
                         InlineKeyboardButton("Hasta el fondo ❎", callback_data="newMessage_hef")],
@@ -428,8 +398,6 @@ def mensaje(bot,update):
                        [InlineKeyboardButton("Hecho 👌", callback_data="newMessage_done")]]
 
             update.message.reply_text(msg, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.MARKDOWN)
-
-
 
 
        else:
@@ -451,11 +419,11 @@ def inlineKeyboardCallback(bot, update):
     elif data == "newMessage_RNI":
         NewMessage().RNI(bot, update, Usuarios)
     elif data == "newMessage_picante":
-        NewMessage().picante(bot, update, Usuarios, newMessages)
+        NewMessage().picante(bot, update, Usuarios)
     elif data == "newMessage_hef":
-        NewMessage().hef(bot, update, Usuarios, newMessages)
+        NewMessage().hef(bot, update, Usuarios)
     elif data == "newMessage_done":
-        NewMessage().done(bot, update, Usuarios)
+        NewMessage().done(bot, update, Usuarios, newMessages)
     elif data[:13] == "revisar_1down":
         Revisar.updown(bot, update, (-1, 0), newMessages)
     elif data[:12] == "revisar_skip":

@@ -24,11 +24,11 @@ class NewMessage:
 
         return keyboard
 
-
     def normal(self, bot, update, Usuarios):
         query = update.callback_query
 
         Usuarios.actualizarUsuario(update.callback_query.from_user.id,4)
+        Usuarios.actualizarMensaje(update.callback_query.from_user.id, init="normal")
 
         msg="Estas escribiendo un mensaje de tipo normal (de un sólo texto). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
             "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
@@ -41,11 +41,11 @@ class NewMessage:
                               reply_markup=InlineKeyboardMarkup(keyboard),
                               parse_mode=ParseMode.MARKDOWN)
 
-
     def RI(self, bot, update, Usuarios):
         query = update.callback_query
 
         Usuarios.actualizarUsuario(update.callback_query.from_user.id,5)
+        Usuarios.actualizarMensaje(update.callback_query.from_user.id, init="RI")
 
         msg="Estas escribiendo un mensaje de tipo RI (dos mensajes seguidos). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
             "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
@@ -58,11 +58,11 @@ class NewMessage:
                               reply_markup=InlineKeyboardMarkup(keyboard),
                               parse_mode=ParseMode.MARKDOWN)
 
-
     def RNI(self, bot, update, Usuarios):
         query = update.callback_query
 
         Usuarios.actualizarUsuario(update.callback_query.from_user.id,6)
+        Usuarios.actualizarMensaje(update.callback_query.from_user.id, init="RNI")
 
         msg="Estas escribiendo un mensaje de tipo RI (dos mensajes separados). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
             "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
@@ -75,20 +75,19 @@ class NewMessage:
                               reply_markup=InlineKeyboardMarkup(keyboard),
                               parse_mode=ParseMode.MARKDOWN)
 
-
-    def picante(self, bot, update, Usuarios, newMessages):
+    def picante(self, bot, update, Usuarios):
         query = update.callback_query
 
         posUsu = Usuarios.finder(query.from_user.id)
         editando = Usuarios.usuariosActivos[posUsu]["editando"]
 
-        variantesActuales = newMessages[editando]["variantes"]
+        variantesActuales = editando["variantes"]
 
         if "picante" not in variantesActuales:
-            newMessages[editando]["variantes"].append("picante")
+            editando["variantes"].append("picante")
             picante = True
         else:
-            newMessages[editando]["variantes"].remove("picante")
+            editando["variantes"].remove("picante")
             picante = False
 
         if "hastaElFondo" in variantesActuales:
@@ -102,20 +101,19 @@ class NewMessage:
                                       message_id=query.message.message_id,
                                       reply_markup=InlineKeyboardMarkup(keyboard))
 
-
-    def hef(self, bot, update, Usuarios, newMessages):
+    def hef(self, bot, update, Usuarios):
         query = update.callback_query
 
         posUsu = Usuarios.finder(query.from_user.id)
         editando = Usuarios.usuariosActivos[posUsu]["editando"]
 
-        variantesActuales = newMessages[editando]["variantes"]
+        variantesActuales = editando["variantes"]
 
         if "hastaElFondo" not in variantesActuales:
-            newMessages[editando]["variantes"].append("hastaElFondo")
+            editando["variantes"].append("hastaElFondo")
             hef = True
         else:
-            newMessages[editando]["variantes"].remove("hastaElFondo")
+            editando["variantes"].remove("hastaElFondo")
             hef = False
 
         if "picante" in variantesActuales:
@@ -129,11 +127,10 @@ class NewMessage:
                                       message_id=query.message.message_id,
                                       reply_markup=InlineKeyboardMarkup(keyboard))
 
-
-    def done(self, bot, update, Usuarios):
+    def done(self, bot, update, Usuarios, newMessages):
         query = update.callback_query
 
-        msg = "Gracias por tu aportación, el mensaje se incluirá próximamente."
+        msg = "Gracias por tu aportación, el mensaje ha pasado a revisión.\nUsa /revisar para ver mensajes en revisión."
 
         keyboard = [[]]
 
@@ -143,5 +140,6 @@ class NewMessage:
                               reply_markup=InlineKeyboardMarkup(keyboard))
 
         posUsu = Usuarios.finder(query.from_user.id)
+        newMessages.append(Usuarios.usuariosActivos[posUsu]["editando"])
         Usuarios.usuariosActivos[posUsu]["posicion"] = 0
         Usuarios.usuariosActivos[posUsu]["editando"] = None

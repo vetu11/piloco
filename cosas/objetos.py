@@ -1,5 +1,5 @@
 # coding=utf-8
-import json,time,threading
+import json, time, threading, random
 from .funciones import nuevosMensajes
 
 class Partida:
@@ -68,6 +68,37 @@ class Usuario:
                 self.usuariosActivos[indice]["posicion"] = 0
             indice = indice + 1
 
+    def actualizarMensaje(self, idUsuario, init=None, text=None):
+        """Este método actuliza el mensaje que esté editando un usuario.
+        init: establecerá un mensaje vacío del tipo que se especifique, normal/RI/RNI
+        text: establecerá el texto del mensaje que esté editando el usuario
+        variante: cambiará el valor una de las variantes del mensaje que es esté editando, picante/hef
+        """
+
+        posUsu = self.finder(idUsuario)
+
+        if init != None:
+            self.usuariosActivos[posUsu]["editando"] = {"id": hex(random.randint(0, 10 ** 8)).replace("0x", ""),
+                                                        "variantes":[],
+                                                        "revisar":{
+                                                            "puntos":(0,0),
+                                                            "revisado":[]}}
+
+            if init == "normal":
+                self.usuariosActivos[posUsu]["editando"]["tipo"] = "normal"
+            elif init == "RI":
+                self.usuariosActivos[posUsu]["editando"]["tipo"] = "RI"
+            else:
+                self.usuariosActivos[posUsu]["editando"]["tipo"] = "RNI"
+
+        elif text != None:
+
+            if self.usuariosActivos[posUsu]["editando"]["tipo"] == "normal":
+                self.usuariosActivos[posUsu]["editando"]["text"] = text
+            elif "text0" in self.usuariosActivos[posUsu]["editando"]:
+                self.usuariosActivos[posUsu]["editando"]["text1"] = text
+            else:
+                self.usuariosActivos[posUsu]["editando"]["text0"] = text
 
 """
 POSICIONES:
