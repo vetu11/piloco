@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-"""This module contains a object that represents a Telegram Video."""
+"""This module contains an object that represents a Telegram Video."""
 
 from telegram import PhotoSize, TelegramObject
 
@@ -46,16 +46,24 @@ class Video(TelegramObject):
         file_size (Optional[int]):
     """
 
-    def __init__(self, file_id, width, height, duration, **kwargs):
+    def __init__(self,
+                 file_id,
+                 width,
+                 height,
+                 duration,
+                 thumb=None,
+                 mime_type=None,
+                 file_size=None,
+                 **kwargs):
         # Required
         self.file_id = str(file_id)
         self.width = int(width)
         self.height = int(height)
         self.duration = int(duration)
         # Optionals
-        self.thumb = kwargs.get('thumb')
-        self.mime_type = str(kwargs.get('mime_type', ''))
-        self.file_size = int(kwargs.get('file_size', 0))
+        self.thumb = thumb
+        self.mime_type = mime_type
+        self.file_size = file_size
 
     @staticmethod
     def de_json(data, bot):
@@ -69,6 +77,8 @@ class Video(TelegramObject):
         """
         if not data:
             return None
+
+        data = super(Video, Video).de_json(data, bot)
 
         data['thumb'] = PhotoSize.de_json(data.get('thumb'), bot)
 

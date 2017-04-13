@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-"""This module contains a object that represents a Telegram ChatMember."""
+"""This module contains an object that represents a Telegram ChatMember."""
 
 from telegram import User, TelegramObject
 
@@ -32,8 +32,9 @@ class ChatMember(TelegramObject):
     Args:
         user (:class:`telegram.User`):
         status (str):
-    """
+        **kwargs (dict): Arbitrary keyword arguments.
 
+    """
     CREATOR = 'creator'
     ADMINISTRATOR = 'administrator'
     MEMBER = 'member'
@@ -57,6 +58,8 @@ class ChatMember(TelegramObject):
         """
         if not data:
             return None
+
+        data = super(ChatMember, ChatMember).de_json(data, bot)
 
         data['user'] = User.de_json(data.get('user'), bot)
 

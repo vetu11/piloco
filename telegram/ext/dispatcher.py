@@ -24,6 +24,7 @@ from functools import wraps
 from threading import Thread, Lock, Event, current_thread, BoundedSemaphore
 from time import sleep
 from uuid import uuid4
+from collections import defaultdict
 
 from queue import Queue, Empty
 
@@ -85,6 +86,11 @@ class Dispatcher(object):
         self.update_queue = update_queue
         self.job_queue = job_queue
         self.workers = workers
+
+        self.user_data = defaultdict(dict)
+        """:type: dict[int, dict]"""
+        self.chat_data = defaultdict(dict)
+        """:type: dict[int, dict]"""
 
         self.handlers = {}
         """:type: dict[int, list[Handler]"""
@@ -153,11 +159,7 @@ class Dispatcher(object):
                                   len(self.__async_threads))
                 break
 
-            try:
-                promise.run()
-
-            except:
-                self.logger.exception("run_async function raised exception")
+            promise.run()
 
     def run_async(self, func, *args, **kwargs):
         """Queue a function (with given args/kwargs) to be run asynchronously.
@@ -303,7 +305,7 @@ class Dispatcher(object):
             which handlers were added to the group defines the priority.
 
         Args:
-            handler (Handler): A Handler instance
+            handler (telegram.ext.Handler): A Handler instance
             group (Optional[int]): The group identifier. Default is 0
         """
 
@@ -324,7 +326,7 @@ class Dispatcher(object):
         Remove a handler from the specified group
 
         Args:
-            handler (Handler): A Handler instance
+            handler (telegram.ext.Handler): A Handler instance
             group (optional[object]): The group identifier. Default is 0
         """
         if handler in self.handlers[group]:

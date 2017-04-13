@@ -17,90 +17,11 @@
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
 """ This module contains the MessageHandler class """
+import warnings
 
 from .handler import Handler
 from telegram import Update
 from telegram.utils.deprecate import deprecate
-
-
-class Filters(object):
-    """
-    Convenient namespace (class) & methods for the filter funcs of the
-    MessageHandler class.
-    """
-
-    @staticmethod
-    def text(message):
-        return message.text and not message.text.startswith('/')
-
-    @staticmethod
-    def command(message):
-        return message.text and message.text.startswith('/')
-
-    @staticmethod
-    def audio(message):
-        return bool(message.audio)
-
-    @staticmethod
-    def document(message):
-        return bool(message.document)
-
-    @staticmethod
-    def photo(message):
-        return bool(message.photo)
-
-    @staticmethod
-    def sticker(message):
-        return bool(message.sticker)
-
-    @staticmethod
-    def video(message):
-        return bool(message.video)
-
-    @staticmethod
-    def voice(message):
-        return bool(message.voice)
-
-    @staticmethod
-    def contact(message):
-        return bool(message.contact)
-
-    @staticmethod
-    def location(message):
-        return bool(message.location)
-
-    @staticmethod
-    def venue(message):
-        return bool(message.venue)
-
-    @staticmethod
-    def status_update(message):
-        return bool(message.new_chat_member or message.left_chat_member or message.new_chat_title
-                    or message.new_chat_photo or message.delete_chat_photo
-                    or message.group_chat_created or message.supergroup_chat_created
-                    or message.channel_chat_created or message.migrate_to_chat_id
-                    or message.migrate_from_chat_id or message.pinned_message)
-
-    @staticmethod
-    def forwarded(message):
-        return bool(message.forward_date)
-
-    @staticmethod
-    def entity(entity_type):
-        """Filters messages to only allow those which have a :class:`telegram.MessageEntity`
-        where their `type` matches `entity_type`.
-
-        Args:
-            entity_type: Entity type to check for. All types can be found as constants
-                in :class:`telegram.MessageEntity`.
-
-        Returns: function to use as filter
-        """
-
-        def entities_filter(message):
-            return any([entity.type == entity_type for entity in message.entities])
-
-        return entities_filter
 
 
 class MessageHandler(Handler):
@@ -110,12 +31,10 @@ class MessageHandler(Handler):
     updates.
 
     Args:
-        filters (list[function]): A list of filter functions. Standard filters
-            can be found in the Filters class above.
-          | Each `function` takes ``Update`` as arg and returns ``bool``.
-          | All messages that match at least one of those filters will be
-            accepted. If ``bool(filters)`` evaluates to ``False``, messages are
-            not filtered.
+        filters (telegram.ext.BaseFilter): A filter inheriting from
+            :class:`telegram.ext.filters.BaseFilter`. Standard filters can be found in
+            :class:`telegram.ext.filters.Filters`. Filters can be combined using bitwise
+            operators (& for and, | for or).
         callback (function): A function that takes ``bot, update`` as
             positional arguments. It will be called when the ``check_update``
             has determined that an update should be processed by this handler.
@@ -124,6 +43,19 @@ class MessageHandler(Handler):
         pass_update_queue (optional[bool]): If the handler should be passed the
             update queue as a keyword argument called ``update_queue``. It can
             be used to insert updates. Default is ``False``
+        pass_user_data (optional[bool]): If set to ``True``, a keyword argument called
+            ``user_data`` will be passed to the callback function. It will be a ``dict`` you
+            can use to keep any data related to the user that sent the update. For each update of
+            the same user, it will be the same ``dict``. Default is ``False``.
+        pass_chat_data (optional[bool]): If set to ``True``, a keyword argument called
+            ``chat_data`` will be passed to the callback function. It will be a ``dict`` you
+            can use to keep any data related to the chat that the update was sent in.
+            For each update in the same chat, it will be the same ``dict``. Default is ``False``.
+        message_updates (Optional[bool]): Should "normal" message updates be handled? Default is
+            ``True``.
+        channel_posts_updates (Optional[bool]): Should channel posts updates be handled? Default is
+            ``True``.
+
     """
 
     def __init__(self,
@@ -131,22 +63,54 @@ class MessageHandler(Handler):
                  callback,
                  allow_edited=False,
                  pass_update_queue=False,
-                 pass_job_queue=False):
+                 pass_job_queue=False,
+                 pass_user_data=False,
+                 pass_chat_data=False,
+                 message_updates=True,
+                 channel_posts_updates=True):
+        if not message_updates and not channel_posts_updates:
+            raise ValueError('Both message_updates & channel_post_updates are False')
+
         super(MessageHandler, self).__init__(
-            callback, pass_update_queue=pass_update_queue, pass_job_queue=pass_job_queue)
+            callback,
+            pass_update_queue=pass_update_queue,
+            pass_job_queue=pass_job_queue,
+            pass_user_data=pass_user_data,
+            pass_chat_data=pass_chat_data)
         self.filters = filters
         self.allow_edited = allow_edited
+        self.message_updates = message_updates
+        self.channel_posts_updates = channel_posts_updates
+
+        # We put this up here instead of with the rest of checking code
+        # in check_update since we don't wanna spam a ton
+        if isinstance(self.filters, list):
+            warnings.warn('Using a list of filters in MessageHandler is getting '
+                          'deprecated, please use bitwise operators (& and |) '
+                          'instead. More info: https://git.io/vPTbc.')
+
+    def _is_allowed_message(self, update):
+        return (self.message_updates
+                and (update.message or (update.edited_message and self.allow_edited)))
+
+    def _is_allowed_channel_post(self, update):
+        return (self.channel_posts_updates
+                and (update.channel_post or (update.edited_channel_post and self.allow_edited)))
 
     def check_update(self, update):
         if (isinstance(update, Update)
-                and (update.message or update.edited_message and self.allow_edited)):
+                and (self._is_allowed_message(update) or self._is_allowed_channel_post(update))):
 
             if not self.filters:
                 res = True
 
             else:
-                message = update.message or update.edited_message
-                res = any(func(message) for func in self.filters)
+                message = (update.message or update.edited_message or update.channel_post
+                           or update.edited_channel_post)
+                if isinstance(self.filters, list):
+                    res = any(func(message) for func in self.filters)
+                else:
+                    res = self.filters(message)
 
         else:
             res = False
@@ -154,12 +118,11 @@ class MessageHandler(Handler):
         return res
 
     def handle_update(self, update, dispatcher):
-        optional_args = self.collect_optional_args(dispatcher)
+        optional_args = self.collect_optional_args(dispatcher, update)
 
         return self.callback(dispatcher.bot, update, **optional_args)
 
-# old non-PEP8 Handler methods
-
+    # old non-PEP8 Handler methods
     m = "telegram.MessageHandler."
     checkUpdate = deprecate(check_update, m + "checkUpdate", m + "check_update")
     handleUpdate = deprecate(handle_update, m + "handleUpdate", m + "handle_update")

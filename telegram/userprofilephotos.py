@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-"""This module contains a object that represents a Telegram
+"""This module contains an object that represents a Telegram
 UserProfilePhotos."""
 
 from telegram import PhotoSize, TelegramObject
@@ -51,6 +51,8 @@ class UserProfilePhotos(TelegramObject):
         """
         if not data:
             return None
+
+        data = super(UserProfilePhotos, UserProfilePhotos).de_json(data, bot)
 
         data['photos'] = [PhotoSize.de_list(photo, bot) for photo in data['photos']]
 

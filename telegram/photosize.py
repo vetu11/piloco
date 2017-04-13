@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-"""This module contains a object that represents a Telegram PhotoSize."""
+"""This module contains an object that represents a Telegram PhotoSize."""
 
 from telegram import TelegramObject
 
@@ -40,13 +40,13 @@ class PhotoSize(TelegramObject):
         file_size (Optional[int]):
     """
 
-    def __init__(self, file_id, width, height, **kwargs):
+    def __init__(self, file_id, width, height, file_size=None, **kwargs):
         # Required
         self.file_id = str(file_id)
         self.width = int(width)
         self.height = int(height)
         # Optionals
-        self.file_size = int(kwargs.get('file_size', 0))
+        self.file_size = file_size
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
