@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-"""This module contains a object that represents a Telegram KeyboardButton."""
+"""This module contains an object that represents a Telegram KeyboardButton."""
 
 from telegram import TelegramObject
 
@@ -37,10 +37,8 @@ class KeyboardButton(TelegramObject):
         # Required
         self.text = text
         # Optionals
-        if request_contact:
-            self.request_contact = request_contact
-        if request_location:
-            self.request_location = request_location
+        self.request_contact = request_contact
+        self.request_location = request_location
 
     @staticmethod
     def de_json(data, bot):

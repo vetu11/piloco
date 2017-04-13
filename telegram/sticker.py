@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-"""This module contains a object that represents a Telegram Sticker."""
+"""This module contains an object that represents a Telegram Sticker."""
 
 from telegram import PhotoSize, TelegramObject
 
@@ -44,15 +44,15 @@ class Sticker(TelegramObject):
         file_size (Optional[int]):
     """
 
-    def __init__(self, file_id, width, height, **kwargs):
+    def __init__(self, file_id, width, height, thumb=None, emoji=None, file_size=None, **kwargs):
         # Required
         self.file_id = str(file_id)
         self.width = int(width)
         self.height = int(height)
         # Optionals
-        self.thumb = kwargs.get('thumb')
-        self.emoji = kwargs.get('emoji', '')
-        self.file_size = int(kwargs.get('file_size', 0))
+        self.thumb = thumb
+        self.emoji = emoji
+        self.file_size = file_size
 
     @staticmethod
     def de_json(data, bot):
@@ -66,6 +66,8 @@ class Sticker(TelegramObject):
         """
         if not data:
             return None
+
+        data = super(Sticker, Sticker).de_json(data, bot)
 
         data['thumb'] = PhotoSize.de_json(data.get('thumb'), bot)
 

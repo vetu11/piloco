@@ -17,7 +17,7 @@
 #
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-"""This module contains a object that represents a Telegram User."""
+"""This module contains an object that represents a Telegram User."""
 
 from telegram import TelegramObject
 
@@ -44,14 +44,21 @@ class User(TelegramObject):
         bot (Optional[Bot]): The Bot to use for instance methods
     """
 
-    def __init__(self, id, first_name, bot=None, **kwargs):
+    def __init__(self,
+                 id,
+                 first_name,
+                 type=None,
+                 last_name=None,
+                 username=None,
+                 bot=None,
+                 **kwargs):
         # Required
         self.id = int(id)
         self.first_name = first_name
         # Optionals
-        self.type = kwargs.get('type', '')
-        self.last_name = kwargs.get('last_name', '')
-        self.username = kwargs.get('username', '')
+        self.type = type
+        self.last_name = last_name
+        self.username = username
 
         self.bot = bot
 
@@ -76,6 +83,8 @@ class User(TelegramObject):
         """
         if not data:
             return None
+
+        data = super(User, User).de_json(data, bot)
 
         return User(bot=bot, **data)
 

@@ -64,7 +64,7 @@ class NewMessage:
         Usuarios.actualizarUsuario(update.callback_query.from_user.id,6)
         Usuarios.actualizarMensaje(update.callback_query.from_user.id, init="RNI")
 
-        msg="Estas escribiendo un mensaje de tipo RI (dos mensajes separados). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
+        msg="Estas escribiendo un mensaje de tipo RNI (dos mensajes separados). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
             "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
 
         keyboard = [[InlineKeyboardButton("AYUDA 🆘", url="telegra.ph/Okay-03-12")]]

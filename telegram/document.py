@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Lesser Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-"""This module contains a object that represents a Telegram Document."""
+"""This module contains an object that represents a Telegram Document."""
 
 from telegram import PhotoSize, TelegramObject
 
@@ -33,23 +33,28 @@ class Document(TelegramObject):
 
     Args:
         file_id (str):
-        **kwargs: Arbitrary keyword arguments.
-
-    Keyword Args:
         thumb (Optional[:class:`telegram.PhotoSize`]):
         file_name (Optional[str]):
         mime_type (Optional[str]):
         file_size (Optional[int]):
+        **kwargs (dict): Arbitrary keyword arguments.
+
     """
 
-    def __init__(self, file_id, **kwargs):
+    def __init__(self,
+                 file_id,
+                 thumb=None,
+                 file_name=None,
+                 mime_type=None,
+                 file_size=None,
+                 **kwargs):
         # Required
         self.file_id = str(file_id)
         # Optionals
-        self.thumb = kwargs.get('thumb')
-        self.file_name = kwargs.get('file_name', '')
-        self.mime_type = str(kwargs.get('mime_type', ''))
-        self.file_size = int(kwargs.get('file_size', 0))
+        self.thumb = thumb
+        self.file_name = file_name
+        self.mime_type = mime_type
+        self.file_size = file_size
 
     @staticmethod
     def de_json(data, bot):
@@ -63,6 +68,8 @@ class Document(TelegramObject):
         """
         if not data:
             return None
+
+        data = super(Document, Document).de_json(data, bot)
 
         data['thumb'] = PhotoSize.de_json(data.get('thumb'), bot)
 
