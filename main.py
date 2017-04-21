@@ -61,6 +61,7 @@ def guardar():
         nID = testFreeID.buscarIDsLibres(mensajesPrincipal)
         id = {"id": nID}
         e.update(id)
+        Revisar.aceptados.remove(e)
 
         mensajesPrincipal.append(e)
 
@@ -266,7 +267,7 @@ dispatcher.add_handler(nuevoHandler)
 
 def comandoAbout(bot,update):
     state(bot, update)
-    msg = "Actualmente este bot está funcionando en la versión *v0.6.3*\n[Más info](github.com/vetu11/piloco)"
+    msg = "Actualmente este bot está funcionando en la versión *v0.6.4*\n[Más info](github.com/vetu11/piloco)"
     bot.send_message(chat_id=update.message.from_user.id,text=msg,parse_mode=ParseMode.MARKDOWN,disable_web_page_preview=True)
 nuevoHandler = CommandHandler("about",comandoAbout)
 dispatcher.add_handler(nuevoHandler)
@@ -401,15 +402,15 @@ def mensaje(bot,update):
            Usuarios.actualizarUsuario(idUsuario, 7)
 
 
-       elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 7:  # AÑADIENDO MENSAJES NUEVOS A LA LISTA
+       elif sesiones[posicionUsuarioEnSesiones]["posicion"] == 7:
 
             Usuarios.actualizarMensaje(idUsuario, text=update.message.text.encode('utf-8'))
 
             print "%s ha añadido un nuevo mensaje." % (update.message.from_user.id)
 
-            l = update.message.text.encode('utf-8')
+            l = update.message.text
             s = Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"]["text0"]
-            msg = '*Tu mensaje*\n"%s"\n"%s"\n*Selecciona categorías.*' % (s,l)
+            msg = u'*Tu mensaje*\n"%s"\n"%s"\n*Selecciona categorías.*' % (s,l)
 
             keyboard = [[InlineKeyboardButton("Picante ❎", callback_data="newMessage_picante"),
                         InlineKeyboardButton("Hasta el fondo ❎", callback_data="newMessage_hef")],
@@ -444,15 +445,15 @@ def inlineKeyboardCallback(bot, update):
     elif data == "newMessage_done":
         NewMessage().done(bot, update, Usuarios, newMessages)
     elif data[:13] == "revisar_1down":
-        Revisar.updown(bot, update, (-1, 0), newMessages)
+        Revisar.updown(bot, update, (-1, -0.2), newMessages)
     elif data[:12] == "revisar_skip":
         Revisar.updown(bot, update, (0, 0), newMessages)
     elif data[:11] == "revisar_1up":
-        Revisar.updown(bot, update, (1, 0.5), newMessages)
+        Revisar.updown(bot, update, (1, 0.2), newMessages)
     elif data[:11] == "revisar_2up":
-        Revisar.updown(bot, update, (2, 0.5), newMessages)
+        Revisar.updown(bot, update, (2, 0.3), newMessages)
     elif data[:11] == "revisar_rev":
-        Revisar.updown(bot, update, (0, -1), newMessages)
+        Revisar.updown(bot, update, (-0.1, -1), newMessages)
     else:
         print data
 nuevoHandler = CallbackQueryHandler(inlineKeyboardCallback)
@@ -496,4 +497,4 @@ while True:
             try:
                 bot.send_message(e["id"], input_C[12:])
             except:
-                pass
+                print "Error al enviar mensaje a", e["id"]
