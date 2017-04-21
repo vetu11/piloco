@@ -77,6 +77,7 @@ class Usuario:
 
         posUsu = self.finder(idUsuario)
 
+
         if init != None:
             self.usuariosActivos[posUsu]["editando"] = {"id": hex(random.randint(0, 10 ** 8)).replace("0x", ""),
                                                         "variantes":[],
@@ -94,11 +95,11 @@ class Usuario:
         elif text != None:
 
             if self.usuariosActivos[posUsu]["editando"]["tipo"] == "normal":
-                self.usuariosActivos[posUsu]["editando"]["text"] = text
+                self.usuariosActivos[posUsu]["editando"]["text"] = unicode(text, encoding="utf-8")
             elif "text0" in self.usuariosActivos[posUsu]["editando"]:
-                self.usuariosActivos[posUsu]["editando"]["text1"] = text
+                self.usuariosActivos[posUsu]["editando"]["text1"] = unicode(text, encoding="utf-8")
             else:
-                self.usuariosActivos[posUsu]["editando"]["text0"] = text
+                self.usuariosActivos[posUsu]["editando"]["text0"] = unicode(text, encoding="utf-8")
 
 """
 POSICIONES:
