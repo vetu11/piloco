@@ -1,8 +1,7 @@
 #coding=utf-8
 
-import random, json
+import random, json, logging
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
-from testFreeID import buscarIDsLibres
 
 
 class Puntos:
@@ -15,8 +14,8 @@ class Puntos:
 
     def __add__(self, other):
 
-        print self.puntos, other.puntos
-        self.puntos = (self.puntos[0] + other.puntos[0], self.puntos[1] + other.puntos[1])
+        logging.info(str(self.puntos) + str(other.puntos))
+        self.puntos = (round(self.puntos[0] + other.puntos[0], 1), round(self.puntos[1] + other.puntos[1], 1))
 
         return self.puntos
 

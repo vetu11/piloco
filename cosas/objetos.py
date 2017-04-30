@@ -1,12 +1,11 @@
 # coding=utf-8
-import json, time, threading, random
+import json, time, threading, random, logging
 from .funciones import nuevosMensajes
 
 class Partida:
     partidasEnCurso = []
 
     def finder(self, host):
-        print "finder de partida"
         posicionPartida = 0
         for e in self.partidasEnCurso:
             if e["host"] == host:
@@ -14,14 +13,10 @@ class Partida:
             posicionPartida = posicionPartida + 1
 
     def nuevaPartida(self, host, jugadores,listaDeMensajes,ajustesJugador):
-        print "creando partida"
+        logging.info("creando partida")
         mensajes = nuevosMensajes(listaDeMensajes,ajustesJugador)
         self.partidasEnCurso.append({"host": host, "jugadores": jugadores,"mensajes": mensajes,"siguiente":{"reap":False,"text":None}})
-        print "partida creada"
-
-    def mensajeUsado(self, host, mensaje):
-        print "marcando mensaje como usado"
-        self.partidasEnCurso[self.finder(host)]["mensajesEnviados"].append(mensaje)
+        logging.info("partida creada")
 
 class Usuario:
     usuariosActivos = []
@@ -31,7 +26,6 @@ class Usuario:
             self.usuariosActivos = json.load(f)
 
     def finder(self,idUsuario):
-        print "Ejecutando finder de usuario para ", idUsuario
         posicionUsuarioEnLista = 0
         for e in self.usuariosActivos:
             if e["id"] == idUsuario:
