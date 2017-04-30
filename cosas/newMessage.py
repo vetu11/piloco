@@ -3,26 +3,12 @@
 import json
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 
+
 class NewMessage:
 
     def __init__(self):
         with open("newMessages") as f:
             self.newMessages = json.load(f)
-
-    def categorias_generarKeyboard(self, picante, hef):
-        keyboard = [[],[InlineKeyboardButton("Hecho 👌", callback_data="newMessage_done")]]
-
-        if picante == True:
-            keyboard[0].append(InlineKeyboardButton("Picante ✅", callback_data="newMessage_picante"))
-        else:
-            keyboard[0].append(InlineKeyboardButton("Picante ❎", callback_data="newMessage_picante"))
-
-        if hef == True:
-            keyboard[0].append((InlineKeyboardButton("Hasta el fondo ✅", callback_data="newMessage_hef")))
-        else:
-            keyboard[0].append(InlineKeyboardButton("Hasta el fondo ❎", callback_data="newMessage_hef"))
-
-        return keyboard
 
     def normal(self, bot, update, Usuarios):
         query = update.callback_query
@@ -31,7 +17,7 @@ class NewMessage:
         Usuarios.actualizarMensaje(update.callback_query.from_user.id, init="normal")
 
         msg="Estas escribiendo un mensaje de tipo normal (de un sólo texto). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
-            "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
+            "uieres poner nombres de jugadores usa {1} para el primer nombre aleatorio y {2} para el segundo nombre."
 
         keyboard = [[InlineKeyboardButton("AYUDA 🆘", url="telegra.ph/Okay-03-12")]]
 
@@ -48,7 +34,7 @@ class NewMessage:
         Usuarios.actualizarMensaje(update.callback_query.from_user.id, init="RI")
 
         msg="Estas escribiendo un mensaje de tipo RI (dos mensajes seguidos). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
-            "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
+            "uieres poner nombres de jugadores usa {1} para el primer nombre aleatorio y {2} para el segundo nombre."
 
         keyboard = [[InlineKeyboardButton("AYUDA 🆘", url="telegra.ph/Okay-03-12")]]
 
@@ -65,7 +51,7 @@ class NewMessage:
         Usuarios.actualizarMensaje(update.callback_query.from_user.id, init="RNI")
 
         msg="Estas escribiendo un mensaje de tipo RNI (dos mensajes separados). Usa /cancel para cancelar.\n*RECUERDA:* Si q" \
-            "uieres poner nombres de jugadores usa `{1}` para el primer nombre aleatorio y `{2}` para el segundo nombre."
+            "uieres poner nombres de jugadores usa {1} para el primer nombre aleatorio y {2} para el segundo nombre."
 
         keyboard = [[InlineKeyboardButton("AYUDA 🆘", url="telegra.ph/Okay-03-12")]]
 
@@ -143,3 +129,19 @@ class NewMessage:
         newMessages.append(Usuarios.usuariosActivos[posUsu]["editando"])
         Usuarios.usuariosActivos[posUsu]["posicion"] = 0
         Usuarios.usuariosActivos[posUsu]["editando"] = None
+
+    @staticmethod
+    def categorias_generarKeyboard(picante, hef):
+        keyboard = [[],[InlineKeyboardButton("Hecho 👌", callback_data="newMessage_done")]]
+
+        if picante == True:
+            keyboard[0].append(InlineKeyboardButton("Picante ✅", callback_data="newMessage_picante"))
+        else:
+            keyboard[0].append(InlineKeyboardButton("Picante ❎", callback_data="newMessage_picante"))
+
+        if hef == True:
+            keyboard[0].append((InlineKeyboardButton("Hasta el fondo ✅", callback_data="newMessage_hef")))
+        else:
+            keyboard[0].append(InlineKeyboardButton("Hasta el fondo ❎", callback_data="newMessage_hef"))
+
+        return keyboard

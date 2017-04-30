@@ -1,51 +1,48 @@
 # coding=utf-8
 
-print "Importando librerias..."
-
-import json, logging, random
+import json, logging, random, time
 from cosas import Partida, TOKEN, Usuario, error, enviarMensaje, NewMessage, Revisar
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, ChatAction
 import testFreeID
 
-print "Librerias importadas"
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
-print "Declarando bot..."
+logging.debug("Declarando bot...")
 updater = Updater(token=TOKEN)
 del TOKEN
 dispatcher = updater.dispatcher
 bot = updater.bot
-print "Bot updater y dispatcher declarados"
+logging.debug("Bot updater y dispatcher declarados")
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-print "Declarando objetos y variables..."
+
+logging.debug("Declarando objetos y variables...")
 Partidas = Partida()
 Usuarios = Usuario()
 Revisar = Revisar(len(Usuarios.usuariosActivos))
+logging.debug("Objetos y variables declarados")
 
-print "Objetos y variables declarados"
-
-print "Borrando usuarios demasiado antiguos..."
+logging.info("Borrando usuarios demasiado antiguos...")
 Usuarios.borrarUsuarios()
-print "Usuarios borrados"
+logging.info("Usuarios borrados")
 
-print "Leyendo lista de mensajes..."
+logging.info("Leyendo lista de mensajes...")
 with open("pilocuras.json") as f:
     mensajesPrincipal = json.load(f)
 with open("newMessages") as f:
-    newMessages = json.load(f) # en esta variable meteremos los mensajes que quieran aportar los usuarios.
-print "Mensajes leidos"
+    newMessages = json.load(f)
+logging.info("Mensajes leidos")
 
 
 
 def guardar():
-    print "Guardando usuarios..."
+    logging.info("Guardando usuarios...")
     Usuarios.guardarUsuarios()
-    print "Usuarios guardados"
+    logging.info("Usuarios guardados")
 
-    print "Guardando nuevos mensajes..."
+    logging.info("Guardando nuevos mensajes...")
     i = 0
     for e in newMessages:
         if "variantes" in e:
@@ -55,22 +52,25 @@ def guardar():
 
     with open("newMessages", "w") as f:
         json.dump(newMessages, f, indent=2)
-    print "Nuevos mensajes guardados"
+    logging.info("Nuevos mensajes guardados")
 
     for e in Revisar.aceptados:
         nID = testFreeID.buscarIDsLibres(mensajesPrincipal)
         id = {"id": nID}
         e.update(id)
-        Revisar.aceptados.remove(e)
+
 
         mensajesPrincipal.append(e)
 
+    for e in range(0, len(Revisar.aceptados) - 1):
+        Revisar.aceptados.pop()
+
     with open("pilocuras.json", "w") as f:
-        json.dump(mensajesPrincipal, f, indent=2)
+        json.dump(mensajesPrincipal, f, indent=4)
 
 
     with open("revision.json","w") as f:
-        json.dump(Revisar.revision, f, indent=2)
+        json.dump(Revisar.revision, f, indent=4)
 
 def actualizar():
     with open("pilocuras.json") as f:
@@ -80,21 +80,19 @@ def actualizar():
 
 """---COMANDOS---"""
 
-print "Declarando handlers..."
+logging.info("Declarando handlers...")
 def comandoNew(bot,update):
     state(bot, update)
     try:
-       print "Ejectutando new para el usuario ", update.message.from_user.first_name
+       logging.info("Ejectutando new para el usuario " + update.message.from_user.first_name)
        idUsuario = update.message.from_user.id
        sesiones = Usuarios.usuariosActivos #para comprobar la posición del usuario
        posicionUsuarioEnSesiones = Usuarios.finder(idUsuario)
        if posicionUsuarioEnSesiones == None or sesiones[posicionUsuarioEnSesiones]["posicion"] == 0:
-           print "Ejecutando new/if"
-           Usuarios.actualizarUsuario(idUsuario,1)
+           Usuarios.actualizarUsuario(idUsuario, 1)
            Partidas.nuevaPartida(idUsuario,[],mensajesPrincipal,Usuarios.usuariosActivos[Usuarios.finder(idUsuario)]["ajustes"])
            bot.send_message(chat_id=update.message.chat_id,text="Bien, ahora mandame los nombres de los jugadores uno por uno.")
        else:
-           print "Ejecutando new/else"
            bot.send_message(chat_id=update.message.chat_id,text="¡Antes debes cancelar la partida!\nUsa /cancel.")
     except Exception,e:
         error(e,bot,update)
@@ -104,7 +102,7 @@ dispatcher.add_handler(nuevoHandler)
 def comandoCancel(bot,update):
     state(bot, update)
     try:
-       print "Ejectutando cancel para el usuario ", update.message.from_user.first_name
+       logging.info("Ejectutando cancel para el usuario " + update.message.from_user.first_name)
        idUsuario = update.message.from_user.id
        Usuarios.actualizarUsuario(idUsuario,0)
        posicionPartida = Partidas.finder(idUsuario)
@@ -135,7 +133,6 @@ def comandoDone(bot,update):
          enviarMensaje(bot,update,Partidas,Usuarios)
          Usuarios.actualizarUsuario(idUsuario, 2)
      else:
-         print "Ejecutando done/else"
          bot.send_message(chat_id=update.message.chat_id, text="Necesito que me des más de un jugador para empezar la partida.")
     except Exception,e:
         error(e, bot, update)
@@ -145,7 +142,7 @@ dispatcher.add_handler(nuevoHandler)
 def comandoNext(bot,update):
     state(bot, update)
     try:
-        print "Ejectutando next para el usuario ", update.message.from_user.first_name
+        logging.info("Ejectutando next para el usuario " + update.message.from_user.first_name)
 
 
         idUsuario = update.message.from_user.id
@@ -163,7 +160,7 @@ dispatcher.add_handler(nuevoHandler)
 def comandoStart(bot, update):
     state(bot, update)
     try:
-        print "Ejectutando start para el usuario ",update.message.from_user.first_name
+        logging.info("Ejectutando start para el usuario " + update.message.from_user.first_name)
         mensaje = "¡Hola!\nPara empezar una nueva partida escribe /new"
         bot.send_message(chat_id=update.message.chat_id, text=mensaje)
         Usuarios.actualizarUsuario(update.message.from_user.id,0)
@@ -175,7 +172,7 @@ dispatcher.add_handler(nuevoHandler)
 def comandoAjustes(bot,update):
     state(bot, update)
     try:
-        print "Ejecutando settings para, ",update.message.from_user.first_name
+        logging.info("Ejecutando settings para " + update.message.from_user.first_name)
         usuarioAjustes = Usuarios.usuariosActivos[Usuarios.finder(update.message.from_user.id)]["ajustes"]
         mensaje = "Tus ajustes actuales son:\n"
         if usuarioAjustes["hastaElFondo"] == True:
@@ -196,7 +193,7 @@ dispatcher.add_handler(nuevoHandler)
 def comandoPi(bot,update):
     state(bot, update)
     try:
-        print "Ejecutando pi para ",update.message.from_user.first_name
+        logging.info("Ejecutando pi para " + update.message.from_user.first_name)
         idUsuario = update.message.from_user.id
         usuarioAjustes = Usuarios.usuariosActivos[Usuarios.finder(idUsuario)]["ajustes"]
         if usuarioAjustes["picante"] == True:
@@ -213,7 +210,7 @@ dispatcher.add_handler(nuevoHandler)
 def comandoHef(bot,update):
     state(bot, update)
     try:
-        print "Ejecutando hef para ",update.message.from_user.first_name
+        logging.info("Ejecutando hef para " + update.message.from_user.first_name)
         idUsuario = update.message.from_user.id
         usuarioAjustes = Usuarios.usuariosActivos[Usuarios.finder(idUsuario)]["ajustes"]
         if usuarioAjustes["hastaElFondo"] == True:
@@ -231,7 +228,7 @@ dispatcher.add_handler(nuevoHandler)
 
 def comandoRondas(bot,update):
     state(bot, update)
-    print "Ejecutando rondas para ",update.message.from_user.first_name
+    logging.info("Ejecutando rondas para " + update.message.from_user.first_name)
     try:
         rondas = update.message.text
         rondas = int(rondas.replace("/rondas ",""))
@@ -241,14 +238,14 @@ def comandoRondas(bot,update):
         msg = msg.format(rondas)
         bot.send_message(chat_id=update.message.from_user.id,text=msg)
     except Exception,e:
-        print e
+        logging.error(e)
         bot.send_message(chat_id=update.message.from_user.id,text="Tienes que enviarme un número así:\n/rondas #")
 nuevoHandler = CommandHandler("rondas",comandoRondas)
 dispatcher.add_handler(nuevoHandler)
 
 def comandoRestart(bot,update):
     state(bot, update)
-    print "Ejectuando restart para el usuario ",update.message.from_user.first_name
+    logging.info("Ejectuando restart para el usuario " + update.message.from_user.first_name)
     try:
         idUsuario = update.message.from_user.id
         bot.send_message(chat_id=idUsuario,text="Reiniciando tu usuario en el bot. Se cerrará tu partida actual y se re"
@@ -267,16 +264,38 @@ dispatcher.add_handler(nuevoHandler)
 
 def comandoAbout(bot,update):
     state(bot, update)
-    msg = "Actualmente este bot está funcionando en la versión *v0.6.4*\n[Más info](github.com/vetu11/piloco)"
+    msg = "Actualmente este bot está funcionando en la versión *v0.6.5*\n[Más info](github.com/vetu11/piloco)"
     bot.send_message(chat_id=update.message.from_user.id,text=msg,parse_mode=ParseMode.MARKDOWN,disable_web_page_preview=True)
+
 nuevoHandler = CommandHandler("about",comandoAbout)
 dispatcher.add_handler(nuevoHandler)
+
+
+def comandoSave(bot, update):
+    state(bot, update)
+
+    if update.message.from_user.id == 254234845:
+        try:
+            update.message.reply_text("GUARDANDOOOO")
+            guardar()
+            actualizar()
+            update.message.reply_text("PEFECTO")
+        except:
+            update.message.reply_text("Ha ocurrido un error.")
+    else:
+        update.message.reply_text("Me temo que no estás autorizado para hacer eso.")
+
+nuevoHandler = CommandHandler("save", comandoSave)
+dispatcher.add_handler(nuevoHandler)
+
 
 def comandoHelp(bot,update):
     state(bot, update)
     bot.send_message(chat_id=update.message.from_user.id,text="_Todavía no hay nada que ver aquí..._",parse_mode=telegram.ParseMode.MARKDOWN)
+
 nuevoHandler =  CommandHandler("help",comandoHelp)
 dispatcher.add_handler(nuevoHandler)
+
 
 def comandoDelPlayer(bot,update):
     state(bot, update)
@@ -344,7 +363,7 @@ dispatcher.add_handler(nuevoHandler)
 def mensaje(bot,update):
     state(bot, update)
     try:
-       print "Ejectutando mensaje para el usuario ", update.message.from_user.first_name
+       logging.info("Ejectutando mensaje para el usuario " + update.message.from_user.first_name)
        idUsuario = update.message.from_user.id
        sesiones = Usuarios.usuariosActivos  # para comprobar la posición del usuario
        posicionUsuarioEnSesiones = Usuarios.finder(idUsuario)
@@ -365,7 +384,7 @@ def mensaje(bot,update):
 
             Usuarios.actualizarMensaje(idUsuario, text=update.message.text.encode('utf-8'))
 
-            print "%s ha añadido un nuevo mensaje."%(update.message.from_user.id)
+            logging.info("%s ha añadido un nuevo mensaje." %(update.message.from_user.id))
 
             s = update.message.text
             msg = '*Tu mensaje:*\n"%s"\n*Selecciona categorías.*' % s.encode('utf-8')
@@ -406,7 +425,7 @@ def mensaje(bot,update):
 
             Usuarios.actualizarMensaje(idUsuario, text=update.message.text.encode('utf-8'))
 
-            print "%s ha añadido un nuevo mensaje." % (update.message.from_user.id)
+            logging.info("%s ha añadido un nuevo mensaje." % (update.message.from_user.id))
 
             l = update.message.text
             s = Usuarios.usuariosActivos[posicionUsuarioEnSesiones]["editando"]["text0"]
@@ -445,17 +464,17 @@ def inlineKeyboardCallback(bot, update):
     elif data == "newMessage_done":
         NewMessage().done(bot, update, Usuarios, newMessages)
     elif data[:13] == "revisar_1down":
-        Revisar.updown(bot, update, (-1, -0.2), newMessages)
+        Revisar.updown(bot, update, (-1, -0.3), newMessages)
     elif data[:12] == "revisar_skip":
         Revisar.updown(bot, update, (0, 0), newMessages)
     elif data[:11] == "revisar_1up":
-        Revisar.updown(bot, update, (1, 0.2), newMessages)
+        Revisar.updown(bot, update, (1, 0.1), newMessages)
     elif data[:11] == "revisar_2up":
-        Revisar.updown(bot, update, (2, 0.3), newMessages)
+        Revisar.updown(bot, update, (2, 0.2), newMessages)
     elif data[:11] == "revisar_rev":
-        Revisar.updown(bot, update, (-0.1, -1), newMessages)
+        Revisar.updown(bot, update, (-0.4, -1), newMessages)
     else:
-        print data
+        logging.error("Se ha recibido " + data + " y no hay respuesta para este Keyboard Callback.")
 nuevoHandler = CallbackQueryHandler(inlineKeyboardCallback)
 dispatcher.add_handler(nuevoHandler)
 
@@ -470,22 +489,22 @@ def state(bot, update):
 del nuevoHandler
 
 #TODO: añadir un error handler
-print "Handlers declarados"
+logging.info("Handlers declarados")
 
-print "Iniciando bot..."
+logging.info("Iniciando bot...")
 updater.start_polling()
-print "Bot iniciado"
+logging.info("Bot iniciado")
 
 while True:
-    input_C = raw_input(">>>")
+    input_C = raw_input("")
 
     if input_C == "stop":
 
         guardar()
 
-        print "Apagando bot..."
+        logging.info("Apagando bot...")
         updater.stop()
-        print "Bot apagado"
+        logging.info("Bot apagado")
         break
 
     if input_C == "guardar":
@@ -495,6 +514,7 @@ while True:
     if input_C[:11] == "annoucement":
         for e in Usuarios.usuariosActivos:
             try:
-                bot.send_message(e["id"], input_C[12:])
+                bot.send_message(e["id"], input_C[12:], disable_notification=True, parse_mode=ParseMode.MARKDOWN)
             except:
-                print "Error al enviar mensaje a", e["id"]
+                logging.error("Error al enviar mensaje a" + e["id"])
+            time.sleep(0.1)

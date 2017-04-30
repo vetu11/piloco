@@ -1,15 +1,16 @@
 #coding=utf-8
-import random
+import random, logging
 from telegram import ParseMode
+
 
 def elegirNombre(listaDeNombres):
     nombre1 = listaDeNombres[random.randint(0, len(listaDeNombres) - 1)]
     nombre2 = listaDeNombres[random.randint(0, len(listaDeNombres) - 1)]
     if listaDeNombres > 1:
         while nombre2 is nombre1:
-            print "elegirMensaje/elif/else/while"
             nombre2 = listaDeNombres[random.randint(0, len(listaDeNombres) - 1)]
     return nombre1,nombre2
+
 
 def nuevosMensajes(listaDeMensajes,ajustesJugador):
     nMensajesEnLista = len(listaDeMensajes)
@@ -17,7 +18,7 @@ def nuevosMensajes(listaDeMensajes,ajustesJugador):
     mensajeN = 0
     mensajesUsados = []
     mensajes = []
-    print "Eligiendo mensajes. Se van a elegir ",nMensajesElegidos," de ",nMensajesEnLista," mensajes."
+    logging.info("Eligiendo mensajes. Se van a elegir " + str(nMensajesElegidos) + " de " + str(nMensajesEnLista) + " mensajes.")
     antiLoop = 0
     while mensajeN < nMensajesElegidos:
         pic = random.randint(0,nMensajesEnLista-1)
@@ -44,16 +45,16 @@ def nuevosMensajes(listaDeMensajes,ajustesJugador):
                 mensajeN = mensajeN + 1
                 antiLoop = 0
         if antiLoop > 50:
-            print "Error de loop. Devolviendo menos mensajes de los pedidos."
+            logging.warning("Error de loop. Devolviendo menos mensajes de los pedidos.")
             break
         antiLoop = antiLoop + 1
     return mensajes
 
 def formatoMensaje(listaDeMensajes, listaDeNombres, bot, update, Partidas, Usuarios):
     nMensajes = len(listaDeMensajes)
-    print "escogiendo mensajes ",nMensajes
+    logging.info("escogiendo mensajes " + str(nMensajes))
     pic = random.randint(0,nMensajes - 1)
-    print "pic = ",pic
+    logging.info("pic = " + str(pic))
     mensajeElegido = listaDeMensajes[pic]
     if mensajeElegido["tipo"] == "normal":
         nombre1,nombre2 = elegirNombre(listaDeNombres)
@@ -73,13 +74,12 @@ def formatoMensaje(listaDeMensajes, listaDeNombres, bot, update, Partidas, Usuar
         return mensaje,None,pic
 
 def enviarMensaje(bot,update,Partidas,Usuarios):
-    print "Ejecutando enviarMensaje"
     idUsuario = update.message.from_user.id
     posicionPartida = Partidas.finder(idUsuario)
     listaDeMensajes = Partidas.partidasEnCurso[posicionPartida]["mensajes"]
     listaDeNombres = Partidas.partidasEnCurso[posicionPartida]["jugadores"]
     if len(listaDeMensajes) == 0 and Partidas.partidasEnCurso[posicionPartida]["siguiente"]["reap"] == False:
-            print "Terminando partida"
+            logging.info("Terminando partida")
             bot.send_message(chat_id=update.message.chat_id, text="······\nFin de la partida\nPara continuar empi"
                                                                   "eza una nueva con /new")
             Partidas.partidasEnCurso.pop(posicionPartida)
@@ -97,6 +97,6 @@ def enviarMensaje(bot,update,Partidas,Usuarios):
         bot.send_message(chat_id=update.message.chat_id, text=mensaje, parse_mode=ParseMode.MARKDOWN)
 
 def error(e,bot,update):
-    print "ERROR\n", e
+    logging.error("ERROR\n" + str(e))
     bot.send_message(chat_id=update.message.chat_id, text="Oh oh. Parece que ha ocurrido un error. Por favor, informa a"
                                                           " @vetu11.\nSi el error persiste usa /restart")
