@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -28,12 +28,9 @@ except ImportError:
 
 import certifi
 import urllib3
+import urllib3.contrib.appengine
 from urllib3.connection import HTTPConnection
 from urllib3.util.timeout import Timeout
-try:
-    from urllib3.contrib.socks import SOCKSProxyManager
-except ImportError:
-    SOCKSProxyManager = None
 
 from telegram import (InputFile, TelegramError)
 from telegram.error import (Unauthorized, NetworkError, TimedOut, BadRequest, ChatMigrated,
@@ -81,7 +78,7 @@ class Request(object):
                 (socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1),
             ],
             timeout=urllib3.Timeout(
-                connect=self._connect_timeout, read=read_timeout),)
+                connect=self._connect_timeout, read=read_timeout, total=None))
 
         # Set a proxy according to the following order:
         # * proxy defined in proxy_url (+ urllib3_proxy_kwargs)
@@ -93,11 +90,17 @@ class Request(object):
             proxy_url = os.environ.get('HTTPS_PROXY') or os.environ.get('https_proxy')
 
         if not proxy_url:
-            mgr = urllib3.PoolManager(**kwargs)
+            if urllib3.contrib.appengine.is_appengine_sandbox():
+                # Use URLFetch service if running in App Engine
+                mgr = urllib3.contrib.appengine.AppEngineManager()
+            else:
+                mgr = urllib3.PoolManager(**kwargs)
         else:
             kwargs.update(urllib3_proxy_kwargs)
             if proxy_url.startswith('socks'):
-                if not SOCKSProxyManager:
+                try:
+                    from urllib3.contrib.socks import SOCKSProxyManager
+                except ImportError:
                     raise RuntimeError('PySocks is missing')
                 mgr = SOCKSProxyManager(proxy_url, **kwargs)
             else:
@@ -180,7 +183,7 @@ class Request(object):
             raise NetworkError('Unknown HTTPError {0}'.format(resp.status))
 
         if resp.status in (401, 403):
-            raise Unauthorized()
+            raise Unauthorized(message)
         elif resp.status == 400:
             raise BadRequest(message)
         elif resp.status == 404:

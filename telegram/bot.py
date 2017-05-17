@@ -2,7 +2,7 @@
 # pylint: disable=E0611,E0213,E1102,C0103,E1101,W0613,R0913,R0904
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -129,36 +129,38 @@ class Bot(TelegramObject):
 
         return decorator
 
+    def _message_wrapper(self, url, data, *args, **kwargs):
+        if kwargs.get('reply_to_message_id'):
+            data['reply_to_message_id'] = kwargs.get('reply_to_message_id')
+
+        if kwargs.get('disable_notification'):
+            data['disable_notification'] = kwargs.get('disable_notification')
+
+        if kwargs.get('reply_markup'):
+            reply_markup = kwargs.get('reply_markup')
+            if isinstance(reply_markup, ReplyMarkup):
+                data['reply_markup'] = reply_markup.to_json()
+            else:
+                data['reply_markup'] = reply_markup
+
+        result = self._request.post(url, data, timeout=kwargs.get('timeout'))
+
+        if result is True:
+            return result
+
+        return Message.de_json(result, self)
+
     def message(func):
 
         @functools.wraps(func)
         def decorator(self, *args, **kwargs):
             url, data = func(self, *args, **kwargs)
-
-            if kwargs.get('reply_to_message_id'):
-                data['reply_to_message_id'] = kwargs.get('reply_to_message_id')
-
-            if kwargs.get('disable_notification'):
-                data['disable_notification'] = kwargs.get('disable_notification')
-
-            if kwargs.get('reply_markup'):
-                reply_markup = kwargs.get('reply_markup')
-                if isinstance(reply_markup, ReplyMarkup):
-                    data['reply_markup'] = reply_markup.to_json()
-                else:
-                    data['reply_markup'] = reply_markup
-
-            result = self._request.post(url, data, timeout=kwargs.get('timeout'))
-
-            if result is True:
-                return result
-
-            return Message.de_json(result, self)
+            return Bot._message_wrapper(self, url, data, *args, **kwargs)
 
         return decorator
 
     @log
-    def getMe(self, timeout=None, **kwargs):
+    def get_me(self, timeout=None, **kwargs):
         """A simple method for testing your bot's auth token.
 
         Args:
@@ -184,16 +186,16 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def sendMessage(self,
-                    chat_id,
-                    text,
-                    parse_mode=None,
-                    disable_web_page_preview=None,
-                    disable_notification=False,
-                    reply_to_message_id=None,
-                    reply_markup=None,
-                    timeout=None,
-                    **kwargs):
+    def send_message(self,
+                     chat_id,
+                     text,
+                     parse_mode=None,
+                     disable_web_page_preview=None,
+                     disable_notification=False,
+                     reply_to_message_id=None,
+                     reply_markup=None,
+                     timeout=None,
+                     **kwargs):
         """Use this method to send text messages.
 
         Args:
@@ -241,13 +243,41 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def forwardMessage(self,
-                       chat_id,
-                       from_chat_id,
-                       message_id,
-                       disable_notification=False,
-                       timeout=None,
-                       **kwargs):
+    def delete_message(self, chat_id, message_id):
+        """Use this method to delete messages which were sent not later than 48 hours ago.
+
+        Args:
+            chat_id (str): Unique identifier for the target chat or
+                username of the target channel (in the format
+                @channelusername).
+            message_id (int): Unique message identifier.
+
+        Note:
+            This method is not documented, so it's not guaranteed to work. Also, its behaviour can
+            be changed at any time.
+
+        Returns:
+            bool: On success, `True` is returned.
+
+        Raises:
+            :class:`telegram.TelegramError`
+
+        """
+        url = '{0}/deleteMessage'.format(self.base_url)
+
+        data = {'chat_id': chat_id, 'message_id': message_id}
+
+        return url, data
+
+    @log
+    @message
+    def forward_message(self,
+                        chat_id,
+                        from_chat_id,
+                        message_id,
+                        disable_notification=False,
+                        timeout=None,
+                        **kwargs):
         """Use this method to forward messages of any kind.
 
         Args:
@@ -283,16 +313,15 @@ class Bot(TelegramObject):
         return url, data
 
     @log
-    @message
-    def sendPhoto(self,
-                  chat_id,
-                  photo,
-                  caption=None,
-                  disable_notification=False,
-                  reply_to_message_id=None,
-                  reply_markup=None,
-                  timeout=None,
-                  **kwargs):
+    def send_photo(self,
+                   chat_id,
+                   photo,
+                   caption=None,
+                   disable_notification=False,
+                   reply_to_message_id=None,
+                   reply_markup=None,
+                   timeout=20.,
+                   **kwargs):
         """Use this method to send photos.
 
         Args:
@@ -308,9 +337,7 @@ class Bot(TelegramObject):
             reply_markup (Optional[:class:`telegram.ReplyMarkup`]): Additional interface options. A
                 JSON-serialized object for an inline keyboard, custom reply keyboard, instructions
                 to remove reply keyboard or to force a reply from the user.
-            timeout (Optional[int|float]): If this value is specified, use it as the read timeout
-                from the server (instead of the one specified during creation of the connection
-                pool).
+            timeout (Optional[int|float]): Send file timeout (default: 20 seconds).
             **kwargs (dict): Arbitrary keyword arguments.
 
         Returns:
@@ -327,22 +354,31 @@ class Bot(TelegramObject):
         if caption:
             data['caption'] = caption
 
-        return url, data
+        return self._message_wrapper(
+            url,
+            data,
+            chat_id=chat_id,
+            photo=photo,
+            caption=caption,
+            disable_notification=disable_notification,
+            reply_to_message_id=reply_to_message_id,
+            reply_markup=reply_markup,
+            timeout=timeout,
+            **kwargs)
 
     @log
-    @message
-    def sendAudio(self,
-                  chat_id,
-                  audio,
-                  duration=None,
-                  performer=None,
-                  title=None,
-                  caption=None,
-                  disable_notification=False,
-                  reply_to_message_id=None,
-                  reply_markup=None,
-                  timeout=None,
-                  **kwargs):
+    def send_audio(self,
+                   chat_id,
+                   audio,
+                   duration=None,
+                   performer=None,
+                   title=None,
+                   caption=None,
+                   disable_notification=False,
+                   reply_to_message_id=None,
+                   reply_markup=None,
+                   timeout=20.,
+                   **kwargs):
         """Use this method to send audio files, if you want Telegram clients to
         display them in the music player. Your audio must be in an .mp3 format.
         On success, the sent Message is returned. Bots can currently send audio
@@ -370,9 +406,7 @@ class Bot(TelegramObject):
             reply_markup (Optional[:class:`telegram.ReplyMarkup`]): Additional interface options. A
                 JSON-serialized object for an inline keyboard, custom reply keyboard, instructions
                 to remove reply keyboard or to force a reply from the user.
-            timeout (Optional[int|float]): If this value is specified, use it as the read timeout
-                from the server (instead of the one specified during creation of the connection
-                pool).
+            timeout (Optional[int|float]): Send file timeout (default: 20 seconds).
             **kwargs (dict): Arbitrary keyword arguments.
 
         Returns:
@@ -395,20 +429,32 @@ class Bot(TelegramObject):
         if caption:
             data['caption'] = caption
 
-        return url, data
+        return self._message_wrapper(
+            url,
+            data,
+            chat_id=chat_id,
+            audio=audio,
+            duration=duration,
+            performer=performer,
+            title=title,
+            caption=caption,
+            disable_notification=disable_notification,
+            reply_to_message_id=reply_to_message_id,
+            reply_markup=reply_markup,
+            timeout=20.,
+            **kwargs)
 
     @log
-    @message
-    def sendDocument(self,
-                     chat_id,
-                     document,
-                     filename=None,
-                     caption=None,
-                     disable_notification=False,
-                     reply_to_message_id=None,
-                     reply_markup=None,
-                     timeout=None,
-                     **kwargs):
+    def send_document(self,
+                      chat_id,
+                      document,
+                      filename=None,
+                      caption=None,
+                      disable_notification=False,
+                      reply_to_message_id=None,
+                      reply_markup=None,
+                      timeout=20.,
+                      **kwargs):
         """Use this method to send general files.
 
         Args:
@@ -426,9 +472,7 @@ class Bot(TelegramObject):
             reply_markup (Optional[:class:`telegram.ReplyMarkup`]): Additional interface options. A
                 JSON-serialized object for an inline keyboard, custom reply keyboard, instructions
                 to remove reply keyboard or to force a reply from the user.
-            timeout (Optional[int|float]): If this value is specified, use it as the read timeout
-                from the server (instead of the one specified during creation of the connection
-                pool).
+            timeout (Optional[int|float]): Send file timeout (default: 20 seconds).
             **kwargs (dict): Arbitrary keyword arguments.
 
         Returns:
@@ -447,18 +491,29 @@ class Bot(TelegramObject):
         if caption:
             data['caption'] = caption
 
-        return url, data
+        return self._message_wrapper(
+            url,
+            data,
+            chat_id=chat_id,
+            document=document,
+            filename=filename,
+            caption=caption,
+            disable_notification=disable_notification,
+            reply_to_message_id=reply_to_message_id,
+            reply_markup=reply_markup,
+            timeout=timeout,
+            **kwargs)
 
     @log
     @message
-    def sendSticker(self,
-                    chat_id,
-                    sticker,
-                    disable_notification=False,
-                    reply_to_message_id=None,
-                    reply_markup=None,
-                    timeout=None,
-                    **kwargs):
+    def send_sticker(self,
+                     chat_id,
+                     sticker,
+                     disable_notification=False,
+                     reply_to_message_id=None,
+                     reply_markup=None,
+                     timeout=None,
+                     **kwargs):
         """Use this method to send .webp stickers.
 
         Args:
@@ -492,17 +547,16 @@ class Bot(TelegramObject):
         return url, data
 
     @log
-    @message
-    def sendVideo(self,
-                  chat_id,
-                  video,
-                  duration=None,
-                  caption=None,
-                  disable_notification=False,
-                  reply_to_message_id=None,
-                  reply_markup=None,
-                  timeout=None,
-                  **kwargs):
+    def send_video(self,
+                   chat_id,
+                   video,
+                   duration=None,
+                   caption=None,
+                   disable_notification=False,
+                   reply_to_message_id=None,
+                   reply_markup=None,
+                   timeout=20.,
+                   **kwargs):
         """Use this method to send video files, Telegram clients support mp4
         videos (other formats may be sent as telegram.Document).
 
@@ -521,9 +575,7 @@ class Bot(TelegramObject):
             reply_markup (Optional[:class:`telegram.ReplyMarkup`]): Additional interface options. A
                 JSON-serialized object for an inline keyboard, custom reply keyboard, instructions
                 to remove reply keyboard or to force a reply from the user.
-            timeout (Optional[int|float]): If this value is specified, use it as the read timeout
-                from the server (instead of the one specified during creation of the connection
-                pool).
+            timeout (Optional[int|float]): Send file timeout (default: 20 seconds).
 
         Returns:
             :class:`telegram.Message`: On success, instance representing the message posted.
@@ -541,20 +593,30 @@ class Bot(TelegramObject):
         if caption:
             data['caption'] = caption
 
-        return url, data
+        return self._message_wrapper(
+            url,
+            data,
+            chat_id=chat_id,
+            video=video,
+            duration=duration,
+            caption=caption,
+            disable_notification=disable_notification,
+            reply_to_message_id=reply_to_message_id,
+            reply_markup=reply_markup,
+            timeout=timeout,
+            **kwargs)
 
     @log
-    @message
-    def sendVoice(self,
-                  chat_id,
-                  voice,
-                  duration=None,
-                  caption=None,
-                  disable_notification=False,
-                  reply_to_message_id=None,
-                  reply_markup=None,
-                  timeout=None,
-                  **kwargs):
+    def send_voice(self,
+                   chat_id,
+                   voice,
+                   duration=None,
+                   caption=None,
+                   disable_notification=False,
+                   reply_to_message_id=None,
+                   reply_markup=None,
+                   timeout=20.,
+                   **kwargs):
         """Use this method to send audio files, if you want Telegram clients to display the file as
         a playable voice message. For this to work, your audio must be in an .ogg file encoded with
         OPUS (other formats may be sent as Audio or Document). On success, the sent Message is
@@ -575,9 +637,7 @@ class Bot(TelegramObject):
             reply_markup (Optional[:class:`telegram.ReplyMarkup`]): Additional interface options. A
                 JSON-serialized object for an inline keyboard, custom reply keyboard, instructions
                 to remove reply keyboard or to force a reply from the user.
-            timeout (Optional[int|float]): If this value is specified, use it as the read timeout
-                from the server (instead of the one specified during creation of the connection
-                pool).
+            timeout (Optional[int|float]): Send file timeout (default: 20 seconds).
             **kwargs (dict): Arbitrary keyword arguments.
 
         Returns:
@@ -596,19 +656,30 @@ class Bot(TelegramObject):
         if caption:
             data['caption'] = caption
 
-        return url, data
+        return self._message_wrapper(
+            url,
+            data,
+            chat_id=chat_id,
+            voice=voice,
+            duration=duration,
+            caption=caption,
+            disable_notification=disable_notification,
+            reply_to_message_id=reply_to_message_id,
+            reply_markup=reply_markup,
+            timeout=timeout,
+            **kwargs)
 
     @log
     @message
-    def sendLocation(self,
-                     chat_id,
-                     latitude,
-                     longitude,
-                     disable_notification=False,
-                     reply_to_message_id=None,
-                     reply_markup=None,
-                     timeout=None,
-                     **kwargs):
+    def send_location(self,
+                      chat_id,
+                      latitude,
+                      longitude,
+                      disable_notification=False,
+                      reply_to_message_id=None,
+                      reply_markup=None,
+                      timeout=None,
+                      **kwargs):
         """Use this method to send point on the map.
 
         Args:
@@ -642,18 +713,18 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def sendVenue(self,
-                  chat_id,
-                  latitude,
-                  longitude,
-                  title,
-                  address,
-                  foursquare_id=None,
-                  disable_notification=False,
-                  reply_to_message_id=None,
-                  reply_markup=None,
-                  timeout=None,
-                  **kwargs):
+    def send_venue(self,
+                   chat_id,
+                   latitude,
+                   longitude,
+                   title,
+                   address,
+                   foursquare_id=None,
+                   disable_notification=False,
+                   reply_to_message_id=None,
+                   reply_markup=None,
+                   timeout=None,
+                   **kwargs):
         """
         Use this method to send information about a venue.
 
@@ -701,16 +772,16 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def sendContact(self,
-                    chat_id,
-                    phone_number,
-                    first_name,
-                    last_name=None,
-                    disable_notification=False,
-                    reply_to_message_id=None,
-                    reply_markup=None,
-                    timeout=None,
-                    **kwargs):
+    def send_contact(self,
+                     chat_id,
+                     phone_number,
+                     first_name,
+                     last_name=None,
+                     disable_notification=False,
+                     reply_to_message_id=None,
+                     reply_markup=None,
+                     timeout=None,
+                     **kwargs):
         """
         Use this method to send phone contacts.
 
@@ -750,14 +821,14 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def sendGame(self,
-                 chat_id,
-                 game_short_name,
-                 disable_notification=False,
-                 reply_to_message_id=None,
-                 reply_markup=None,
-                 timeout=None,
-                 **kwargs):
+    def send_game(self,
+                  chat_id,
+                  game_short_name,
+                  disable_notification=False,
+                  reply_to_message_id=None,
+                  reply_markup=None,
+                  timeout=None,
+                  **kwargs):
         """Use this method to send a game.
 
         Args:
@@ -793,7 +864,7 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def sendChatAction(self, chat_id, action, timeout=None, **kwargs):
+    def send_chat_action(self, chat_id, action, timeout=None, **kwargs):
         """Use this method when you need to tell the user that something is happening on the bot's
         side. The status is set for 5 seconds or less (when a message arrives from your bot,
         Telegram clients clear its typing status).
@@ -822,16 +893,16 @@ class Bot(TelegramObject):
         return url, data
 
     @log
-    def answerInlineQuery(self,
-                          inline_query_id,
-                          results,
-                          cache_time=300,
-                          is_personal=None,
-                          next_offset=None,
-                          switch_pm_text=None,
-                          switch_pm_parameter=None,
-                          timeout=None,
-                          **kwargs):
+    def answer_inline_query(self,
+                            inline_query_id,
+                            results,
+                            cache_time=300,
+                            is_personal=None,
+                            next_offset=None,
+                            switch_pm_text=None,
+                            switch_pm_parameter=None,
+                            timeout=None,
+                            **kwargs):
         """Use this method to send answers to an inline query. No more than 50 results per query
         are allowed.
 
@@ -887,7 +958,7 @@ class Bot(TelegramObject):
         return result
 
     @log
-    def getUserProfilePhotos(self, user_id, offset=None, limit=100, timeout=None, **kwargs):
+    def get_user_profile_photos(self, user_id, offset=None, limit=100, timeout=None, **kwargs):
         """Use this method to get a list of profile pictures for a user.
 
         Args:
@@ -923,7 +994,7 @@ class Bot(TelegramObject):
         return UserProfilePhotos.de_json(result, self)
 
     @log
-    def getFile(self, file_id, timeout=None, **kwargs):
+    def get_file(self, file_id, timeout=None, **kwargs):
         """Use this method to get basic info about a file and prepare it for downloading. For the
         moment, bots can download files of up to 20MB in size.
 
@@ -953,7 +1024,7 @@ class Bot(TelegramObject):
         return File.de_json(result, self)
 
     @log
-    def kickChatMember(self, chat_id, user_id, timeout=None, **kwargs):
+    def kick_chat_member(self, chat_id, user_id, timeout=None, **kwargs):
         """Use this method to kick a user from a group or a supergroup.
 
         In the case of supergroups, the user will not be able to return to the group on their own
@@ -985,7 +1056,7 @@ class Bot(TelegramObject):
         return result
 
     @log
-    def unbanChatMember(self, chat_id, user_id, timeout=None, **kwargs):
+    def unban_chat_member(self, chat_id, user_id, timeout=None, **kwargs):
         """Use this method to unban a previously kicked user in a supergroup.
         The user will not return to the group automatically, but will be able to join via link,
         etc. The bot must be an administrator in the group for this to work.
@@ -1015,14 +1086,14 @@ class Bot(TelegramObject):
         return result
 
     @log
-    def answerCallbackQuery(self,
-                            callback_query_id,
-                            text=None,
-                            show_alert=False,
-                            url=None,
-                            cache_time=None,
-                            timeout=None,
-                            **kwargs):
+    def answer_callback_query(self,
+                              callback_query_id,
+                              text=None,
+                              show_alert=False,
+                              url=None,
+                              cache_time=None,
+                              timeout=None,
+                              **kwargs):
         """Use this method to send answers to callback queries sent from inline keyboards. The
         answer will be displayed to the user as a notification at the top of the chat screen or as
         an alert.
@@ -1068,16 +1139,16 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def editMessageText(self,
-                        text,
-                        chat_id=None,
-                        message_id=None,
-                        inline_message_id=None,
-                        parse_mode=None,
-                        disable_web_page_preview=None,
-                        reply_markup=None,
-                        timeout=None,
-                        **kwargs):
+    def edit_message_text(self,
+                          text,
+                          chat_id=None,
+                          message_id=None,
+                          inline_message_id=None,
+                          parse_mode=None,
+                          disable_web_page_preview=None,
+                          reply_markup=None,
+                          timeout=None,
+                          **kwargs):
         """Use this method to edit text messages sent by the bot or via the bot (for inline bots).
 
         Args:
@@ -1127,14 +1198,14 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def editMessageCaption(self,
-                           chat_id=None,
-                           message_id=None,
-                           inline_message_id=None,
-                           caption=None,
-                           reply_markup=None,
-                           timeout=None,
-                           **kwargs):
+    def edit_message_caption(self,
+                             chat_id=None,
+                             message_id=None,
+                             inline_message_id=None,
+                             caption=None,
+                             reply_markup=None,
+                             timeout=None,
+                             **kwargs):
         """Use this method to edit captions of messages sent by the bot or via the bot (for inline
             bots).
 
@@ -1184,13 +1255,13 @@ class Bot(TelegramObject):
 
     @log
     @message
-    def editMessageReplyMarkup(self,
-                               chat_id=None,
-                               message_id=None,
-                               inline_message_id=None,
-                               reply_markup=None,
-                               timeout=None,
-                               **kwargs):
+    def edit_message_reply_markup(self,
+                                  chat_id=None,
+                                  message_id=None,
+                                  inline_message_id=None,
+                                  reply_markup=None,
+                                  timeout=None,
+                                  **kwargs):
         """Use this method to edit only the reply markup of messages sent by the bot or via the bot
         (for inline bots).
 
@@ -1237,14 +1308,14 @@ class Bot(TelegramObject):
         return url, data
 
     @log
-    def getUpdates(self,
-                   offset=None,
-                   limit=100,
-                   timeout=0,
-                   network_delay=None,
-                   read_latency=2.,
-                   allowed_updates=None,
-                   **kwargs):
+    def get_updates(self,
+                    offset=None,
+                    limit=100,
+                    timeout=0,
+                    network_delay=None,
+                    read_latency=2.,
+                    allowed_updates=None,
+                    **kwargs):
         """Use this method to receive incoming updates using long polling.
 
         Args:
@@ -1320,13 +1391,13 @@ class Bot(TelegramObject):
         return [Update.de_json(u, self) for u in result]
 
     @log
-    def setWebhook(self,
-                   url=None,
-                   certificate=None,
-                   timeout=None,
-                   max_connections=40,
-                   allowed_updates=None,
-                   **kwargs):
+    def set_webhook(self,
+                    url=None,
+                    certificate=None,
+                    timeout=None,
+                    max_connections=40,
+                    allowed_updates=None,
+                    **kwargs):
         """Use this method to specify a url and receive incoming updates via an outgoing webhook.
         Whenever there is an update for the bot, we will send an HTTPS POST request to the
         specified url, containing a JSON-serialized Update. In case of an unsuccessful request, we
@@ -1389,7 +1460,7 @@ class Bot(TelegramObject):
         return result
 
     @log
-    def deleteWebhook(self, timeout=None, **kwargs):
+    def delete_webhook(self, timeout=None, **kwargs):
         """Use this method to remove webhook integration if you decide to switch back to
         getUpdates. Returns True on success. Requires no parameters.
 
@@ -1414,7 +1485,7 @@ class Bot(TelegramObject):
         return result
 
     @log
-    def leaveChat(self, chat_id, timeout=None, **kwargs):
+    def leave_chat(self, chat_id, timeout=None, **kwargs):
         """Use this method for your bot to leave a group, supergroup or channel.
 
         Args:
@@ -1441,7 +1512,7 @@ class Bot(TelegramObject):
         return result
 
     @log
-    def getChat(self, chat_id, timeout=None, **kwargs):
+    def get_chat(self, chat_id, timeout=None, **kwargs):
         """Use this method to get up to date information about the chat (current name of the user
         for one-on-one conversations, current username of a user, group or channel, etc.).
 
@@ -1470,7 +1541,7 @@ class Bot(TelegramObject):
         return Chat.de_json(result, self)
 
     @log
-    def getChatAdministrators(self, chat_id, timeout=None, **kwargs):
+    def get_chat_administrators(self, chat_id, timeout=None, **kwargs):
         """Use this method to get a list of administrators in a chat. On success, returns an Array
         of ChatMember objects that contains information about all chat administrators except other
         bots. If the chat is a group or a supergroup and no administrators were appointed, only the
@@ -1500,7 +1571,7 @@ class Bot(TelegramObject):
         return [ChatMember.de_json(x, self) for x in result]
 
     @log
-    def getChatMembersCount(self, chat_id, timeout=None, **kwargs):
+    def get_chat_members_count(self, chat_id, timeout=None, **kwargs):
         """Use this method to get the number of members in a chat.
 
         Args:
@@ -1527,7 +1598,7 @@ class Bot(TelegramObject):
         return result
 
     @log
-    def getChatMember(self, chat_id, user_id, timeout=None, **kwargs):
+    def get_chat_member(self, chat_id, user_id, timeout=None, **kwargs):
         """Use this method to get information about a member of a chat.
 
         Args:
@@ -1554,7 +1625,7 @@ class Bot(TelegramObject):
 
         return ChatMember.de_json(result, self)
 
-    def getWebhookInfo(self, timeout=None, **kwargs):
+    def get_webhook_info(self, timeout=None, **kwargs):
         """Use this method to get current webhook status.
 
         If the bot is using getUpdates, will return an object with the url field empty.
@@ -1576,17 +1647,17 @@ class Bot(TelegramObject):
 
         return WebhookInfo.de_json(result, self)
 
-    def setGameScore(self,
-                     user_id,
-                     score,
-                     chat_id=None,
-                     message_id=None,
-                     inline_message_id=None,
-                     edit_message=None,
-                     force=None,
-                     disable_edit_message=None,
-                     timeout=None,
-                     **kwargs):
+    def set_game_score(self,
+                       user_id,
+                       score,
+                       chat_id=None,
+                       message_id=None,
+                       inline_message_id=None,
+                       edit_message=None,
+                       force=None,
+                       disable_edit_message=None,
+                       timeout=None,
+                       **kwargs):
         """Use this method to set the score of the specified user in a game.
 
         Args:
@@ -1641,13 +1712,13 @@ class Bot(TelegramObject):
         else:
             return Message.de_json(result, self)
 
-    def getGameHighScores(self,
-                          user_id,
-                          chat_id=None,
-                          message_id=None,
-                          inline_message_id=None,
-                          timeout=None,
-                          **kwargs):
+    def get_game_high_scores(self,
+                             user_id,
+                             chat_id=None,
+                             message_id=None,
+                             inline_message_id=None,
+                             timeout=None,
+                             **kwargs):
         """Use this method to get data for high score tables.
 
         Args:
@@ -1693,39 +1764,39 @@ class Bot(TelegramObject):
         return (self.__class__, (self.token, self.base_url.replace(self.token, ''),
                                  self.base_file_url.replace(self.token, '')))
 
-# snake_case (PEP8) aliases
-
-    get_me = getMe
-    send_message = sendMessage
-    forward_message = forwardMessage
-    send_photo = sendPhoto
-    send_audio = sendAudio
-    send_document = sendDocument
-    send_sticker = sendSticker
-    send_video = sendVideo
-    send_voice = sendVoice
-    send_location = sendLocation
-    send_venue = sendVenue
-    send_contact = sendContact
-    send_game = sendGame
-    send_chat_action = sendChatAction
-    answer_inline_query = answerInlineQuery
-    get_user_profile_photos = getUserProfilePhotos
-    get_file = getFile
-    kick_chat_member = kickChatMember
-    unban_chat_member = unbanChatMember
-    answer_callback_query = answerCallbackQuery
-    edit_message_text = editMessageText
-    edit_message_caption = editMessageCaption
-    edit_message_reply_markup = editMessageReplyMarkup
-    get_updates = getUpdates
-    set_webhook = setWebhook
-    delete_webhook = deleteWebhook
-    leave_chat = leaveChat
-    get_chat = getChat
-    get_chat_administrators = getChatAdministrators
-    get_chat_member = getChatMember
-    get_chat_members_count = getChatMembersCount
-    get_webhook_info = getWebhookInfo
-    set_game_score = setGameScore
-    get_game_high_scores = getGameHighScores
+    # camelCase aliases
+    getMe = get_me
+    sendMessage = send_message
+    deleteMessage = delete_message
+    forwardMessage = forward_message
+    sendPhoto = send_photo
+    sendAudio = send_audio
+    sendDocument = send_document
+    sendSticker = send_sticker
+    sendVideo = send_video
+    sendVoice = send_voice
+    sendLocation = send_location
+    sendVenue = send_venue
+    sendContact = send_contact
+    sendGame = send_game
+    sendChatAction = send_chat_action
+    answerInlineQuery = answer_inline_query
+    getUserProfilePhotos = get_user_profile_photos
+    getFile = get_file
+    kickChatMember = kick_chat_member
+    unbanChatMember = unban_chat_member
+    answerCallbackQuery = answer_callback_query
+    editMessageText = edit_message_text
+    editMessageCaption = edit_message_caption
+    editMessageReplyMarkup = edit_message_reply_markup
+    getUpdates = get_updates
+    setWebhook = set_webhook
+    deleteWebhook = delete_webhook
+    leaveChat = leave_chat
+    getChat = get_chat
+    getChatAdministrators = get_chat_administrators
+    getChatMember = get_chat_member
+    getChatMembersCount = get_chat_members_count
+    getWebhookInfo = get_webhook_info
+    setGameScore = set_game_score
+    getGameHighScores = get_game_high_scores

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,6 @@ import warnings
 
 from .handler import Handler
 from telegram import Update
-from telegram.utils.deprecate import deprecate
 
 
 class CommandHandler(Handler):
@@ -100,7 +99,7 @@ class CommandHandler(Handler):
             if message.text:
                 command = message.text[1:].split(' ')[0].split('@')
                 command.append(
-                    update.message.bot.username)  # in case the command was send without a username
+                    message.bot.username)  # in case the command was send without a username
 
                 if self.filters is None:
                     res = True
@@ -110,7 +109,7 @@ class CommandHandler(Handler):
                     res = self.filters(message)
 
                 return res and (message.text.startswith('/') and command[0] == self.command
-                                and command[1] == update.message.bot.username)
+                                and command[1].lower() == message.bot.username.lower())
             else:
                 return False
 
@@ -126,8 +125,3 @@ class CommandHandler(Handler):
             optional_args['args'] = message.text.split()[1:]
 
         return self.callback(dispatcher.bot, update, **optional_args)
-
-    # old non-PEP8 Handler methods
-    m = "telegram.CommandHandler."
-    checkUpdate = deprecate(check_update, m + "checkUpdate", m + "check_update")
-    handleUpdate = deprecate(handle_update, m + "handleUpdate", m + "handle_update")

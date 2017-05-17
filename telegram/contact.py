@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -46,6 +46,8 @@ class Contact(TelegramObject):
         # Optionals
         self.last_name = last_name
         self.user_id = user_id
+
+        self._id_attrs = (self.phone_number,)
 
     @staticmethod
     def de_json(data, bot):

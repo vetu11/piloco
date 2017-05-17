@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,6 @@ import re
 from future.utils import string_types
 
 from telegram import Update
-from telegram.utils.deprecate import deprecate
 from .handler import Handler
 
 
@@ -105,8 +104,3 @@ class CallbackQueryHandler(Handler):
                 optional_args['groupdict'] = match.groupdict()
 
         return self.callback(dispatcher.bot, update, **optional_args)
-
-    # old non-PEP8 Handler methods
-    m = "telegram.CallbackQueryHandler."
-    checkUpdate = deprecate(check_update, m + "checkUpdate", m + "check_update")
-    handleUpdate = deprecate(handle_update, m + "handleUpdate", m + "handle_update")

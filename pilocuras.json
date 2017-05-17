@@ -1,160 +1,2234 @@
 [
-  {"id":0,"tipo":"normal","text":"Everybody do the flop. (Hola mundo)"},
-  {"id":1,"tipo":"normal","text":"Bebe 4 tragos si te has despertado en la cama de alguien preguntándote como llegaste ahí."},
-  {"id":2,"tipo":"normal","text":"Todos beben tantos tragos como jugadores hay jugando."},
-  {"id":3,"tipo":"normal","text":"El más peludo bebe 4 tragos."},
-  {"id":4,"tipo":"normal","text":"Aquellas y aquellos que oigan esta frase beben 2 tragos."},
-  {"id":5,"tipo":"normal","text":"Las y los que todavía no han repartido tragos en esta noche beben 3 tragos."},
-  {"id":6,"tipo":"normal","text":"Hay que cambiar la letra A por la letra I al hablar. Cistigo de 1 trigo."},
-  {"id":7,"tipo":"normal","text":"Aquellas y aquellos cuyos nombres contengan la letra F beben 4 tragos."},
-  {"id":8,"tipo":"normal","text":"Aquellas y aquellos cuyos nombres contengan la letra R beben 4 tragos."},
-  {"id":9,"tipo":"normal","text":"Aquellas y aquellos cuyos nombres contengan la letra A beben 3 tragos."},
-  {"id":10,"tipo":"normal","text":"Aquellas y aquellos cuyos nombres contengan la letra S beben 3 tragos."},
-  {"id":11,"tipo":"normal","text":"Las personas con buen corazón que hayan donado a una obra caritativa reparten 3 tragos."},
-  {"id":12,"tipo":"normal","text":"Bebe 4 tragos 1ºsi alguna vez has gastado mas de 100 euros en un dia."},
-  {"id":13,"tipo":"normal","text":"Los que sepan tocar la guitarra beben 5 tragos."},
-  {"id":14,"tipo":"normal","text":"Los que sepan leer una partitura beben 3 tragos."},
-  {"id":15,"tipo":"normal","text":"Hasta el final de la partida los tragos impares serán duplicados"},
-  {"id":16,"tipo":"normal","text":"Bebe 3 tragos si has tenido sueños eróticos esta semana."},
-  {"id":17,"tipo":"normal","text":"Bebe 4 tragos si has mantenido relaciones sexuales esta semana."},
-  {"id":18,"tipo":"normal","text":"Reparte 3 tragos si te has tirado algún pedo mientras te liabas con alguien."},
-  {"id":19,"tipo":"normal","text":"Bebe 4 tragos si estando borracho te pasaste de tu parada de metro/autobus."},
-  {"id":20,"tipo":"normal","text":"Reparte 5 tragos si te han operado."},
-  {"id":21,"tipo":"normal","text":"El primero en decir un refrán reparte 4 tragos."},
-  {"id":22,"tipo":"normal","text":"Si hoy has bailado reparte 3 tragos."},
-  {"id":23,"tipo":"normal","text":"Quien no haya nacido en esta comunidad bebe 3 tragos."},
-  {"id":24,"tipo":"normal","text":"Las personas que no puedan juntar sus dos manos detrás de la espalda (una desde arriba y otra desde abajo) beben 4 tragos."},
-  {"id":25,"tipo":"normal","variantes":["picante"],"text":"Bebes 5 tragos si te has acostado con mas de un miembro de una misma familia."},
-  {"id":26,"tipo":"normal","text":"La primera persona en encontrar un objeto triangular reparte 6 tragos."},
-  {"id":27,"tipo":"normal","text":"Quien terminase mal su ultima noche de fiesta bebe 2 tragos."},
-  {"id":28,"tipo":"normal","text":"El jugador a la derecha de quién está leyendo bebe 3 tragos."},
-  {"id":29,"tipo":"normal","text":"El jugador a la izquierda de quién está leyendo bebe 3 tragos."},
-  {"id":30,"tipo":"normal","text":"Las personas que son vírgen beben 6 tragos y hacen beber a otra a su elección otros 6."},
-  {"id":31,"tipo":"normal","text":"Bebe 2 tragos si has pasado mas de 3 días sin lavarte."},
-  {"id":32,"tipo":"normal","text":"Bebe 3 tragos por cada uno/a de los/las jugadores/as que hayas visto desnudo/a"},
-  {"id":33,"tipo":"normal","text":"A la de tres todos señalan al jugador más cobarde que tendrá que beber 3 tragos."},
-  {"id":34,"tipo":"normal","variantes":["picante"],"text":"Bebe 3 tragos si te encanta el sabor de los genitales de tu pareja."},
-  {"id":35,"tipo":"normal","text":"Reparte 2 tragos si no has visto ninguna película del Señor de los Anillos"},
-  {"id":36,"tipo":"normal","text":"A la de tres todos señalan a la persona más inteligente, que tendrá que beber 3 tragos."},
-  {"id":37,"tipo":"normal","text":"Bebe 3 tragos si alguna vez has enviado a alguien al hospital."},
-  {"id":38,"tipo":"normal","text":"Las y los que lleven una prenda marrón beben 3 tragos."},
-  {"id":39,"tipo":"normal","text":"Las personas que vomitaron en su última fiesta reparte 5 tragos."},
-  {"id":40,"tipo":"normal","text":"El jugador o jugadora que haya salido con la mujer más guapa bebe 3 tragos."},
-  {"id":41,"tipo":"normal","text":"La primera persona que encuentre un objeto blanco reparte 4 tragos."},
-  {"id":42,"tipo":"normal","text":"Los que usan gafas o lentillas beben 4 tragos."},
-  {"id":43,"tipo":"normal","text":"Bebe 3 tragos si alguna vez has comprado un móvil de más de 300€"},
-  {"id":44,"tipo":"normal","text":"¡Hasta el final de la partida hay que cecear!"},
-  {"id":45,"tipo":"normal","text":"Todos deben decir en alto la última película que han visto. Los que hayan visto la misma beben 5 tragos"},
-  {"id":46,"tipo":"RNI","text0":"¡Nueva regla! Cara o cruz; cada vez que te toque beber lanzas la moneda, si ganas no bebes, si pierdes bebes el doble","text1":"Se acabó la norma de la moneda, todos bebéis los tragos correspondientes."},
-  {"id":47,"tipo":"normal","text":"Cuando la hora muestre un múltiplo de diez el primer jugador en gritar \"Supercalifragilisticoespialidoso\" reparte 10 tragos."},
-  {"id":48,"tipo":"normal","text":"Aquellos y aquellas que tengan el teléfono en la mesa o en la mano (salvo el que está leyendo) beben 3 tragos"},
-  {"id":49,"tipo":"normal","text":"Cacao o cacado, voten todos juntos. La minoría bebe 3 tragos"},
-  {"id":50,"tipo":"normal","variantes":["picante"],"text":"Todos los que tienen una camisa de botónes se la desabrochan y beben 1 trago por cada botón"},
-  {"id":51,"tipo":"normal","text":"Prohibido dirigirse a cualquier persona por su nombre. Castigo de un trago"},
-  {"id":52,"tipo":"normal","text":"Brindemos amigos, por nosotros"},
-  {"id":53,"tipo":"normal","text":"El/la primera persona que sea capaz de lamer su codo reparte 50 tragos."},
-  {"id":47,"tipo":"normal","text":"Cuando la hora muestre un múltiplo de diez el primer jugador en gritar \"Supercalifragilisticoespialidoso\" bebe 10 tragos."},
-  {"id":55,"tipo":"normal","text":"El jugador que está enfrente de la persona que acaba de leer este mensaje reparte 4 tragos."},
-  {"id":56,"tipo":"normal","text":"Reparte 5 tragos si has tenido algún accidente de tráfico."},
-  {"id":57,"tipo":"normal","text":"Bebe 5 tragos si has tenido un orgasmo en las ultimas 24h."},
-  {"id":58,"tipo":"normal","text":"Decidid entre todos quien es el jugador mas fuerte que beberá 4 tragos."},
-  {"id":59,"tipo":"normal","text":"La ultima persona que haya ido al baño bebe 2 tragos."},
-  {"id":60,"tipo":"normal","text":"Los fans de los súper héroes beben 5 tragos."},
-  {"id":61,"tipo":"normal","text":"{1} haz 6 abdominales y bebe un trago entre cada una de ellas."},
-  {"id":62,"tipo":"normal","text":"{1} debes sacarle una foto a {2} y la tendrá que subir a alguna de sus redes sociales (tipo fb)."},
-  {"id":63,"tipo":"normal","text":"Sin dolor no hay recompensa, {1} bebe un trago sin usar tus manos."},
-  {"id":64,"tipo":"normal","variantes":["picante"],"text":"{1} bebe 3 tragos si te parece atractava/o {2}."},
-  {"id":65,"tipo":"normal","text":"{1} bebe en tragos el número de tus conquistas."},
-  {"id":67,"tipo":"normal","text":"¿Pepsi o cocacola? A la de tres levantad la mano los que prefirais Cocacola. La minoría bebe 3 tragos."},
-  {"id":68,"tipo":"normal","text":"Las personas que han repetido un año escolar beben 2 tragos."},
-  {"id":69,"tipo":"normal","text":"Aquellas y aquellos que tengan un animal doméstico reparten 2 tragos."},
-  {"id":70,"tipo":"normal","text":"Bebe 4 tragos si alguna vez has montado a caballo."},
-  {"id":71,"tipo":"normal","text":"Las y los zurdos beben 2 tragos."},
-  {"id":72,"tipo":"normal","variantes":["hastaElFondo"],"text":"¡La primera persona en terminar su copa reparte 5 tragos!"},
-  {"id":74,"tipo":"normal","variantes":["picante"],"Text":"¡Ronda de preguntas y respuestas! Todo el mundo responderá a una pregunta con la verdad. {1} empiezas."},
-  {"id":75,"tipo":"normal","text":"{1} invita a alguien a esta fiesta o bebe 2 tragos."},
-  {"id":76,"tipo":"RNI","variantes":["hastaElFondo"],"text0":"Nadie puede coger su vaso con la mano buena (izquierda/derecha), el castigo será terminarse lo que le queda, de un sólo trago.","text1":"Podéis coger el vaso con vuestra mano buena otra vez."},
-  {"id":78,"tipo":"normal","text":"Bebe 3 tragos si nunca vas a donar sangre (maldito bastardo)."},
-  {"id":79,"tipo":"normal","variantes":["hastaElFondo"],"text":"HASTA EL FONDO ¡Que termine su vaso la última persona que llegó a la fista!"},
-  {"id":80,"tipo":"normal","text":"Tema: Los personajes de los Simpson. {1} Empiezas."},
-  {"id":81,"tipo":"normal","text":"Los que tengan los ojos azules beben 3 tragos"},
-  {"id":82,"tipo":"normal","text":"Los que tengan los ojos verdes beben 3 tragos"},
-  {"id":83,"tipo":"normal","variantes":["picante"],"text":"Bebe 4 tragos si alguna vez has tenido sexo en el agua."},
-  {"id":54,"tipo":"normal","variantes":["picante"],"text":"Cada uno bebe tantos tragos como líos haya tenido con las personas presentes."},
-  {"id":66,"tipo":"normal","text":"Bebe 5 tragos si le has quitado dinero de la cartera a tus padres sin decírselo."},
-  {"id":77,"tipo":"normal","text":"Aquellos y aquellas que tengan su foto de perfil de WhatsApp retocada de alguna manera beben 4 tragos."},
-  {"id":84,"tipo":"normal","text":"Bebe 5 tragos si has creado Piloco."},
-  {"id":85,"tipo":"normal","text":"Reparte 2 tragos si te gusta Piloco."},
-  {"id":86,"tipo":"normal","text":"Aquellos o aquellas que tengas su foto de perfil de WhatsApp retocada de alguna manera beben 3 tragos."},
-  {"id":41,"tipo":"normal","text":"La primera persona en encontrar un objeto rojo reparte 4 tragos."},
-  {"id":26,"tipo":"normal","text":"La primera persona en encontrar un objeto cuadrado reparte 4 tragos."},
-  {"id":73,"tipo":"normal","text":"2 tragos para los fumadores."},
-  {"id":87,"tipo":"RNI","text0":"¡{1} eres alemán! Habla con acento alemán hasta nuevo aviso.","text1":"{1} ya puedes hablar sin acento alemán."},
-  {"id":88,"tipo":"normal","text":"Para el recuerdo, {1} y {2} haceos un selfie"},
-  {"id":89,"tipo":"normal","variantes":["picante"],"text":"Bebe 4 tragos si has besado a alguien de tu mismo sexo."},
-  {"id":90,"tipo":"normal","text":"Bebe 3 tragos si has trabajo ilegalmente."},
-  {"id":91,"tipo":"normal","text":"Bebe 3 tragos si la mayoría considera tu nombre inusual."},
-  {"id":92,"tipo":"normal","text":"Bebe tantos tragos como veces que te masturbas."},
-  {"id":93,"tipo":"normal","text":"Bebe tantos tragos como veces hayas ido al baño esta noche."},
-  {"id":95,"tipo":"normal","variantes":["picante"],"text":"Bebe 5 tragos si lo último que buscaste en ventana de incógnito es porno."},
-  {"id":96,"tipo":"normal","variantes":["picante"],"text":"{1} y {2}, intercanbiad vuestras camisetas hasta que acabe la partida. Sino, bebéis 1 trago cada vez que cualquier jugador beba hasta que acabe la partida."},
-  {"id":97,"tipo":"normal","text":"Las personas que lleguen a tocarse la cabeza con el pie reparten 4 tragos."},
-  {"id":98,"tipo":"normal","variantes":["picante"],"text":"{1} quitate una prenda. (Pls no hagas lo de la pulserita o el calcetín)"},
-  {"id":99,"tipo":"normal","variantes":["picante"],"text":"{1} quitate una prenda. (Pls no hagas lo de la pulserita o el calcetín)"},
-  {"id":100,"tipo":"normal","variantes":["picante"],"text":"{1} quitate una prenda. (Pls no hagas lo de la pulserita o el calcetín)"},
-  {"id":101,"tipo":"normal","variantes":["picante"],"text":"{1} quitate una prenda. (Pls no hagas lo de la pulserita o el calcetín)"},
-  {"id":102,"tipo":"normal","variantes":["picante"],"text":"{1} elige, quedate en ropa interior de cintura para arriba o de cintura para abajo."},
-  {"id":103,"tipo":"RNI","variantes":["picante"],"text0":"{1} te toca sentarte sobre {2} hasta nuevo aviso.","text1":"{1}, ya no hace falta que te sientes sobre {2}."},
-  {"id":104,"tipo":"RNI","text0":"{1} tienes que levantar la mano para hablar y {2} te dará permiso. Castigo de 1 trago.","text1":"¡Libertad de expresión! {1}, ya no sigues las órdenes de {2}, habla cuando quieras."},
-  {"id":105,"tipo":"normal","variantes":["picante"],"text":"¡Sin rechistar, ni lo pienses! {1} tienes que darle un beso en la boca a {2}."},
-  {"id":106,"tipo":"normal","variantes":["picante"],"text":"¡Sin rechistar, ni lo pienses! {1} tienes que darle un beso en la boca a {2}."},
-  {"id":107,"tipo":"RI","text0":"Si alguien tiene ganas de insultar a {1} es el momento.","text1":"{1} ahora reparte 4 tragos por cada pesona que te haya insultado."},
-  {"id":107,"tipo":"RI","text0":"Si alguien tiene ganas de insultar a {1} es el momento.","text1":"Los que hayan insultado a {1} reparten 3 tragos (dejad a {1}). Los que no lo hayan hecho beben 2."},
-  {"id":108,"tipo":"normal","text":"Bebe 3 tragos si usas zapatos entre talla 40 y 44"},
-  {"id":109,"tipo":"normal","text":"Reparte 4 tragos si te has tomado una pastilla en las ultimas 48h."},
-  {"id":110,"tipo":"normal","variantes":["picante"],"text":"Bebe 2 tragos por cada pesona de la sala con la que te hayas besado."},
-  {"id":111,"tipo":"normal","text":"Reparte 4 tragos si tienes que trabajar/estudiar mañana."},
-  {"id":112,"tipo":"normal","text":"Bebe 3 tragos si puedes chuparte el dedo gordo del pie."},
-  {"id":113,"tipo":"normal","text":"Reparte 4 tragos si sabes chuparte la nariz con la lengua."},
-  {"id":114,"tipo":"normal","text":"Que beban todas/os las/los solteras/os."},
-  {"id":115,"tipo":"normal","text":"Que beban todas/os las/los estudiantes."},
-  {"id":116,"tipo":"normal","text":"Si alguien ha vomitado esta noche puede repartir 4 tragos."},
-  {"id":117,"tipo":"normal","text":"Los ateos beben 4 tragos."},
-  {"id":118,"tipo":"RNI","variantes":["picante"],"text0":"{1} empieza a masajear a {2} hasta nuevo aviso.","text1":"{1} puedes dejar de masajear a {2}. Si en algún momento has dejado de hacerlo, bebe 4 tragos."},
-  {"id":118,"tipo":"RNI","variantes":["picante","hastaElFondo"],"text0":"{1} empieza a masajear a {2} hasta nuevo aviso.","text1":"{1} puedes dejar de masajear a {2}. Si en algún momento has dejado de hacerlo, temina tu vaso."},
-  {"id":119,"tipo":"RNI","text0":"{1} mantén las manos en la cabeza, menos para beber.","text1":"{1}, ya puedes bajar tus manos."},
-  {"id":120,"tipo":"normal","text":"Los creyentes beben 4 tragos."},
-  {"id":121,"tipo":"normal","text":"Los agnósticos beben 4 tragos."},
-  {"id":122,"tipo":"normal","text":"A la de tres votais a quien es más probable que haga preguntas estúpidas y que deberá beber 3 tragos"},
-  {"id":123,"tipo":"normal","text":"A la de tres votais a quien es más probable que compre cosas que no necesita y deberá beber 3 tragos "},
-  {"id":124,"tipo":"normal","text":"A la de tres votais a quien es más probable que haga el ridículo sin querer y beberá 2 tragos"},
-  {"id":125,"tipo":"normal","text":"A la de tres votais a quien es más impaciente y deberá esperar 3 minutos para volver a beber"},
-  {"id":126,"tipo":"normal","text":"A la de tres votais a quien creeis que es más probable que tenga un sueño erótico y repartirá 3 tragos."},
-  {"id":127,"tipo":"normal","text":"A la de tres votais a quien es más probable que olvide algo importante y beberá 3 tragos"},
-  {"id":128,"tipo":"normal","text":"A la de tres votais a quien es el más raro de la sala y deberá beber 4 tragos"},
-  {"id":129,"tipo":"normal","text":"Quien se haya arrepentido de liarse con alguien bebe 4 tragos."},
-  {"id":130,"tipo":"normal","text":"Los mayores de 18 beben reparten 4 tragos."},
-  {"id":131,"tipo":"normal","text":"Si estás bebiendo cerveza bebe 3 tragos."},
-  {"id":132,"tipo":"normal","text":"Si estás bebiendo tinto bebe 3 tragos."},
-  {"id":133,"tipo":"normal","text":"Si estás bebiendo agua bebe 10 tragos."},
-  {"id":134,"tipo":"normal","text":"Si estás bebiendo algo con mezcla bebe 3 tragos."},
-  {"id":135,"tipo":"normal","text":"Aquellos y aquellas que hayan cagado en la calle beben 3 tragos."},
-  {"id":136,"tipo":"normal","text":"Reparte 3 tragos si has besado a más de tres jugadores."},
-  {"id":137,"tipo":"normal","text":"Bebe dos tragos si has visto a algún jugador semidesnudo."},
-  {"id":138,"tipo":"normal","variantes":["picante"],"text":"{1} y {2}, restregad vuestros culos. Sino, bebéis 1 trago cada vez que cualquier jugador beba hasta que acabe la partida."},
-  {"id":139,"tipo":"normal","variantes":["picante"],"text":"{1} besa el cuello de  {2} durante 3 segundos, quien se niegue duplica sus tragos hasta el final de la partida, ."},
-  {"id":140,"tipo":"normal","variantes":["picante"],"text":"{1} tienes que morder el labio inferior de {2}. Quién se niegue dejará de beber por 10 minutos."},
-  {"id":141,"tipo":"normal","text": "Reparte 4 tragos si algún periódico ha publicado un artículo donde salgas."},
-  {"id":142,"tipo":"normal","text":"¡Los y las que hayan cagado en el mar beben 3 tragos!"},
-  {"id":143,"tipo":"normal","text":"Las personas con tatuajes o piercings beben 5 tragos."},
-  {"id":144,"tipo":"normal","text":"JUEGO: Todos deben nombrar la última película que han visto quienes hayan visto la misma beben 3 tragos."},
-  {"id":145,"tipo":"RNI","text0":"¡Nueva regla!Todos deben imaginar tener una pajita en su vaso que deberán quitar cada vez que tengan que beber y volver a poner la pajita en el vaso","text1":"Se acabó la norma de la pajita."},
-  {"id":146,"tipo":"normal","variantes":["picante"],"text":"Si nunca has hecho un Strip-tease bebe 5 tragos o hazlo ahora."},
-  {"id":147,"tipo":"normal","text":"¡Cada uno bebe tantos tragos como años haya pasado en la guardería!"},
-  {"id":148,"tipo":"normal","text":"Reparte 4 tragos si han roto contigo más de 2 veces."},
-  {"id":149,"tipo":"normal","text":"Bebe 3 tragos si te arrepientes de haberte liado con alguien"},
-  {"id":150,"tipo":"normal","text":"El siguiente jugador que beba podrá repartir 6 tragos"},
-  {"id":151,"tipo":"normal","text":"El siguiente jugador que beba podrá repartir 3 tragos"},
-  {"id":152,"tipo":"normal","text":"El siguiente jugador que reparta tragos deberá beber 3 tragos"},
-  {"id":153,"tipo":"normal","text":"El siguiente jugador que reparta tragos deberá beber 5 tragos"}
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Everybody do the flop. (Hola mundo)", 
+    "picante": 0, 
+    "id": 0
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 4 tragos si te has despertado en la cama de alguien pregunt\u00e1ndote como llegaste ah\u00ed.", 
+    "picante": 0, 
+    "id": 1
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Todos beben tantos tragos como jugadores hay jugando.", 
+    "picante": 0, 
+    "id": 2
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El m\u00e1s peludo bebe 4 tragos.", 
+    "picante": 0, 
+    "id": 3
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellas y aquellos que oigan esta frase beben 2 tragos.", 
+    "picante": 0, 
+    "id": 4
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las y los que todav\u00eda no han repartido tragos en esta noche beben 3 tragos.", 
+    "picante": 0, 
+    "id": 5
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Hay que cambiar todas las vocales por la A al hablar. Castaga da 1 traga. (El que lee puede _leer_ normal)", 
+    "text1": "Ya se pueden decir todas las vocales.", 
+    "id": 6
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Hay que cambiar todas las vocales por la E al hablar. Cestegue de 1 trege. (El que lee puede _leer_ normal)", 
+    "text1": "Ya se pueden decir todas las vocales.", 
+    "id": 7
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Hay que cambiar todas las vocales por la I al hablar. Cistigui di 1 trigi. (El que lee puede _leer_ normal)", 
+    "text1": "Ya se pueden decir todas las vocales.", 
+    "id": 8
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Hay que cambiar todas las vocales por la O al hablar. Costogo do 1 trogo. (El que lee puede _leer_ normal)", 
+    "text1": "Ya se pueden decir todas las vocales.", 
+    "id": 9
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Hay que cambiar todas las vocales por la U al hablar. Custugu du 1 trugu. (El que lee puede _leer_ normal)", 
+    "text1": "Ya se pueden decir todas las vocales.", 
+    "id": 10
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellas y aquellos cuyos nombres contengan la letra F beben 4 tragos.", 
+    "picante": 0, 
+    "id": 11
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellas y aquellos cuyos nombres contengan la letra R beben 4 tragos.", 
+    "picante": 0, 
+    "id": 12
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellas y aquellos cuyos nombres contengan la letra A beben 3 tragos.", 
+    "picante": 0, 
+    "id": 13
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellas y aquellos cuyos nombres contengan la letra S beben 3 tragos.", 
+    "picante": 0, 
+    "id": 14
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las personas con buen coraz\u00f3n que hayan donado a una obra caritativa reparten 3 tragos.", 
+    "picante": 0, 
+    "id": 15
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 4 tragos si alguna vez has gastado mas de 100 euros en un dia.", 
+    "picante": 0, 
+    "id": 16
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los que sepan tocar la guitarra beben 5 tragos.", 
+    "picante": 0, 
+    "id": 17
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los que sepan leer una partitura beben 3 tragos.", 
+    "picante": 0, 
+    "id": 18
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Hasta el final de la partida los tragos impares ser\u00e1n duplicados", 
+    "picante": 0, 
+    "id": 19
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si has tenido sue\u00f1os er\u00f3ticos esta semana.", 
+    "picante": 0, 
+    "id": 20
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 4 tragos si has mantenido relaciones sexuales esta semana.", 
+    "picante": 0, 
+    "id": 21
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 3 tragos si te has tirado alg\u00fan pedo mientras te liabas con alguien.", 
+    "picante": 0, 
+    "id": 22
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 4 tragos si estando borracho te pasaste de tu parada de metro/autobus.", 
+    "picante": 0, 
+    "id": 23
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 5 tragos si te han operado.", 
+    "picante": 0, 
+    "id": 24
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El primero en decir un refr\u00e1n reparte 4 tragos.", 
+    "picante": 0, 
+    "id": 25
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si hoy has bailado reparte 3 tragos.", 
+    "picante": 0, 
+    "id": 26
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Quien no haya nacido en esta comunidad bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 27
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las personas que no puedan juntar sus dos manos detr\u00e1s de la espalda (una desde arriba y otra desde abajo) beben 4 tragos.", 
+    "picante": 0, 
+    "id": 28
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebes 5 tragos si te has acostado con mas de un miembro de una misma familia.", 
+    "picante": 4.311730077539024, 
+    "id": 29
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "La primera persona en encontrar un objeto triangular reparte 6 tragos.", 
+    "picante": 0, 
+    "id": 30
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Quien terminase mal su ultima noche de fiesta bebe 2 tragos.", 
+    "picante": 0, 
+    "id": 31
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El jugador a la derecha de qui\u00e9n est\u00e1 leyendo bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 32
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El jugador a la izquierda de qui\u00e9n est\u00e1 leyendo bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 33
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las personas que son v\u00edrgen beben 6 tragos y hacen beber a otra a su elecci\u00f3n otros 6.", 
+    "picante": 0, 
+    "id": 34
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 2 tragos si has pasado mas de 3 d\u00edas sin lavarte.", 
+    "picante": 0, 
+    "id": 35
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos por cada uno/a de los/las jugadores/as que hayas visto desnudo/a", 
+    "picante": 0, 
+    "id": 36
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres todos se\u00f1alan al jugador m\u00e1s cobarde que tendr\u00e1 que beber 3 tragos.", 
+    "picante": 0, 
+    "id": 37
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si te encanta el sabor de los genitales de tu pareja.", 
+    "picante": 3.1470614335159737, 
+    "id": 38
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 2 tragos si no has visto ninguna pel\u00edcula del Se\u00f1or de los Anillos", 
+    "picante": 0, 
+    "id": 39
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres todos se\u00f1alan a la persona m\u00e1s inteligente, que tendr\u00e1 que beber 3 tragos.", 
+    "picante": 0, 
+    "id": 40
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si alguna vez has enviado a alguien al hospital.", 
+    "picante": 0, 
+    "id": 41
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las y los que lleven una prenda marr\u00f3n beben 3 tragos.", 
+    "picante": 0, 
+    "id": 42
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las personas que vomitaron en su \u00faltima fiesta reparte 5 tragos.", 
+    "picante": 0, 
+    "id": 43
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El jugador o jugadora que haya salido con la mujer m\u00e1s guapa bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 44
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "La primera persona que encuentre un objeto blanco reparte 4 tragos.", 
+    "picante": 0, 
+    "id": 45
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los que usan gafas o lentillas beben 4 tragos.", 
+    "picante": 0, 
+    "id": 46
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si alguna vez has comprado un m\u00f3vil de m\u00e1s de 300\u20ac", 
+    "picante": 0, 
+    "id": 47
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1Hasta el final de la partida hay que cecear!", 
+    "picante": 0, 
+    "id": 48
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Todos deben decir en alto la \u00faltima pel\u00edcula que han visto. Los que hayan visto la misma beben 5 tragos", 
+    "picante": 0, 
+    "id": 49
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1Nueva regla! Cara o cruz: cada vez que te toque beber lanzas la moneda, si ganas no bebes, si pierdes bebes el doble", 
+    "text1": "Se acab\u00f3 la norma de la moneda, todos beb\u00e9is los tragos correspondientes.", 
+    "id": 50
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Cuando la hora muestre un m\u00faltiplo de diez el primer jugador en gritar \"Supercalifragilisticoespialidoso\" reparte 10 tragos.", 
+    "picante": 0, 
+    "id": 51
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellos y aquellas que tengan el tel\u00e9fono en la mesa o en la mano (salvo el que est\u00e1 leyendo) beben 3 tragos", 
+    "picante": 0, 
+    "id": 52
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Cacao o cacado, voten todos juntos. La minor\u00eda bebe 3 tragos", 
+    "picante": 0, 
+    "id": 53
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Todos los que tienen una camisa de bot\u00f3nes se la desabrochan y beben 1 trago por cada bot\u00f3n", 
+    "picante": 6.585920987593623, 
+    "id": 54
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Prohibido dirigirse a cualquier persona por su nombre. Castigo de un trago", 
+    "picante": 0, 
+    "id": 55
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Brindemos amigos, por nosotros", 
+    "picante": 0, 
+    "id": 56
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "La primera persona que sea capaz de lamer su codo reparte 50 tragos.", 
+    "picante": 0, 
+    "id": 57
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Cuando la hora muestre un m\u00faltiplo de diez el primer jugador en gritar \"Supercalifragilisticoespialidoso\" bebe 10 tragos.", 
+    "picante": 0, 
+    "id": 58
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El jugador que est\u00e1 enfrente de la persona que acaba de leer este mensaje reparte 4 tragos.", 
+    "picante": 0, 
+    "id": 59
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 5 tragos si has tenido alg\u00fan accidente de tr\u00e1fico.", 
+    "picante": 0, 
+    "id": 60
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 5 tragos si has tenido un orgasmo en las ultimas 24h.", 
+    "picante": 0, 
+    "id": 61
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Decidid entre todos quien es el jugador mas fuerte que beber\u00e1 4 tragos.", 
+    "picante": 0, 
+    "id": 62
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "La ultima persona que haya ido al ba\u00f1o bebe 2 tragos.", 
+    "picante": 0, 
+    "id": 63
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los fans de los s\u00faper h\u00e9roes beben 5 tragos.", 
+    "picante": 0, 
+    "id": 64
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} haz 6 abdominales y bebe un trago entre cada una de ellas.", 
+    "picante": 0, 
+    "id": 65
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} debes sacarle una foto a {2} y la tendr\u00e1 que subir a alguna de sus redes sociales (tipo fb).", 
+    "picante": 0, 
+    "id": 66
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Sin dolor no hay recompensa, {1} bebe un trago sin usar tus manos.", 
+    "picante": 0, 
+    "id": 67
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} bebe 3 tragos si te parece atrictava/o {2}.", 
+    "picante": 7.783473282991633, 
+    "id": 68
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} bebe en tragos el n\u00famero de tus conquistas.", 
+    "picante": 0, 
+    "id": 69
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00bfPepsi o cocacola? A la de tres levantad la mano los que prefirais Cocacola. La minor\u00eda bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 70
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las personas que han repetido un a\u00f1o escolar beben 2 tragos.", 
+    "picante": 0, 
+    "id": 71
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellas y aquellos que tengan un animal dom\u00e9stico reparten 2 tragos.", 
+    "picante": 0, 
+    "id": 72
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 4 tragos si alguna vez has montado a caballo.", 
+    "picante": 0, 
+    "id": 73
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las y los zurdos beben 2 tragos.", 
+    "picante": 0, 
+    "id": 74
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1La primera persona en terminar su copa reparte 5 tragos!", 
+    "picante": 0, 
+    "id": 75
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1Ronda de preguntas y respuestas! Todo el mundo responder\u00e1 a una pregunta con la verdad. {1} empiezas.", 
+    "picante": 2.6215335843840526, 
+    "id": 76
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} invita a alguien a esta fiesta o bebe 2 tragos.", 
+    "picante": 0, 
+    "id": 77
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Nadie puede coger su vaso con la mano buena (izquierda/derecha), el castigo ser\u00e1 terminarse lo que le queda, de un s\u00f3lo trago.", 
+    "text1": "Pod\u00e9is coger el vaso con vuestra mano buena otra vez.", 
+    "id": 78
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si nunca vas a donar sangre (maldito bastardo).", 
+    "picante": 0, 
+    "id": 79
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "HASTA EL FONDO \u00a1Que termine su vaso la \u00faltima persona que lleg\u00f3 a la fista!", 
+    "picante": 0, 
+    "id": 80
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Tema: Los personajes de los Simpson. {1} Empiezas.", 
+    "picante": 0, 
+    "id": 81
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los que tengan los ojos azules beben 3 tragos", 
+    "picante": 0, 
+    "id": 82
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los que tengan los ojos verdes beben 3 tragos", 
+    "picante": 0, 
+    "id": 83
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 4 tragos si alguna vez has tenido sexo en el agua.", 
+    "picante": 16.531152756121987, 
+    "id": 84
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Cada uno bebe tantos tragos como l\u00edos haya tenido con las personas presentes.", 
+    "picante": 7.414537156429867, 
+    "id": 85
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 5 tragos si le has quitado dinero de la cartera a tus padres sin dec\u00edrselo.", 
+    "picante": 0, 
+    "id": 86
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellos y aquellas que tengan su foto de perfil de WhatsApp retocada de alguna manera beben 4 tragos.", 
+    "picante": 0, 
+    "id": 87
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 5 tragos si has creado Piloco.", 
+    "picante": 0, 
+    "id": 88
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 2 tragos si te gusta Piloco.", 
+    "picante": 0, 
+    "id": 89
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellos o aquellas que tengas su foto de perfil de WhatsApp retocada de alguna manera beben 3 tragos.", 
+    "picante": 0, 
+    "id": 90
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "La primera persona en encontrar un objeto rojo reparte 4 tragos.", 
+    "picante": 0, 
+    "id": 91
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "La primera persona en encontrar un objeto cuadrado reparte 4 tragos.", 
+    "picante": 0, 
+    "id": 92
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "2 tragos para los fumadores.", 
+    "picante": 0, 
+    "id": 93
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1{1} eres alem\u00e1n! Habla con acento alem\u00e1n hasta nuevo aviso.", 
+    "text1": "{1} ya puedes hablar sin acento alem\u00e1n.", 
+    "id": 94
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Para el recuerdo, {1} y {2} haceos un selfie", 
+    "picante": 0, 
+    "id": 95
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 4 tragos si has besado a alguien de tu mismo sexo.", 
+    "picante": 6.992000653827837, 
+    "id": 96
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si has trabajo ilegalmente.", 
+    "picante": 0, 
+    "id": 97
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si la mayor\u00eda considera tu nombre inusual.", 
+    "picante": 0, 
+    "id": 98
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe tantos tragos como veces te masturbas normalmente cada d\u00eda (0,x se redonde hacia arriba as\u00ed que m\u00ednimo 1).", 
+    "picante": 0, 
+    "id": 99
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe tantos tragos como veces hayas ido al ba\u00f1o esta noche.", 
+    "picante": 0, 
+    "id": 100
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 5 tragos si lo \u00faltimo que buscaste en ventana de inc\u00f3gnito es porno.", 
+    "picante": 5.3869231078770925, 
+    "id": 101
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} y {2}, intercambiad vuestras camisetas hasta que acabe la partida. Sino, beb\u00e9is 1 trago cada vez que cualquier jugador beba hasta que acabe la partida.", 
+    "picante": 8.400297660685533, 
+    "id": 102
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las personas que lleguen a tocarse la cabeza con el pie reparten 4 tragos.", 
+    "picante": 0, 
+    "id": 103
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} quitate una prenda. (Pls no hagas lo de la pulserita o el calcet\u00edn)", 
+    "picante": 13.874762578727601, 
+    "id": 104
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} quitate una prenda. (Pls no hagas lo de la pulserita o el calcet\u00edn)", 
+    "picante": 11.53412205339823, 
+    "id": 105
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} quitate una prenda. (Pls no hagas lo de la pulserita o el calcet\u00edn)", 
+    "picante": 11.761007911753733, 
+    "id": 106
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} quitate una prenda. (Pls no hagas lo de la pulserita o el calcet\u00edn)", 
+    "picante": 11.890729438379847, 
+    "id": 107
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} elige, quedate en ropa interior de cintura para arriba o de cintura para abajo.", 
+    "picante": 9.828900319378379, 
+    "id": 108
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 2.043407092367335, 
+    "text0": "{1} te toca sentarte sobre {2} hasta nuevo aviso.", 
+    "text1": "{1}, ya no hace falta que te sientes sobre {2}.", 
+    "id": 109
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} tienes que levantar la mano para hablar y {2} te dar\u00e1 permiso. Castigo de 1 trago.", 
+    "text1": "\u00a1Libertad de expresi\u00f3n! {1}, ya no sigues las \u00f3rdenes de {2}, habla cuando quieras.", 
+    "id": 110
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1Sin rechistar, ni lo pienses! {1} tienes que darle un beso en la boca a {2}.", 
+    "picante": 12.018511238482093, 
+    "id": 111
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1Sin rechistar, ni lo pienses! {1} tienes que darle un beso en la boca a {2}.", 
+    "picante": 9.180292607120329, 
+    "id": 112
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Si alguien tiene ganas de insultar a {1} es el momento.", 
+    "text1": "{1} ahora reparte 4 tragos por cada pesona que te haya insultado.", 
+    "id": 113
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Si alguien tiene ganas de insultar a {1} es el momento.", 
+    "text1": "Los que hayan insultado a {1} reparten 3 tragos (dejad a {1}). Los que no lo hayan hecho beben 2.", 
+    "id": 114
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si usas zapatos entre talla 40 y 44", 
+    "picante": 0, 
+    "id": 115
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 4 tragos si te has tomado una pastilla en las ultimas 48h.", 
+    "picante": 0, 
+    "id": 116
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 2 tragos por cada pesona de la sala con la que te hayas besado.", 
+    "picante": 8.909597269642227, 
+    "id": 117
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 4 tragos si tienes que trabajar/estudiar ma\u00f1ana.", 
+    "picante": 0, 
+    "id": 118
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si puedes chuparte el dedo gordo del pie.", 
+    "picante": 0, 
+    "id": 119
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 4 tragos si sabes chuparte la nariz con la lengua.", 
+    "picante": 0, 
+    "id": 120
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Que beban todas/os las/los solteras/os.", 
+    "picante": 0, 
+    "id": 121
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Que beban todas/os las/los estudiantes.", 
+    "picante": 0, 
+    "id": 122
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si alguien ha vomitado esta noche puede repartir 4 tragos.", 
+    "picante": 0, 
+    "id": 123
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los ateos beben 4 tragos.", 
+    "picante": 0, 
+    "id": 124
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 8.166631519635862, 
+    "text0": "{1} empieza a masajear a {2} hasta nuevo aviso.", 
+    "text1": "{1} puedes dejar de masajear a {2}. Si en alg\u00fan momento has dejado de hacerlo, bebe 4 tragos.", 
+    "id": 125
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} mant\u00e9n las manos en la cabeza, menos para beber.", 
+    "text1": "{1}, ya puedes bajar tus manos.", 
+    "id": 126
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los creyentes beben 4 tragos.", 
+    "picante": 0, 
+    "id": 127
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los agn\u00f3sticos beben 4 tragos.", 
+    "picante": 0, 
+    "id": 128
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres votais a quien es m\u00e1s probable que haga preguntas est\u00fapidas y que deber\u00e1 beber 3 tragos", 
+    "picante": 0, 
+    "id": 129
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres votais a quien es m\u00e1s probable que compre cosas que no necesita y deber\u00e1 beber 3 tragos ", 
+    "picante": 0, 
+    "id": 130
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres votais a quien es m\u00e1s probable que haga el rid\u00edculo sin querer y beber\u00e1 2 tragos", 
+    "picante": 0, 
+    "id": 131
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres votais a quien es m\u00e1s impaciente y deber\u00e1 esperar 3 minutos para volver a beber", 
+    "picante": 0, 
+    "id": 132
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres votais a quien creeis que es m\u00e1s probable que tenga un sue\u00f1o er\u00f3tico y repartir\u00e1 3 tragos.", 
+    "picante": 0, 
+    "id": 133
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres votais a quien es m\u00e1s probable que olvide algo importante y beber\u00e1 3 tragos", 
+    "picante": 0, 
+    "id": 134
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A la de tres votais a quien es el m\u00e1s raro de la sala y deber\u00e1 beber 4 tragos", 
+    "picante": 0, 
+    "id": 135
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Quien se haya arrepentido de liarse con alguien bebe 4 tragos.", 
+    "picante": 0, 
+    "id": 136
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los mayores de 18 beben reparten 4 tragos.", 
+    "picante": 0, 
+    "id": 137
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si est\u00e1s bebiendo cerveza bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 138
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si est\u00e1s bebiendo tinto bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 139
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si est\u00e1s bebiendo agua bebe 10 tragos.", 
+    "picante": 0, 
+    "id": 140
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si est\u00e1s bebiendo algo con mezcla bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 141
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Aquellos y aquellas que hayan cagado en la calle beben 3 tragos.", 
+    "picante": 0, 
+    "id": 142
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 3 tragos si has besado a m\u00e1s de tres jugadores.", 
+    "picante": 0, 
+    "id": 143
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe dos tragos si has visto a alg\u00fan jugador semidesnudo.", 
+    "picante": 0, 
+    "id": 144
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} y {2}, restregad vuestros culos. Sino, beb\u00e9is 1 trago cada vez que cualquier jugador beba hasta que acabe la partida.", 
+    "picante": 10.95829362623004, 
+    "id": 145
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} besa el cuello de {2} durante 3 segundos, quien se niegue duplica sus tragos hasta el final de la partida, .", 
+    "picante": 10.818741259891825, 
+    "id": 146
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} tienes que morder el labio inferior de {2}. Qui\u00e9n se niegue dejar\u00e1 de beber por 10 minutos.", 
+    "picante": 16.608539792359966, 
+    "id": 147
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 4 tragos si alg\u00fan peri\u00f3dico ha publicado un art\u00edculo donde salgas.", 
+    "picante": 0, 
+    "id": 148
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1Los y las que hayan cagado en el mar beben 3 tragos!", 
+    "picante": 0, 
+    "id": 149
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las personas con tatuajes o piercings beben 5 tragos.", 
+    "picante": 0, 
+    "id": 150
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "JUEGO: Todos deben nombrar la \u00faltima pel\u00edcula que han visto quienes hayan visto la misma beben 3 tragos.", 
+    "picante": 0, 
+    "id": 151
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1Nueva regla!Todos deben imaginar tener una pajita en su vaso que deber\u00e1n quitar cada vez que tengan que beber y volver a poner la pajita en el vaso", 
+    "text1": "Se acab\u00f3 la norma de la pajita.", 
+    "id": 152
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si nunca has hecho un Strip-tease bebe 5 tragos o hazlo ahora.", 
+    "picante": 13.568328381526754, 
+    "id": 153
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1Cada uno bebe tantos tragos como a\u00f1os haya pasado en la guarder\u00eda!", 
+    "picante": 0, 
+    "id": 154
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 4 tragos si han roto contigo m\u00e1s de 2 veces.", 
+    "picante": 0, 
+    "id": 155
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si te arrepientes de haberte liado con alguien", 
+    "picante": 0, 
+    "id": 156
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El siguiente jugador que beba podr\u00e1 repartir 6 tragos", 
+    "picante": 0, 
+    "id": 157
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El siguiente jugador que beba podr\u00e1 repartir 3 tragos", 
+    "picante": 0, 
+    "id": 158
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El siguiente jugador que reparta tragos deber\u00e1 beber 3 tragos", 
+    "picante": 0, 
+    "id": 159
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El siguiente jugador que reparta tragos deber\u00e1 beber 5 tragos", 
+    "picante": 0, 
+    "id": 160
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} es el/la DJ hasta nuevo aviso, el/ella decide que se pone.", 
+    "text1": "{1} puede dejar de ser DJ.", 
+    "id": 161
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1{1} eres ruso/a! Habla con acento ruso hasta nuevo aviso.", 
+    "text1": "{1} ya puedes hablar sin acento ruso.", 
+    "id": 162
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1{1} eres latina/o! Habla con acento latino hasta nuevo aviso.", 
+    "text1": "{1} ya puedes hablar sin acento latino.", 
+    "id": 163
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1{1} eres china/o! Habla con acento chino hasta nuevo aviso.", 
+    "text1": "{1} ya puedes hablar sin acento chino.", 
+    "id": 164
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} tienes una mirada hipn\u00f3tica. Cada vez que mires a alguien a los ojos \u00a1tendr\u00e1 que beber!", 
+    "picante": 0, 
+    "id": 165
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 1, 
+    "text0": "Se abre debate: \u00bfc\u00f3mo la tiene Dios? Beben 1 trago los que digan que peque\u00f1a, 2, los que proporcional y 3 los que APOTE\u00d3SICA.", 
+    "text1": "Claramente hablabamos de la misericordia divina.", 
+    "id": 166
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben 3 tragos los que han metido mensajes en Piloco, 2 los que s\u00f3lo los han revisado.", 
+    "picante": 0, 
+    "id": 167
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben todos los que est\u00e1n entre {1} y {2} (por el camino m\u00e1s corto)", 
+    "picante": 0, 
+    "id": 168
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben los que sean m\u00e1s altos que {1}.", 
+    "picante": 0, 
+    "id": 169
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben los que sean m\u00e1s bajos que {1}.", 
+    "picante": 0, 
+    "id": 170
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben todos los que tengan la camiseta del mismo color que {1}.", 
+    "picante": 0, 
+    "id": 171
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El/la jugador/a que haya salido con el chico m\u00e1s guapo bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 172
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe qui\u00e9n no haya inventado Piloco!", 
+    "picante": 0, 
+    "id": 173
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Los que tengan la ropa interior del mismo color que {1} Beben 3 tragos. Que sean 6 si {2} tambi\u00e9n coincide.", 
+    "picante": 1, 
+    "id": 174
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "A partir de ahora, si {1} habla {2} tendr\u00e1 que beber y viceversa... Cuidado con el coma", 
+    "text1": "{1} y {2}, ya pod\u00e9is hablar con normalidad.", 
+    "id": 175
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} Chupale el dedo a {2}.", 
+    "picante": 9.683917239117767, 
+    "id": 176
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1T\u00fa! El que lee, no leas en voz alta el siguiente mensaje...", 
+    "text1": "Pon la mano as\u00ed \ud83d\udc4c y di \"mirad!\" los que miren beben 4 tragos.", 
+    "id": 177
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} canta el Cara al Sol pero s\u00f3lo con la O. Luego reparte 3 tragos", 
+    "picante": 0.0, 
+    "id": 178
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 2 tragos quien solo tenga Telegram", 
+    "picante": 0, 
+    "id": 179
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparten 2 tragos los que les parece que Jesucristo tiene un polvazo", 
+    "picante": 2.7892796027611886, 
+    "id": 180
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben 2 tragos los que beben 2 tragos y reparten 2 tragos a los que ya hayan bebido 2 tragos.\nLuego entramos todos al Matrix", 
+    "picante": 0, 
+    "id": 181
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} reparte tres tragos a quien te comer\u00edas antes (CAN\u00cdVAL)", 
+    "picante": 0, 
+    "id": 182
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} y {2} haced una pelea de pulgares, el que pierda tendr\u00e1 que beber sus tragos y los del otro hasta nuevo aviso.", 
+    "text1": "El que perdiera entre {1} y {2} ya no tiene que beber los tragos del otro.", 
+    "id": 183
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} cuenta hasta 100 en voz alta y entonces bebe 5 tragos.", 
+    "picante": 0, 
+    "id": 184
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1}, eres mu t\u00edmida/o, no puedes responder a ninguna pregunta bajo castigo de 2 tragos.", 
+    "text1": "{1} ya puedes responder preguntas.", 
+    "id": 185
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} tienes que responder *NO* a todas las preguntas que te hagan, \u00a1y tienes que explicar por qu\u00e9!", 
+    "text1": "{1} puedes responder normalmente a las preguntas.", 
+    "id": 186
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} hasta nuevo aviso ser\u00e1s el espejo de {2}, im\u00edtale.", 
+    "text1": "{1} ya puedes dejar de imitar a {2}.", 
+    "id": 187
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si teniendo un boli de 4 colores has usado los 4 al mismo tiempo bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 188
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} si tu bebida es m\u00e1s barata que la de {2}, bebe 3 tragos de su bebida.", 
+    "picante": 0, 
+    "id": 189
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} inventate una regla que se tendr\u00e1 que cumplir hasta nuevo aviso.", 
+    "text1": "La regla de {1} ha perdido efecto.", 
+    "id": 190
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "A partir de ahora y hasta el final de la partida hay que acabar cada frase con un \"te quiero\" o \"os quiero\".", 
+    "picante": 0, 
+    "id": 191
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Todas las personas m\u00e1s j\u00f3venes que {1} beben 3 tragos", 
+    "picante": 0, 
+    "id": 192
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Las personas que conocen a {1} desde hace menos de un mes beben 3 tragos.", 
+    "picante": 0, 
+    "id": 193
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 3 tragos si hace m\u00e1s de una semana desde la \u00faltima vez que saliste de fiesta.", 
+    "picante": 0, 
+    "id": 194
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00bfErrejoner o Iglesier? Elegid. La minoria bebe dos tragos.", 
+    "picante": 0, 
+    "id": 195
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Todas las personas m\u00e1s mayores que {1} beben 3 tragos", 
+    "picante": 0, 
+    "id": 196
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1}, est\u00e1s obligado/a a esperar 2 segundos entre cada palabra, castigo de 1 tragos.", 
+    "picante": 0, 
+    "id": 197
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Que beban todos los que todav\u00eda no han bebido", 
+    "picante": 0, 
+    "id": 198
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} elige a una persona que deber\u00e1 quitarse una prenda.", 
+    "picante": 11.196986056132543, 
+    "id": 199
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} ahora eres \u00e1rabe, tendr\u00e1s que hablar con acento \u00e1rabe hasta nuevo aviso.", 
+    "text1": "{1} ya puedes dejar de hablar con acento \u00e1rabe.", 
+    "id": 200
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1}, bebe tantos tragos como {2} diga.", 
+    "text1": "{2}, bebe tantos tragos como {1} diga.", 
+    "id": 201
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Hasta nuevo aviso hay que terminar las frases insultando a qui\u00e9n se dirijan.", 
+    "text1": "Ya pod\u00e9is dejar de insuoltaros pofav\u00f3.", 
+    "id": 202
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Empezando por {1} todos tendr\u00e1n que deletrear el nombre del jugador de la derecha, qui\u00e9n se equivoque bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 203
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Hasta el final de la partida el que lee puede repartir un trago por ronda a quienes no le escuchen.", 
+    "picante": 0, 
+    "id": 204
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 8.666806664335668, 
+    "text0": "\u00a1Nueva regla hasta nuevo aviso! Hay que hablar entre gemidos y en especial al decir el nombre de alguien.", 
+    "text1": "Se acab\u00f3 el _orgasmear_, ya no gem\u00eds al hablar con alguien.", 
+    "id": 205
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} es el marginado del grupo, hasta nuevo aviso cada vez que quiera hablar le mand\u00e1is callar.", 
+    "text1": "\u00a1Dejad de hacer bulling a {1}!", 
+    "id": 206
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "La(s) \u00faltima(s) persona que haya tenido sexo reparte 4 tragos", 
+    "picante": 5.980691744025934, 
+    "id": 207
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Ahora {1} es el/la camarero/a, tiene que servir las bebidas hasta nuevo aviso.", 
+    "text1": "{1} \u00a1deja de servir ya!", 
+    "id": 208
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} lame la parte del cuerpo que quieras de la pesona que {2} diga.", 
+    "picante": 17.73137427015032, 
+    "id": 209
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} elige una palabra que no se podr\u00e1 decir a castigo de 2 tragos.", 
+    "picante": 0, 
+    "id": 210
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 5.146274018986679, 
+    "text0": "Al hablar con alguien, hay que acariciarse el pecho hasta nuevo aviso.", 
+    "text1": "Ya pod\u00e9is dejar de acariciaros el pecho.", 
+    "id": 211
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} es el/la famoso/a youtuber del grupo. Cada vez que termine de hablar, la primera persona en decir \"first coment\" o \"pole\" reparte 2 tragos.", 
+    "text1": "{1} hizo un v\u00eddeo sobre un se\u00f1or que le di\u00f3 una hostia en la cara y se ha ganado todo el odio de Internet. Ha dejado Youtube. Bebe 3 tragos para ahogar los recuerdos.", 
+    "id": 212
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 16.716169152332597, 
+    "text0": "Todos ten\u00e9is que decir con qui\u00e9n tendr\u00edais sexo de los presentes. {1} empiezas.", 
+    "text1": "{2} tienes que dar un beso (en la boca) a los que te hayan nombrado. Muahaha", 
+    "id": 213
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1Est\u00e1is en la biblioteca! Ten\u00e9is que susurrar hasta nuevo aviso. Castigo de 2 tragos.", 
+    "text1": "\u00a1Ya pod\u00e9is hablar sin susurrar!", 
+    "id": 214
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1todo el mundo bebe y se quita una prenda!", 
+    "picante": 20.949758039763474, 
+    "id": 215
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1Pasad el hielo! {1} Tiene que pasar el hielo a su derecha y tiene que volver a el de boca en boca. Si no hay hielo una carta o un papel valdr\u00e1.", 
+    "picante": 14.292168611809206, 
+    "id": 216
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1}, si le das un beso a {2}, hasta el final de la partida podr\u00e9is decir en cada ronda dos personas se tendr\u00e1n que besar.", 
+    "picante": 16.921892094762285, 
+    "id": 217
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1}, da un buen trago a tu bebida y finge hacer sexo oral a {2}.", 
+    "picante": 18.78813706628799, 
+    "id": 218
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "La siguiente persona en reirse bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 219
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1}, da 3 tragos a la persona m\u00e1s sexy.", 
+    "picante": 34.91079048152979, 
+    "id": 220
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben 10 tragos los que A MI ME LA VAS A PEGAR", 
+    "picante": 0, 
+    "id": 221
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Hasta nuevo aviso, cuando {1} diga la palabra \"empeizas\" todos tienen que hacerlo despu\u00e9s, el \u00faltimo beber\u00e1 3 tragos.", 
+    "text1": "Ya no hay _empeizas_ que valga, {1} ha perdido su poder.", 
+    "id": 222
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Entre todos ten\u00e9is que elegir a una persona que deber\u00e1 quedarse en ropa interior de cintura para arriba o para abajo (a su elecci\u00f3n).", 
+    "picante": 18.3292643371638, 
+    "id": 223
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Que beban pi tragos los que sepan la cuadrangulatura del c\u00edrculo.", 
+    "picante": 0, 
+    "id": 224
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Todas las personas entre {1} y {2} (por el camino m\u00e1s corto) se quitan una prenda.", 
+    "picante": 8.481419802321886, 
+    "id": 225
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} bebe 3 tragos si te liar\u00edas con {2}", 
+    "picante": 8.763929249513719, 
+    "id": 226
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben 3 tragos las mujeres con talla de sujetador entre B y C.", 
+    "picante": 0, 
+    "id": 227
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Hasta nuevo aviso nadie nueve dirigirse a nadie por su nombre. Castigo de 1 trago.", 
+    "text1": "Ya podeis llamaros por vuestro nombre.", 
+    "id": 228
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "*Nueva regla:* como lo ten\u00e9is todo muy claro en la vida, no podeis hacer ninguna pregunta. *Ninguna.*", 
+    "text1": "Ya pod\u00e9is *hacer pregutas* de nuevo.", 
+    "id": 229
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} es un paparazzi, cuando saca una foto a alguien esa persona tiene que beber 3 tragos.", 
+    "text1": "{1} ha muerto apedreado por entrometerse en la vida privada de un famoso musulm\u00e1n practicante. {1} ya no es paparazzi.", 
+    "id": 230
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} y {2}, intercanviad vuestros vasos, hasta nuevo aviso.", 
+    "text1": "{1} y {2}, recuperad vuestros vasos.", 
+    "id": 231
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Entre todos y al coro de \"que se besen\" elegid a dos personas que tendr\u00e1n que besarse.", 
+    "picante": 11.065699133312293, 
+    "id": 232
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} si no recuerdas algo de alguna noche por culpa del alcohol bebe 3 tragos.", 
+    "picante": 0, 
+    "id": 233
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Que beba 3 tragos quien se sienta atra\u00eddo por 3 o m\u00e1s personas presentes.", 
+    "picante": 0, 
+    "id": 234
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 5.366985537876173, 
+    "text0": "\u00a1*Pelea de pulgares* entre {1} y {2}!", 
+    "text1": "El que haya perdido se quita una prenda.", 
+    "id": 235
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1}, si no te molestar\u00eda acostarte con {2} bebe 3 tragos.", 
+    "picante": 8.307697858331464, 
+    "id": 236
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 7.400189243125556, 
+    "text0": "\u00a1*Pelea de pulgares* entre {1} y {2}!", 
+    "text1": "El que haya ganado dicide con qui\u00e9n se besa el que ha perdido.", 
+    "id": 237
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 8.838078328524407, 
+    "text0": "{1} obliga a {2} a besarse con qui\u00e9n t\u00fa digas, no te cortes!", 
+    "text1": "\u00a1Venganza! {2} ahora es tu turno, elige con qui\u00e9n tiene que besarse {1} o tendr\u00e1 que dejar de beber por diez minutos...", 
+    "id": 238
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0.0, 
+    "text0": "{1} tiene el sindrome de Pustav\u00ed (el de gritar por que si)", 
+    "text1": "A {1} se le ha pasado el sindrome de Pustav\u00ed \ud83d\ude31", 
+    "id": 239
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} debes beber 4 tragos mientras {2} te besa el cuello.", 
+    "picante": 23.341375394142112, 
+    "id": 240
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Si ten\u00e9is alguna botella de pl\u00e1stico a mano, {1} debe tirarla para que de una vuelta sobre si misma y caiga de pie. Si lo consigue a la primera reparte 10 tragos. Sino bebe 3.", 
+    "picante": 0, 
+    "id": 241
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beb\u00e9d todos un trago, el \u00faltimo que lo haga estar\u00e1 sin beber 5m", 
+    "picante": 0, 
+    "id": 242
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 10.74077024835216, 
+    "text0": "*Pelea de pulgares* entre {1} y {2}.", 
+    "text1": "Da igual quien haya ganado, os besais igual.", 
+    "id": 243
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Entre {1} y {2} aqu\u00e9l o aquella que hoy haya bebido menos, bebe 2 tragos.", 
+    "picante": 0, 
+    "id": 244
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "El siguiente que se r\u00eda deja de beber 3m", 
+    "picante": 0, 
+    "id": 245
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} y {2} miraos fijamente a los ojos, el/la primero/a que parpadee bebe 2 tragos.", 
+    "picante": 0, 
+    "id": 246
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 5.832163783609641, 
+    "text0": "\u00a1{1} es *cupido*! Podr\u00e1 elegir en cualquier momento a dos personas para que se besen cuanto el/ella quiera.", 
+    "text1": "{1} ya no es cupido.", 
+    "id": 247
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben 3 tragos aquellos que han utilizado alg\u00fan tipo de lubricante alguna vez.", 
+    "picante": 5.879263760746063, 
+    "id": 248
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00bfVerdad o castigo? Preg\u00fantale algo al vecino de la izquierda, {1} tragos si se niega a responder, as\u00ed una ronda de todos los jugadores. {1} Empiezas", 
+    "picante": 0, 
+    "id": 249
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Que beba 3 tragos quien haya tenido un pensamiento/fantasia sexual con alguien de la sala", 
+    "picante": 7.695631101770719, 
+    "id": 250
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00bfVerdad o castigo? Preg\u00fantale algo al vecino de la derecha, 4 tragos si se niega a responder, as\u00ed una ronda de todos los jugadores. {1} Empiezas", 
+    "picante": 0, 
+    "id": 251
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 2 tragos si has previsto para ma\u00f1ana agua/zumo de lim\u00f3n u otro remedio para la resaca.", 
+    "picante": 0, 
+    "id": 252
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00a1{1} elige la pr\u00f3xima canci\u00f3n, es una orden!", 
+    "picante": 0, 
+    "id": 253
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Sucesivamente, deletrea el nombre del jugador a tu derecha, quien se equivoque bebe 3 tragos. {1} empiezas.", 
+    "picante": 0, 
+    "id": 254
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebe 2 tragos por cada persona presente con la que te liar\u00edas.", 
+    "picante": 7.659383755316738, 
+    "id": 255
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben 3 tragos los que hayan hecho el 69.", 
+    "picante": 15.79738515398436, 
+    "id": 256
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "Est\u00e1is muy cari\u00f1osos esta noche. En vez de repartir tragos repartir\u00e9is abrazos hasta nuevo aviso.", 
+    "text1": "\u00a1Basta de mimos! A beber, pod\u00e9is repartir tragos de nuevo.", 
+    "id": 257
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RNI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "{1} tiene un *toque divino*: cada vez que toque la cabeza de alguien la \u00faltima persona en hacer lo mismo bebe 3 tragos.", 
+    "text1": "{1} ha perdido su *toque divino*.", 
+    "id": 258
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 2 tragos si no has visto nunca pel\u00edcula de Hitchcock.", 
+    "picante": 0, 
+    "id": 259
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Qu\u00e9 beba 3 tragos quien haya tenido cualquier tipo de pr\u00e1ctica sexual con alguien de aqu\u00ed", 
+    "picante": 17.577570763611657, 
+    "id": 260
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Beben 2 tragos los que no metan un nuevo #MensajeDiarioEnPiloco todos los d\u00edas. Deber\u00edais ser desterrados.", 
+    "picante": 0, 
+    "id": 261
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1T\u00fa! El que lee, no leas en voz alta el siguiente mensaje...", 
+    "text1": "Con ayuda de los dem\u00e1s tienes que convencer a {1} ({2} si tu eres {1}) de que tiene algo en la cara.", 
+    "id": 262
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1Todos en pi\u00e9! El \u00faltimo que se haya levantado...", 
+    "text1": "*deja de beber* durante 3 minutos.", 
+    "id": 263
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1Todos en pi\u00e9! El \u00faltimo que se haya levantado...", 
+    "text1": "*reparte* 6 tragos.", 
+    "id": 264
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Bebed todos un trago. El \u00faltimo que lo haga *\u00a1se quita una prenda!*", 
+    "picante": 11.876392924951372, 
+    "id": 265
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "\u00bfPrefieres ser vista como una persona muy extra\u00f1a o ser una persona normal y no tener nada de especial? Voten todos juntos, la minor\u00eda bebe 5 tragos.", 
+    "picante": 0, 
+    "id": 266
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "Reparte 5 tragos el que haya matado a Dios", 
+    "picante": 0, 
+    "id": 267
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "normal", 
+    "puntuacion": 0, 
+    "text": "{1} comunica a qui\u00e9n te tirar\u00edas del PP. Si alguien coincide, dos tragos para ambos", 
+    "picante": 1, 
+    "id": 268
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 5.832773428839357, 
+    "text0": "\u00a1T\u00fa! El que lee, no leas en voz alta el siguiente mensaje...", 
+    "text1": "Pregunta qu\u00e9 hora es y las personas que te lo digan se quitan una prenda.", 
+    "id": 269
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 0, 
+    "text0": "\u00a1Todos en pi\u00e9! El \u00faltimo que se haya levantado...", 
+    "text1": "*bebe* 3 tragos.", 
+    "id": 270
+  }, 
+  {
+    "hecho_por": 254234845, 
+    "tipo": "RI", 
+    "puntuacion": 0, 
+    "picante": 11.333054897436195, 
+    "text0": "\u00a1Todos en pi\u00e9! El \u00faltimo que se haya levantado...", 
+    "text1": "*se quita una prenda*", 
+    "id": 271
+  }
 ]

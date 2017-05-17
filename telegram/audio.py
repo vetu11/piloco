@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -59,6 +59,8 @@ class Audio(TelegramObject):
         self.title = title
         self.mime_type = mime_type
         self.file_size = file_size
+
+        self._id_attrs = (self.file_id,)
 
     @staticmethod
     def de_json(data, bot):

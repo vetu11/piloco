@@ -1,0 +1,269 @@
+# coding=utf-8
+
+import json, random
+from .constantes import Constantes
+from .usuarios import Usuarios
+
+class Puntos:
+    """VECTOR ORINTADO A LA PUNTUACIÓN DE UN MENSAJE"""
+
+    def __init__(self, tupla):
+
+        self.puntos = tupla
+
+    def __iadd__(self, other):
+
+        self.puntos = (round(self.puntos[0] + other.puntos[0], 1), round(self.puntos[1] + other.puntos[1], 1))
+
+        return self
+    def __call__(self, *args, **kwargs):
+
+        return self.puntos
+    def __mul__(self, other):
+
+        return Puntos((round(self.puntos[0] * other, 1), round(self.puntos[0] * other, 1)))
+
+
+class BaseMensaje:
+
+    def __init__(self, dicc):
+
+        self.tipo = dicc["tipo"]
+        self.picante = dicc["picante"]
+        self.id = dicc["id"]
+        self.hecho_por = dicc["hecho_por"]
+
+        try:
+            self.text = dicc["text"]
+        except:
+            self.text0 = dicc["text0"]
+            self.text1 = dicc["text1"]
+
+
+class MensajeEnRevision(BaseMensaje):
+
+    def __init__(self, dicc):
+
+        BaseMensaje.__init__(self, dicc)
+        self.puntos = Puntos(dicc["revisar"]["puntos"])
+        self.a_favor = dicc["revisar"]["a_favor"]
+        self.en_contra = dicc["revisar"]["en_contra"]
+        self.skipped = dicc["revisar"]["skipped"]
+
+
+class MensajeEnJuego(BaseMensaje):
+
+    def __init__(self, dicc):
+
+        BaseMensaje.__init__(self, dicc)
+        self.puntuacion = dicc["puntuacion"]
+
+
+class MensajesClasica:
+
+    def __init__(self):
+
+        self.list = []
+        self.len = 0
+        self.json_dump = json.dump
+
+        with open("pilocuras.json") as f:
+            list = json.load(f)
+
+        for msg_dicc in list:
+
+            self.list.append(MensajeEnJuego(msg_dicc))
+
+        self.len = len(self.list)
+
+    def escojer_mensaje(self):
+
+        return self.list[random.randint(0, self.len - 1)]
+
+    def get_new_id(self):
+
+        if self.list:
+            todasIDs = []
+            idLibres = []
+
+            for mensaje in self.list:
+                todasIDs.append(mensaje.id)
+            ultimaID = max(todasIDs)
+
+            posicion = 0
+            while posicion <= ultimaID:
+                if posicion not in todasIDs:
+                    idLibres.append(posicion)
+                posicion = posicion + 1
+
+            if idLibres:
+                return idLibres[0]
+            else:
+                return ultimaID + 1
+        else:
+            return 0
+
+    # TODO: comprobar aptitud
+
+    def get_message(self, msgID):  # TODO: aplicar binary search?
+
+        for mensaje in self.list:
+            if mensaje.id == int(msgID):
+                return mensaje
+        return None
+
+    def __del__(self):
+
+        list = []
+
+        for mensaje in self.list:
+
+            if mensaje.tipo == "normal":
+                msg_dicc = {"hecho_por": mensaje.hecho_por,
+                            "text": mensaje.text,
+                            "tipo": mensaje.tipo,
+                            "puntuacion": mensaje.puntuacion,
+                            "picante": mensaje.picante,
+                            "id": mensaje.id}
+            else:
+                msg_dicc =   {"hecho_por": mensaje.hecho_por,
+                              "text0": mensaje.text0,
+                              "text1": mensaje.text1,
+                              "tipo": mensaje.tipo,
+                              "puntuacion": mensaje.puntuacion,
+                              "picante": mensaje.picante,
+                              "id": mensaje.id}
+            list.append(msg_dicc)
+
+        with open("pilocuras.json", "w") as f:  # TODO: mal, mal, muy mal
+
+            self.json_dump(list, f, indent=2)
+
+MensajesClasica = MensajesClasica()
+
+
+class MensajesEnRevision:
+
+    def __init__(self):
+
+        self.list = []
+        self.len = 0
+        self.json_dump = json.dump
+
+        with open("newMessages.json") as f:
+            list = json.load(f)
+
+        for msg_dicc in list:
+
+            self.list.append(MensajeEnRevision(msg_dicc))
+
+        self.len = len(self.list)
+
+    def escojer_mensaje(self, idTelegram=None):
+        antiLoop = 0
+
+        if not idTelegram:
+            return self.list[random.randint(0, len(self.list) - 1)]
+        else:
+            while antiLoop < 50:
+
+                mensaje = self.list[random.randint(0, len(self.list) - 1)]
+                if idTelegram not in mensaje.a_favor and idTelegram not in mensaje.en_contra:
+                    return mensaje
+            return None
+
+    def __del__(self):
+
+        list = []
+
+        for mensaje in self.list:
+
+            if mensaje.tipo == "normal":
+                msg_dicc = {"hecho_por": mensaje.hecho_por,
+                            "text": mensaje.text,
+                            "tipo": mensaje.tipo,
+                            "picante": mensaje.picante,
+                            "id": mensaje.id,
+                            "revisar": {"a_favor": mensaje.a_favor,
+                                        "en_contra": mensaje.en_contra,
+                                        "skipped": mensaje.skipped,
+                                        "puntos": mensaje.puntos()}}
+            else:
+                msg_dicc =   {"hecho_por": mensaje.hecho_por,
+                              "text0": mensaje.text0,
+                              "text1": mensaje.text1,
+                              "tipo": mensaje.tipo,
+                              "picante": mensaje.picante,
+                              "id": mensaje.id,
+                              "revisar":{"a_favor": mensaje.a_favor,
+                                "en_contra": mensaje.en_contra,
+                                "skipped": mensaje.skipped,
+                                "puntos": mensaje.puntos()}}
+            list.append(msg_dicc)
+
+        with open("newMessages.json", "w") as f:  # TODO: mal, mal, muy mal
+
+            self.json_dump(list, f, indent=2)
+
+    def get_message(self, msgID):  # TODO: aplicar binary search?
+
+        for mensaje in self.list:
+            if mensaje.id == msgID:
+                return mensaje
+        return None
+
+    def transformar_a_activo(self, mensaje):
+
+        if mensaje.tipo == "normal":
+            msg_dicc = {"id": MensajesClasica.get_new_id(),
+                        "tipo": mensaje.tipo,
+                        "picante": mensaje.picante,
+                        "text": mensaje.text,
+                        "puntuacion": 0,
+                        "hecho_por": mensaje.hecho_por}
+        else:
+            msg_dicc = {"id": MensajesClasica.get_new_id(),
+                        "tipo": mensaje.tipo,
+                        "picante": mensaje.picante,
+                        "text0": mensaje.text0,
+                        "text1": mensaje.text1,
+                        "puntuacion": 0,
+                        "hecho_por": mensaje.hecho_por}
+
+        return MensajeEnJuego(msg_dicc)
+
+    def comprobar_aptitud(self, mensaje):
+
+        puntos_necesarios = Constantes.Usuarios.NUMERO_USUARIOS * 0.6
+
+        puntos_tupla = mensaje.puntos.puntos
+
+        if puntos_tupla[0] >= puntos_necesarios:
+            self.list.remove(mensaje)
+            MensajesClasica.list.append(self.transformar_a_activo(mensaje))
+
+            Usuarios.actualizar_reputacion(mensaje.hecho_por, 9.0)
+            for idTelegram in mensaje.a_favor:
+                Usuarios.actualizar_reputacion(idTelegram, 1.0)
+            for idTelegram in mensaje.en_contra:
+                Usuarios.actualizar_reputacion(idTelegram, -1.0)
+
+        elif puntos_tupla[0] <= -puntos_necesarios/3:
+            self.list.remove(mensaje)
+
+            Usuarios.actualizar_reputacion(mensaje.hecho_por, -9.0)
+            for idTelegram in mensaje.a_favor:
+                Usuarios.actualizar_reputacion(idTelegram, -1.0)
+            for idTelegram in mensaje.en_contra:
+                Usuarios.actualizar_reputacion(idTelegram, 1.0)
+        elif puntos_tupla[1] <= -puntos_necesarios/4:
+            pass
+            # self.list.remove(mensaje)  # TODO: añadir a una lista de mensajes
+            #
+            # Usuarios.actualizar_reputacion(mensaje.hecho_por, -5.0)
+            # for idTelegram in mensaje.a_favor:
+            #     Usuarios.actualizar_reputacion(idTelegram, 1.0)
+            # for idTelegram in mensaje.en_contra:
+            #     Usuarios.actualizar_reputacion(idTelegram, -1.0)
+
+MensajesEnRevision = MensajesEnRevision()

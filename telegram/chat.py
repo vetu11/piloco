@@ -2,7 +2,7 @@
 # pylint: disable=C0103,W0622
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -71,6 +71,7 @@ class Chat(TelegramObject):
         self.all_members_are_administrators = all_members_are_administrators
 
         self.bot = bot
+        self._id_attrs = (self.id,)
 
     @staticmethod
     def de_json(data, bot):

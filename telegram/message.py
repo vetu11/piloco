@@ -2,7 +2,7 @@
 # pylint: disable=R0902,R0912,R0913
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -181,6 +181,8 @@ class Message(TelegramObject):
 
         self.bot = bot
 
+        self._id_attrs = (self.message_id,)
+
     @property
     def chat_id(self):
         """int: Short for :attr:`Message.chat.id`"""
@@ -202,7 +204,7 @@ class Message(TelegramObject):
         data = super(Message, Message).de_json(data, bot)
 
         data['from_user'] = User.de_json(data.get('from'), bot)
-        data['date'] = datetime.fromtimestamp(data['date'])
+        data['date'] = Message._fromtimestamp(data['date'])
         data['chat'] = Chat.de_json(data.get('chat'), bot)
         data['entities'] = MessageEntity.de_list(data.get('entities'), bot)
         data['forward_from'] = User.de_json(data.get('forward_from'), bot)
@@ -538,6 +540,25 @@ class Message(TelegramObject):
             return value of the ``bot.send_*`` family of methods.
         """
         return self.bot.edit_message_reply_markup(
+            chat_id=self.chat_id, message_id=self.message_id, *args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """
+        Shortcut for
+
+            >>> bot.delete_message(chat_id=message.chat_id,
+            ...                   message_id=message.message_id,
+            ...                   *args, **kwargs)
+
+        Note:
+            This method is not documented, so it's not guaranteed to work. Also, its behaviour can
+            be changed at any time.
+
+        Returns:
+            bool: On success, `True` is returned.
+
+        """
+        return self.bot.delete_message(
             chat_id=self.chat_id, message_id=self.message_id, *args, **kwargs)
 
     def parse_entity(self, entity):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -48,11 +48,7 @@ class PhotoSize(TelegramObject):
         # Optionals
         self.file_size = file_size
 
-    def __eq__(self, other):
-        if not isinstance(other, self.__class__):
-            return False
-        return (self.file_id == other.file_id and self.width == other.width
-                and self.height == other.height and self.file_size == other.file_size)
+        self._id_attrs = (self.file_id,)
 
     @staticmethod
     def de_json(data, bot):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # A library that provides a Python interface to the Telegram Bot API
-# Copyright (C) 2015-2016
+# Copyright (C) 2015-2017
 # Leandro Toledo de Souza <devs@python-telegram-bot.org>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -122,6 +122,10 @@ class ConversationHandler(Handler):
         if not any((self.per_user, self.per_chat, self.per_message)):
             raise ValueError("'per_user', 'per_chat' and 'per_message' can't all be 'False'")
 
+        if self.per_message and not self.per_chat:
+            logging.warning("If 'per_message=True' is used, 'per_chat=True' should also be used, "
+                            "since message IDs are not globally unique.")
+
         all_handlers = list()
         all_handlers.extend(entry_points)
         all_handlers.extend(fallbacks)
@@ -132,20 +136,25 @@ class ConversationHandler(Handler):
         if self.per_message:
             for handler in all_handlers:
                 if not isinstance(handler, CallbackQueryHandler):
-                    raise ValueError("If 'per_message=True', all entry points and state handlers"
-                                     " must be 'CallbackQueryHandler'")
+                    logging.warning("If 'per_message=True', all entry points and state handlers"
+                                    " must be 'CallbackQueryHandler', since no other handlers "
+                                    "have a message context.")
         else:
             for handler in all_handlers:
                 if isinstance(handler, CallbackQueryHandler):
-                    raise ValueError("If 'per_message=False', 'CallbackQueryHandler' doesn't work")
+                    logging.warning("If 'per_message=False', 'CallbackQueryHandler' will not be "
+                                    "tracked for every message.")
 
         if self.per_chat:
             for handler in all_handlers:
                 if isinstance(handler, (InlineQueryHandler, ChosenInlineResultHandler)):
-                    raise ValueError("If 'per_chat=True', 'InlineQueryHandler' doesn't work")
+                    logging.warning("If 'per_chat=True', 'InlineQueryHandler' can not be used, "
+                                    "since inline queries have no chat context.")
 
     def _get_key(self, update):
-        chat, user = update.extract_chat_and_user()
+        chat = update.effective_chat
+        user = update.effective_user
+
         key = list()
 
         if self.per_chat:
@@ -165,7 +174,8 @@ class ConversationHandler(Handler):
         # Ignore messages in channels
         if (not isinstance(update, Update) or update.channel_post or self.per_chat
                 and (update.inline_query or update.chosen_inline_result) or self.per_message
-                and not update.callback_query):
+                and not update.callback_query or update.callback_query and self.per_chat
+                and not update.callback_query.message):
             return False
 
         key = self._get_key(update)
@@ -181,6 +191,7 @@ class ConversationHandler(Handler):
                 res = new_state.result(timeout=self.run_async_timeout)
             except Exception as exc:
                 self.logger.exception("Promise function raised exception")
+                self.logger.exception("{}".format(exc))
                 error = True
 
             if not error and new_state.done.is_set():
