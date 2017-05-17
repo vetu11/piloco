@@ -129,26 +129,33 @@ class HandlersPiloco:
             mensaje1 = MensajesEnRevision.escojer_mensaje()
             mensaje2 = MensajesEnRevision.escojer_mensaje()
 
-            while mensaje1.picante == 0 or mensaje2.picante == 0 or mensaje1 == mensaje2:
+            antiloop = 0
+            while (mensaje1.picante == 0 or mensaje2.picante == 0 or mensaje1 == mensaje2) and antiloop < 50:
                 mensaje1 = MensajesEnRevision.escojer_mensaje()
                 if random.randint(0,9):
                     mensaje2 = MensajesEnRevision.escojer_mensaje()
                 else:
                     mensaje2 = MensajesClasica.escojer_mensaje()
+                antiloop += 1
 
-            if mensaje1.tipo == "normal":
-                msg1 = mensaje1.text
-            else:
-                msg1 = u"%s\"\n\"%s" % (mensaje1.text0, mensaje1.text1)
-            
-            if mensaje2.tipo == "normal":
-                msg2 = mensaje2.text
-            else:
-                msg2 = u"%s\"\n\"%s" % (mensaje2.text0, mensaje2.text1)
+            if antiloop < 50:
+                if mensaje1.tipo == "normal":
+                    msg1 = mensaje1.text
+                else:
+                    msg1 = u"%s\"\n\"%s" % (mensaje1.text0, mensaje1.text1)
 
-            msg = u"*Escoje de los dos mensajes el más picante. Primer mensaje:*" \
-                  u"\n\"%s\"\n\n*Segundo mensaje*\n\"%s\"" % (msg1, msg2)
-            keyboard = Teclados.revisar_mensajes_picante(mensaje1.id, mensaje2.id)
+                if mensaje2.tipo == "normal":
+                    msg2 = mensaje2.text
+                else:
+                    msg2 = u"%s\"\n\"%s" % (mensaje2.text0, mensaje2.text1)
+
+                msg = u"*Escoje de los dos mensajes el más picante. Primer mensaje:*" \
+                      u"\n\"%s\"\n\n*Segundo mensaje*\n\"%s\"" % (msg1, msg2)
+                keyboard = Teclados.revisar_mensajes_picante(mensaje1.id, mensaje2.id)
+            else:
+                msg = "Parece que ya has revisado todos los mensajes. Vuelve a intentarlo más tarde, o añade tus pro" \
+                      "pios mensajes."
+                keyboard = Teclados.solo_menu_principal()
 
         bot.edit_message_text(text=msg,
                               chat_id=update.callback_query.message.chat_id,
@@ -187,37 +194,35 @@ class HandlersPiloco:
 
         data = update.callback_query.data
         usuario = Usuarios.get_user(update.callback_query.from_user.id)
-        msg1ID = data.split("-")[1]
-        msg2ID = data.split("-")[2]
-        mensaje1 = MensajesEnRevision.get_message(msg1ID)
-        mensaje2 = MensajesEnRevision.get_message(msg2ID)
 
-        if not mensaje2:
-            mensaje2 = MensajesClasica.get_message(msg2ID)
+        if not data == "revisar_picante_pass":
+            msg1ID = data.split("-")[1]
+            msg2ID = data.split("-")[2]
+            mensaje1 = MensajesEnRevision.get_message(msg1ID)
+            mensaje2 = MensajesEnRevision.get_message(msg2ID)
 
-        if mensaje1 and mensaje2 and not data == "revisar_picante_pass":
+            if not mensaje2:
+                mensaje2 = MensajesClasica.get_message(msg2ID)
 
-            print "%s   -   %s" % (mensaje1.picante, mensaje2.picante)
+            if mensaje1 and mensaje2:
 
-            if re.match(r"revisar_picante_1", data):
-                factor = (mensaje2.picante / mensaje1.picante) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL)
-                if factor > ((mensaje1.picante + mensaje2.picante)/2):
-                    factor = (mensaje1.picante + mensaje2.picante)/2
-                mensaje1.picante += factor
-                mensaje2.picante -= factor
-            else:
-                factor = (mensaje1.picante / mensaje2.picante) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL)
-                if factor > ((mensaje1.picante + mensaje2.picante)/2):
-                    factor = (mensaje1.picante + mensaje2.picante)/2
-                mensaje2.picante += factor
-                mensaje1.picante -= factor
+                if re.match(r"revisar_picante_1", data):
+                    factor = (mensaje2.picante / mensaje1.picante) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL)
+                    if factor > ((mensaje1.picante + mensaje2.picante)/2):
+                        factor = (mensaje1.picante + mensaje2.picante)/2
+                    mensaje1.picante += factor
+                    mensaje2.picante -= factor
+                else:
+                    factor = (mensaje1.picante / mensaje2.picante) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL)
+                    if factor > ((mensaje1.picante + mensaje2.picante)/2):
+                        factor = (mensaje1.picante + mensaje2.picante)/2
+                    mensaje2.picante += factor
+                    mensaje1.picante -= factor
 
-            if mensaje1.picante < 1:
-                mensaje1.picante = 1
-            if mensaje2.picante < 1:
-                mensaje2.picante = 1
-
-            print "%s   -   %s" % (mensaje1.picante, mensaje2.picante)
+                if mensaje1.picante < 1:
+                    mensaje1.picante = 1
+                if mensaje2.picante < 1:
+                    mensaje2.picante = 1
 
         self.revisar_mensajes(bot, update)
 
@@ -251,7 +256,7 @@ class HandlersPiloco:
                     "revisar": {"a_favor": [],
                                 "en_contra": [],
                                 "skipped": [],
-                                "puntos": 0}}
+                                "puntos": (0, 0)}}
 
         usuario.editando_mensaje = MensajeEnRevision(msg_dicc)
 
@@ -281,11 +286,41 @@ class HandlersPiloco:
                     "revisar": {"a_favor": [],
                                 "en_contra": [],
                                 "skipped": [],
-                                "puntos": 0}}
+                                "puntos": (0, 0)}}
 
         usuario.editando_mensaje = MensajeEnRevision(msg_dicc)
 
         msg = "*Añadiendo mensaje RI.* Ahora mandame el primer mensaje.\n\n*CONSEJOS:*\n-Para poner *nombres aleatorios* escribe *nombre1* o *{1}* para" \
+              " el primero y *nombre2* o *{2}* para el segundo.\n-Rodea con asteriscos lo que quieres que salga en *" \
+              "negrita*.\n-Rodea con barras bajas lo que quieres que salga en _cursiva._"
+        keyboard = Teclados.menu_add_cancelar()
+
+        bot.edit_message_text(text=msg,
+                              chat_id=update.callback_query.message.chat_id,
+                              message_id=update.callback_query.message.message_id,
+                              reply_markup=InlineKeyboardMarkup(keyboard),
+                              parse_mode=ParseMode.MARKDOWN)
+
+        return 1
+
+    def add_RNI(self, bot, update):
+
+        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+
+        msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
+                    "tipo": "RNI",
+                    "text0": None,
+                    "text1": None,
+                    "picante": 0,
+                    "hecho_por": usuario.id,
+                    "revisar": {"a_favor": [],
+                                "en_contra": [],
+                                "skipped": [],
+                                "puntos": (0, 0)}}
+
+        usuario.editando_mensaje = MensajeEnRevision(msg_dicc)
+
+        msg = "*Añadiendo mensaje RNI.* Ahora mandame el primer mensaje.\n\n*CONSEJOS:*\n-Para poner *nombres aleatorios* escribe *nombre1* o *{1}* para" \
               " el primero y *nombre2* o *{2}* para el segundo.\n-Rodea con asteriscos lo que quieres que salga en *" \
               "negrita*.\n-Rodea con barras bajas lo que quieres que salga en _cursiva._"
         keyboard = Teclados.menu_add_cancelar()
@@ -363,7 +398,7 @@ class HandlersPiloco:
 
         usuario.editando_mensaje.text0 = update.message.text
 
-        msg = "Ahora mandame el segundo mensaje mensaje. Primer mensaje:\n\"%s\"\n\n*CONSEJOS:*\n-Para poner *nombres aleatorios* escribe *nombre1* o *{1}* para" \
+        msg = "Ahora mandame el segundo mensaje. Primer mensaje:\n\"%s\"\n\n*CONSEJOS:*\n-Para poner *nombres aleatorios* escribe *nombre1* o *{1}* para" \
               " el primero y *nombre2* o *{2}* para el segundo.\n-Rodea con asteriscos lo que quieres que salga en *" \
               "negrita*.\n-Rodea con barras bajas lo que quieres que salga en _cursiva._" % usuario.editando_mensaje.text0
         keyboard = Teclados.menu_add_cancelar()
@@ -389,8 +424,6 @@ class HandlersPiloco:
                                   parse_mode=ParseMode.MARKDOWN)
 
         return 3
-
-
 
     # MENÚ DE PARTIDA CLÁSICA
     def menu_partidaClasica(self, bot, update):
@@ -820,7 +853,8 @@ class Conversations:
                                       allow_reentry=True)
 
     add_message = ConversationHandler(entry_points=[CallbackQueryHandler(HandlersPiloco.add_normal, pattern="^newMessage_normal$"),
-                                                    CallbackQueryHandler(HandlersPiloco.add_RI, pattern="^newMessage_RI$")],
+                                                    CallbackQueryHandler(HandlersPiloco.add_RI, pattern="^newMessage_RI$"),
+                                                    CallbackQueryHandler(HandlersPiloco.add_RNI, pattern="^newMessage_RNI$")],
 
                                       states={0: [MessageHandler(Filters.text, HandlersPiloco.add_text)],
                                               1: [MessageHandler(Filters.text, HandlersPiloco.add_text0)],

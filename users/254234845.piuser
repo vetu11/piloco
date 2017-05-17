@@ -1,1 +1,12 @@
-{"posicion": 0, "ultimoUso": 1494876743.266391, "editando": null, "ajustes": {"picante": true, "hastaElFondo": false, "rondas": 60}, "id": 254234845}
+{
+  "emparejador": false, 
+  "reputacion": 50.0, 
+  "ultimos_jugadores": [
+    "hernan", 
+    "francis", 
+    "anastasia", 
+    "fransica"
+  ], 
+  "picante": 0, 
+  "ultimo_uso": 1495039466.736
+}

@@ -16,12 +16,14 @@ class Puntos:
         self.puntos = (round(self.puntos[0] + other.puntos[0], 1), round(self.puntos[1] + other.puntos[1], 1))
 
         return self
+
     def __call__(self, *args, **kwargs):
 
         return self.puntos
+
     def __mul__(self, other):
 
-        return Puntos((round(self.puntos[0] * other, 1), round(self.puntos[0] * other, 1)))
+        return Puntos((self.puntos[0] * other, self.puntos[0] * other))
 
 
 class BaseMensaje:
@@ -147,7 +149,6 @@ class MensajesEnRevision:
     def __init__(self):
 
         self.list = []
-        self.len = 0
         self.json_dump = json.dump
 
         with open("newMessages.json") as f:
@@ -156,8 +157,6 @@ class MensajesEnRevision:
         for msg_dicc in list:
 
             self.list.append(MensajeEnRevision(msg_dicc))
-
-        self.len = len(self.list)
 
     def escojer_mensaje(self, idTelegram=None):
         antiLoop = 0
@@ -168,8 +167,9 @@ class MensajesEnRevision:
             while antiLoop < 50:
 
                 mensaje = self.list[random.randint(0, len(self.list) - 1)]
-                if idTelegram not in mensaje.a_favor and idTelegram not in mensaje.en_contra:
+                if idTelegram not in mensaje.a_favor and idTelegram not in mensaje.en_contra and idTelegram not in mensaje.skipped:
                     return mensaje
+                antiLoop += 1
             return None
 
     def __del__(self):
@@ -256,6 +256,7 @@ class MensajesEnRevision:
                 Usuarios.actualizar_reputacion(idTelegram, -1.0)
             for idTelegram in mensaje.en_contra:
                 Usuarios.actualizar_reputacion(idTelegram, 1.0)
+
         elif puntos_tupla[1] <= -puntos_necesarios/4:
             pass
             # self.list.remove(mensaje)  # TODO: añadir a una lista de mensajes

@@ -78,7 +78,8 @@ class BasePartidaClasica:
                         "text": mensaje.text1,
                         "puntuacion": mensaje.puntuacion,
                         "picante": mensaje.picante,
-                        "id": mensaje.id}
+                        "id": mensaje.id,
+                        "hecho_por": mensaje.hecho_por}
 
             self.mensajes[0].append(MensajeEnJuego(msg_dicc))
 
@@ -96,7 +97,8 @@ class BasePartidaClasica:
                         "text": mensaje.text1,
                         "puntuacion": mensaje.puntuacion,
                         "picante": mensaje.picante,
-                        "id": mensaje.id}
+                        "id": mensaje.id,
+                        "hecho_por": mensaje.hecho_por}
 
             self.mensajes[1].append(MensajeEnJuego(msg_dicc))
 

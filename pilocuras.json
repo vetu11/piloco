@@ -1375,7 +1375,7 @@
     "hecho_por": 254234845, 
     "tipo": "normal", 
     "puntuacion": 0, 
-    "text": "Beben los que sean m\u00e1s altos que {1}.", 
+    "text": "Beben los que sean m\u00e1s altos que Hernan.", 
     "picante": 0, 
     "id": 169
   }, 
@@ -2151,7 +2151,7 @@
     "puntuacion": 0, 
     "picante": 0, 
     "text0": "\u00a1T\u00fa! El que lee, no leas en voz alta el siguiente mensaje...", 
-    "text1": "Con ayuda de los dem\u00e1s tienes que convencer a {1} ({2} si tu eres {1}) de que tiene algo en la cara.", 
+    "text1": "Con ayuda de los dem\u00e1s tienes que convencer a Fransica (Francis si tu eres Fransica) de que tiene algo en la cara.", 
     "id": 262
   }, 
   {

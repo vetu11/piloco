@@ -127,7 +127,7 @@ class Usuarios:
             return usuario
 
         try:
-            with open("users/%s.piuser" %idTelegram) as f:
+            with open("users/%s.piuser" % idTelegram) as f:
                 search = self._add_user(idTelegram, file=json.load(f))
             usuario = self.activos[search]
             usuario.actualizar()
@@ -140,6 +140,7 @@ class Usuarios:
                 la_lista = json.load(f)
 
             la_lista.append(usuario.id)
+            la_lista = list(set(la_lista))
             la_lista.sort()
 
             with open("users/usuarios", "w") as f:

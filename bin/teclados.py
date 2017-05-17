@@ -82,7 +82,7 @@ class Teclados:
                     [InlineKeyboardButton("El segundo es más picante",
                                           callback_data="revisar_picante_2-%s-%s" % (msg1ID, msg2ID))],
 
-                    [InlineKeyboardButton("Son dos son igual de picantes", callback_data="revisar_picante_pass")],
+                    [InlineKeyboardButton("Los dos son igual de picantes", callback_data="revisar_picante_pass")],
 
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
@@ -196,7 +196,7 @@ class Menus():
     def menu_info(self):
 
         msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*" \
-              "\n▪️¿Tienes *ideas nuevas* para Piloco? Habla con @vetu11\n\nv1.0-alpha1"
+              "\n▪️¿Tienes *ideas nuevas* para Piloco? Habla con @vetu11\n\nv1.0-alpha10"
 
         keyboard = Teclados.menu_info()
         return [msg, keyboard]
