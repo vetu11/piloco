@@ -1,8 +1,7 @@
 # coding=utf-8
 
-import time, logging, json
+import time, json
 from .constantes import Constantes
-
 
 class AjustesUsuario:
 
@@ -39,13 +38,13 @@ class Usuario:
 
     def __del__(self):
 
-        with open("users/%s.piuser" %self.id, "w") as f:
+        with open("users/%s.piuser" % self.id, "w") as f:
 
-            dicc = {"ultimo_uso":self.ultimo_uso,
-                    "ultimos_jugadores":self.ultimos_jugadores,
-                    "reputacion":self.reputacion,
-                    "picante":self.ajustes.picante,
-                    "emparejador":self.ajustes.emparejador}
+            dicc = {"ultimo_uso": self.ultimo_uso,
+                    "ultimos_jugadores": self.ultimos_jugadores,
+                    "reputacion": self.reputacion,
+                    "picante": self.ajustes.picante,
+                    "emparejador": self.ajustes.emparejador}
 
             self.json_dump(dicc, f, indent=2)
 
@@ -67,7 +66,12 @@ class Usuarios:
             inx += 1
         return inx
 
-    def _bin_search(self, idTelegram):
+    def _bin_search(self, idTelegram):  # TODO: hay cosas mal aquí
+
+        try:
+            if idTelegram == self.activos[len(self.activos) - 1].id:
+                return len(self.activos) - 1
+        except: pass
 
         if len(self.activos):
             min = 0
@@ -82,6 +86,8 @@ class Usuarios:
 
             if idTelegram == self.activos[pic].id:
                 return pic
+
+
 
             while pic != min and pic != max:
 
@@ -130,6 +136,14 @@ class Usuarios:
             with open("users/%s.piuser" % idTelegram) as f:
                 search = self._add_user(idTelegram, file=json.load(f))
             usuario = self.activos[search]
+
+            cambio_reputacion = int((time.time() - usuario.ultimo_uso) / 86400)
+
+            if usuario.reputacion - cambio_reputacion > 100:
+                usuario.reputacion -= cambio_reputacion
+            elif usuario.reputacion > 100:
+                usuario.reputacion = 100
+
             usuario.actualizar()
             return usuario
         except:
@@ -153,5 +167,23 @@ class Usuarios:
         usuario = self.get_user(idTelegram)
 
         usuario.reputacion += reputacion
+
+    def imprimir_estado(self):
+
+        for usuario in self.activos:
+
+            msg = "Usuario %s," % usuario.id
+
+            if usuario.partida:
+
+                msg += " con partida creada y"
+
+            if usuario.editando_mensaje:
+
+                msg += " editando mensaje y"
+
+            msg += " activo hace %d segundos" % (time.time() - usuario.ultimo_uso)
+
+            print msg
 
 Usuarios = Usuarios()

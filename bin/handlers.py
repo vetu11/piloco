@@ -9,6 +9,13 @@ from .partida import PartidaClasica, PartidaClasicaEmparejador, ColaEmparejador
 from .constantes import Constantes
 from .mensaje import MensajesEnRevision, Puntos, MensajeEnRevision, MensajesClasica
 
+def dame_mensaje_a_revisar():
+    if random.randint(0, 3):
+        mensaje = MensajesEnRevision.escojer_mensaje()
+    else:
+        mensaje = MensajesClasica.escojer_mensaje()
+    return mensaje
+
 
 class HandlersPiloco:
 
@@ -90,6 +97,11 @@ class HandlersPiloco:
 
         return ConversationHandler.END
 
+    def comandos_no_soportados(self, bot, update):
+
+        update.message.reply_text("¡Se acabaron los comandos! Piloco ya no usa interfaz por comandos, basta con que us"
+                                  "es /start para ver el menú inicial o si alguna vez que el bot no responde o no hace "
+                                  "lo que debería, puedes probar a usar /restart (reiniciar siempre lo arregla todo).")
 
     # MENSAJES
     def revisar_mensajes(self, bot, update):
@@ -126,19 +138,20 @@ class HandlersPiloco:
                 keyboard = Teclados.solo_menu_principal()
 
         else:
-            mensaje1 = MensajesEnRevision.escojer_mensaje()
-            mensaje2 = MensajesEnRevision.escojer_mensaje()
 
+            mensaje1 = dame_mensaje_a_revisar()
+            mensaje2 = dame_mensaje_a_revisar()
             antiloop = 0
-            while (mensaje1.picante == 0 or mensaje2.picante == 0 or mensaje1 == mensaje2) and antiloop < 50:
-                mensaje1 = MensajesEnRevision.escojer_mensaje()
-                if random.randint(0,9):
-                    mensaje2 = MensajesEnRevision.escojer_mensaje()
-                else:
-                    mensaje2 = MensajesClasica.escojer_mensaje()
+
+            while (mensaje1.picante == 0 or mensaje1 == mensaje2) and antiloop < 100:
+                mensaje1 = dame_mensaje_a_revisar()
                 antiloop += 1
 
-            if antiloop < 50:
+            while (mensaje2.picante == 0 or mensaje1 == mensaje2) and antiloop < 100:
+                mensaje2 = dame_mensaje_a_revisar()
+                antiloop += 1
+
+            if antiloop < 100:
                 if mensaje1.tipo == "normal":
                     msg1 = mensaje1.text
                 else:
@@ -150,7 +163,7 @@ class HandlersPiloco:
                     msg2 = u"%s\"\n\"%s" % (mensaje2.text0, mensaje2.text1)
 
                 msg = u"*Escoje de los dos mensajes el más picante. Primer mensaje:*" \
-                      u"\n\"%s\"\n\n*Segundo mensaje*\n\"%s\"" % (msg1, msg2)
+                      u"\n\"%s\"\n\n*Segundo mensaje:*\n\"%s\"" % (msg1, msg2)
                 keyboard = Teclados.revisar_mensajes_picante(mensaje1.id, mensaje2.id)
             else:
                 msg = "Parece que ya has revisado todos los mensajes. Vuelve a intentarlo más tarde, o añade tus pro" \
@@ -170,7 +183,7 @@ class HandlersPiloco:
         msgID = data.split("-")[1]
         mensaje = MensajesEnRevision.get_message(msgID)
 
-        if mensaje:
+        if mensaje and mensaje.hecho_por != usuario.id:
             if re.match(r"revisar_valor_1down", data):
                 mensaje.puntos += (Puntos((-1, -0.4)) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL))
                 mensaje.en_contra.append(usuario.id)
@@ -178,7 +191,7 @@ class HandlersPiloco:
                 mensaje.skipped.append(usuario.id)
             elif re.match(r"revisar_valor_1up", data):
                 mensaje.puntos += (Puntos((1, 0.1)) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL))
-                mensaje.en_contra.append(usuario.id)
+                mensaje.a_favor.append(usuario.id)
             elif re.match(r"revisar_valor_2up", data):
                 mensaje.puntos += (Puntos((2, 0.2)) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL))
                 mensaje.a_favor.append(usuario.id)
@@ -187,6 +200,17 @@ class HandlersPiloco:
                 mensaje.skipped.append(usuario.id)
 
             MensajesEnRevision.comprobar_aptitud(mensaje)
+        elif mensaje:
+            if re.match(r"revisar_valor_1down", data):
+                mensaje.en_contra.append(usuario.id)
+            elif re.match(r"revisar_valor_skip", data):
+                mensaje.skipped.append(usuario.id)
+            elif re.match(r"revisar_valor_1up", data):
+                mensaje.a_favor.append(usuario.id)
+            elif re.match(r"revisar_valor_2up", data):
+                mensaje.a_favor.append(usuario.id)
+            elif re.match(r"revisar_rev", data):
+                mensaje.skipped.append(usuario.id)
 
         self.revisar_mensajes(bot, update)
 
@@ -231,7 +255,7 @@ class HandlersPiloco:
         usuario = Usuarios.get_user(update.callback_query.from_user.id)
         usuario.editando_mensaje = None
 
-        if usuario.reputacion >= 35:
+        if usuario.reputacion >= Constantes.Usuarios.ACESO_A_ADD_MESSAGE:
             msg, keyboard = Menus.menu_add_message()
         else:
             msg = "Lo sentimos, pero ahora mismo no tienes acceso a esta función. Prueba a revisar unos mensajes y" \
@@ -454,10 +478,12 @@ class HandlersPiloco:
 
             usuario.partida = PartidaClasicaEmparejador(usuario,
                                                         factor_picante=dicc_fac_picante[usuario.ajustes.picante])
+            usuario.ultimos_jugadores = []
         else:
 
             usuario.partida = PartidaClasica(usuario,
                                              factor_picante=dicc_fac_picante[usuario.ajustes.picante])
+            usuario.ultimos_jugadores = []
 
         usuario.partida.inciar_mensajes()
         usuario.partida.iniciar_valor_picante()
@@ -502,12 +528,10 @@ class HandlersPiloco:
         else:
 
             msg = "Iniciando partida..."
-            keyboard = [[]]
 
             bot.edit_message_text(text=msg,
                                   chat_id=update.callback_query.message.chat_id,
                                   message_id=update.callback_query.message.message_id,
-                                  reply_markup=InlineKeyboardMarkup(keyboard),
                                   parse_mode=ParseMode.MARKDOWN)
 
             usuario.partida = PartidaClasica(usuario,
@@ -590,6 +614,7 @@ class HandlersPiloco:
         usuario = Usuarios.get_user(update.message.from_user.id)
 
         usuario.partida.add_player(update.message.text)
+        usuario.add_player(update.message.text)
 
         # TODO: no debería soportar mensajes largos y debería comprobar si los jugadores ya exisiten.
         # Esto último debería comprobarse dentro el método add_player y que este devuelva 1 o 0.
@@ -616,12 +641,7 @@ class HandlersPiloco:
     # EN PARTIDA
     def next_mesagge(self, bot, update):
         usuario = Usuarios.get_user(update.callback_query.from_user.id)
-        mensaje = usuario.partida.dame_mensaje()
-
-        if mensaje.tipo == "normal":
-            msg = mensaje.text
-        else:
-            msg = mensaje.text0
+        msg = usuario.partida.dame_mensaje()
 
         keyboard = Teclados.menu_mensaje()
 
@@ -648,7 +668,7 @@ class HandlersPiloco:
 
         usuario = Usuarios.get_user(update.callback_query.from_user.id)
 
-        usuario.partida.last_message.puntuacion += 1
+        usuario.partida.last_message.puntuacion += usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL
 
         self.next_mesagge(bot, update)
 
@@ -656,13 +676,14 @@ class HandlersPiloco:
 
         usuario = Usuarios.get_user(update.callback_query.from_user.id)
 
-        usuario.partida.last_message.puntuacion -= 1
+        usuario.partida.last_message.puntuacion -= usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL
 
         self.next_mesagge(bot, update)
 
         # TODO: hay que comrobar si el mensaje se tiene que largar a narnia, teniendo en cuenta la posibilidad de que
         # este mismo mensaje esté en otra partida y esté siendo votado.
         # TODO: debe soportar la posibilidad de que el usuario no esté en partida
+        # TODO: tiene que soportar mensajes tipo RNI y RI
 
     def ajustes_partida_clasica(self, bot, update):
 
@@ -686,12 +707,7 @@ class HandlersPiloco:
     def partida_clasica_volver(self, bot, update):
 
         usuario = Usuarios.get_user(update.callback_query.from_user.id)
-        mensaje = usuario.partida.dame_mensaje()
-
-        if mensaje.tipo == "normal":
-            msg = mensaje.text
-        else:
-            msg = mensaje.text0
+        msg = usuario.partida.dame_mensaje()
 
         keyboard = Teclados.menu_mensaje()
 
@@ -708,7 +724,7 @@ class HandlersPiloco:
 
         self.menu_principal(bot, update)
 
-    def ajustes_mas_picante(self, bot, update):
+    def ajustes_mas_picante(self, bot, update):  # TODO: si factor == 0? + partidas con emparejador bien ploes
 
         usuario = Usuarios.get_user(update.callback_query.from_user.id)
 
@@ -732,7 +748,7 @@ class HandlersPiloco:
             usuario.partida.valor_picante *= 2
 
         if usuario.partida.valor_picante == 0:
-            usuario.partida.valor_picante = val_picante[actual]
+            usuario.partida.valor_picante = val_picante[nuevo]
 
         update.callback_query.answer("Nivel de picante aumentado")
 

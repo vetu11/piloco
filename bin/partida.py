@@ -32,12 +32,11 @@ class BasePartidaClasica:
 
     todo_mensaje = MensajesClasica
 
-    def __init__(self, padre, factor_picante, **kargs):
+    def __init__(self, padre, factor_picante, **kargs):  # TODO: eliminar padre, (está para backwards compatibilty)
 
         self.jugadores = []
         self.factor_picante = factor_picante
         self.valor_picante = kargs.get("valor_picante", Constantes.PartidaClasica.VALOR_INICIAL_PICANTE)
-        self.padre = padre
         self.mensajes = [[], []]
         self.last_message = None
         self.emparejador = None
@@ -67,15 +66,15 @@ class BasePartidaClasica:
         if mensaje.tipo == "RI":
 
             # INTRODUCIMOS LOS NOMBRES EN LOS TEXTOS
-            mensaje.text0 = mensaje.text0.replace("nombre1", nombre1) \
+            text0 = mensaje.text0.replace("nombre1", nombre1) \
                 .replace("nombre2", nombre2) \
                 .format("", nombre1, nombre2)
-            mensaje.text1 = mensaje.text1.replace("nombre1", nombre1) \
+            text1 = mensaje.text1.replace("nombre1", nombre1) \
                 .replace("nombre2", nombre2) \
                 .format("", nombre1, nombre2)
 
             msg_dicc = {"tipo": "normal",
-                        "text": mensaje.text1,
+                        "text": text1,
                         "puntuacion": mensaje.puntuacion,
                         "picante": mensaje.picante,
                         "id": mensaje.id,
@@ -86,15 +85,15 @@ class BasePartidaClasica:
         elif mensaje.tipo == "RNI":
 
             # INTRODUCIMOS LOS NOMBRES EN LOS TEXTOS
-            mensaje.text0 = mensaje.text0.replace("nombre1", nombre1) \
+            text0 = mensaje.text0.replace("nombre1", nombre1) \
                 .replace("nombre2", nombre2) \
                 .format("", nombre1, nombre2)
-            mensaje.text1 = mensaje.text1.replace("nombre1", nombre1) \
+            text1 = mensaje.text1.replace("nombre1", nombre1) \
                 .replace("nombre2", nombre2) \
                 .format("", nombre1, nombre2)
 
             msg_dicc = {"tipo": "normal",
-                        "text": mensaje.text1,
+                        "text": text1,
                         "puntuacion": mensaje.puntuacion,
                         "picante": mensaje.picante,
                         "id": mensaje.id,
@@ -103,17 +102,11 @@ class BasePartidaClasica:
             self.mensajes[1].append(MensajeEnJuego(msg_dicc))
 
         else:
-            mensaje.text = mensaje.text.replace("nombre1", nombre1) \
+            text0 = mensaje.text.replace("nombre1", nombre1) \
                 .replace("nombre2", nombre2) \
                 .format("", nombre1, nombre2)
 
-        return mensaje
-
-    def __del__(self):
-
-        self.padre.ultimos_jugadores = []
-        for jugador in self.jugadores:
-            self.padre.ultimos_jugadores.append(jugador.nombre)
+        return text0
 
 
 class PartidaClasica(BasePartidaClasica):
@@ -148,12 +141,12 @@ class PartidaClasica(BasePartidaClasica):
                 jugador1, jugador2 = self.elegir_jugadores()
                 nombre1, nombre2 = jugador1.nombre.capitalize(), jugador2.nombre.capitalize()
 
-                mensaje = self.introducir_nombres(mensaje, nombre1, nombre2)
+                text0 = self.introducir_nombres(mensaje, nombre1, nombre2)
                 break
 
         self.last_message = mensaje
         self.valor_picante *= self.factor_picante
-        return mensaje
+        return text0
 
     def add_player(self, name):
         """Añade un objeto jugador con el nombre indicado"""
@@ -168,7 +161,7 @@ class PartidaClasica(BasePartidaClasica):
             self.factor_picante = Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_BAJO
         elif self.factor_picante == Constantes.PartidaClasica.FACTOR_PICANTE_MEDIO:
             self.factor_picante = Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_MEDIO
-        else:
+        elif self.factor_picante == Constantes.PartidaClasica.FACTOR_PICANTE_ALTO:
             self.factor_picante = Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_ALTO
 
 
@@ -212,7 +205,7 @@ class PartidaClasicaEmparejador(BasePartidaClasica, UnionDeNodos):
                 else:
                     nombre2, nombre1 = relacion.n1.nombre.capitalize(), relacion.n2.nombre.capitalize()
 
-                mensaje = self.introducir_nombres(mensaje, nombre1, nombre2)
+                text0 = self.introducir_nombres(mensaje, nombre1, nombre2)
                 break
 
         self.last_message = mensaje
@@ -220,7 +213,7 @@ class PartidaClasicaEmparejador(BasePartidaClasica, UnionDeNodos):
         for relacion in self.relaciones:
             relacion.potencia *= self.factor_picante
 
-        return mensaje
+        return text0
 
     def add_player(self, name):
 

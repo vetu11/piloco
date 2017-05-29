@@ -23,7 +23,7 @@ class Puntos:
 
     def __mul__(self, other):
 
-        return Puntos((self.puntos[0] * other, self.puntos[0] * other))
+        return Puntos((self.puntos[0] * other, self.puntos[1] * other))
 
 
 class BaseMensaje:
@@ -157,6 +157,17 @@ class MensajesEnRevision:
         for msg_dicc in list:
 
             self.list.append(MensajeEnRevision(msg_dicc))
+
+        mensaje = self.list[random.randint(0, len(self.list) - 1)]
+        print mensaje.id
+        pic = random.randint(0,2)
+        if pic == 2 and mensaje.a_favor:
+            mensaje.a_favor.pop(random.randint(0, len(mensaje.a_favor) - 1))
+        elif pic == 1 and mensaje.skipped:
+            mensaje.skipped.pop(random.randint(0, len(mensaje.skipped) - 1))
+        elif not pic and mensaje.en_contra:
+            mensaje.en_contra.pop(random.randint(0, len(mensaje.en_contra) - 1))
+        pass
 
     def escojer_mensaje(self, idTelegram=None):
         antiLoop = 0

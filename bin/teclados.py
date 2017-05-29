@@ -52,6 +52,7 @@ class Teclados:
     def menu_info(self):
 
         keyboard = [[InlineKeyboardButton("📢 Canal", url="t.me/Piloco")],
+                    [InlineKeyboardButton("💬 Habla con nosotros", url="t.me/PilocoSupportbot")],
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
 
@@ -163,7 +164,6 @@ class Teclados:
                          InlineKeyboardButton("Volver⏭", callback_data="apc_volver")])
         return keyboard
 
-
 Teclados = Teclados()
 
 
@@ -195,8 +195,8 @@ class Menus():
 
     def menu_info(self):
 
-        msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*" \
-              "\n▪️¿Tienes *ideas nuevas* para Piloco? Habla con @vetu11\n\nv1.0-alpha10"
+        msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*\n▪️¿Tienes *ideas nuevas" \
+              "* para Piloco, o *alguna duda*? Habla con [nosotros](@PilocoSupportbot)\n\nv1.0-alpha19"
 
         keyboard = Teclados.menu_info()
         return [msg, keyboard]
@@ -273,7 +273,5 @@ class Menus():
 
         keyboard = Teclados.menu_add_picante(picante)
         return msg, keyboard
-
-
 
 Menus = Menus()

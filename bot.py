@@ -1,14 +1,22 @@
 # coding=utf-8
 
 import logging
-from telegram.ext import Updater, MessageHandler, CommandHandler, CallbackQueryHandler, Filters
+from telegram.ext import Updater, MessageHandler, CommandHandler, CallbackQueryHandler, Filters, RegexHandler
 from bin import TOKEN, HandlersPiloco, Conversations
+from bin.usuarios import Usuarios
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 
 def stop_bot(updater):
     logging.info("Apagando bot...")
+    for usuario in Usuarios.activos:
+        if usuario.partida:
+            updater.bot.send_message(chat_id=usuario.id,
+                                     text="El bot se ha reiniciado y se ha cerrado tu partida, usar /start para continuar.")
+        elif usuario.editando_mensaje:
+            updater.bot.send_message(chat_id=usuario.id,
+                                     text="El bot se ha reiniciado y tu mensaje se ha perdido, usar /start para continuar.")
     updater.stop()
     logging.info("Bot apagado")
 
@@ -43,6 +51,7 @@ def main():
     a_h(CallbackQueryHandler(HandlersPiloco.revisar_actualizar_picante, pattern="^revisar_picante_"))
     a_h(CallbackQueryHandler(HandlersPiloco.add_message, pattern="^ms_new$"))
     a_h(CommandHandler('restart', HandlersPiloco.restart_bot))
+    a_h(RegexHandler("^/", HandlersPiloco.comandos_no_soportados))
     a_h(CallbackQueryHandler(HandlersPiloco.proximamente_clb))
     a_h(MessageHandler(Filters.all, HandlersPiloco.mensaje))
 
@@ -50,17 +59,23 @@ def main():
 
     # CONSOLA
     while True:
-        input = raw_input()
-        input_C = input.split()[0]
-        args = input.split()[1:]
+        inp = raw_input()
+        input_c = inp.split()[0]
+        args = inp.split()[1:]
         strig = ""
 
         for e in args:
             strig = strig + " " + e
 
-        if input_C == "stop":
+        if input_c == "stop":
             stop_bot(updater)
             break
+
+        elif input_c == "comprobar":
+            Usuarios.imprimir_estado()
+
+        elif input_c == "pt":
+            print Usuarios.activos
 
         else:
             print "Comando desconocido"
