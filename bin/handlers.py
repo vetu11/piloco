@@ -55,8 +55,7 @@ class HandlersPiloco:
 
         logging.debug("Petición del menú info recibida")
 
-        msg = Menus.menu_info()[0]
-        keyboard = Menus.menu_info()[1]
+        msg, keyboard = Menus.menu_info(Usuarios.get_user(update.callback_query.from_user.id))
 
         bot.edit_message_text(text=msg,
                               chat_id=update.callback_query.message.chat_id,
@@ -231,13 +230,13 @@ class HandlersPiloco:
             if mensaje1 and mensaje2:
 
                 if re.match(r"revisar_picante_1", data):
-                    factor = (mensaje2.picante / mensaje1.picante) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL)
+                    factor = (mensaje2.picante / mensaje1.picante)
                     if factor > ((mensaje1.picante + mensaje2.picante)/2):
                         factor = (mensaje1.picante + mensaje2.picante)/2
                     mensaje1.picante += factor
                     mensaje2.picante -= factor
                 else:
-                    factor = (mensaje1.picante / mensaje2.picante) * (usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL)
+                    factor = (mensaje1.picante / mensaje2.picante)
                     if factor > ((mensaje1.picante + mensaje2.picante)/2):
                         factor = (mensaje1.picante + mensaje2.picante)/2
                     mensaje2.picante += factor
@@ -380,6 +379,7 @@ class HandlersPiloco:
 
         elif data == "pic_done":
 
+            usuario.reputacion -= 10
             MensajesEnRevision.list.append(usuario.editando_mensaje)
             self.add_message(bot, update)
 

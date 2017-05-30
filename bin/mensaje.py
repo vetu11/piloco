@@ -137,7 +137,7 @@ class MensajesClasica:
                               "id": mensaje.id}
             list.append(msg_dicc)
 
-        with open("pilocuras.json", "w") as f:  # TODO: mal, mal, muy mal
+        with open("pilocuras.json", "w") as f:
 
             self.json_dump(list, f, indent=2)
 
@@ -159,7 +159,6 @@ class MensajesEnRevision:
             self.list.append(MensajeEnRevision(msg_dicc))
 
         mensaje = self.list[random.randint(0, len(self.list) - 1)]
-        print mensaje.id
         pic = random.randint(0,2)
         if pic == 2 and mensaje.a_favor:
             mensaje.a_favor.pop(random.randint(0, len(mensaje.a_favor) - 1))
@@ -253,7 +252,7 @@ class MensajesEnRevision:
             self.list.remove(mensaje)
             MensajesClasica.list.append(self.transformar_a_activo(mensaje))
 
-            Usuarios.actualizar_reputacion(mensaje.hecho_por, 9.0)
+            Usuarios.actualizar_reputacion(mensaje.hecho_por, 20.0)
             for idTelegram in mensaje.a_favor:
                 Usuarios.actualizar_reputacion(idTelegram, 1.0)
             for idTelegram in mensaje.en_contra:
@@ -262,7 +261,7 @@ class MensajesEnRevision:
         elif puntos_tupla[0] <= -puntos_necesarios/3:
             self.list.remove(mensaje)
 
-            Usuarios.actualizar_reputacion(mensaje.hecho_por, -9.0)
+            Usuarios.actualizar_reputacion(mensaje.hecho_por, -5.0)
             for idTelegram in mensaje.a_favor:
                 Usuarios.actualizar_reputacion(idTelegram, -1.0)
             for idTelegram in mensaje.en_contra:

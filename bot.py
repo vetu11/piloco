@@ -5,23 +5,24 @@ from telegram.ext import Updater, MessageHandler, CommandHandler, CallbackQueryH
 from bin import TOKEN, HandlersPiloco, Conversations
 from bin.usuarios import Usuarios
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-
 
 def stop_bot(updater):
     logging.info("Apagando bot...")
     for usuario in Usuarios.activos:
-        if usuario.partida:
-            updater.bot.send_message(chat_id=usuario.id,
-                                     text="El bot se ha reiniciado y se ha cerrado tu partida, usar /start para continuar.")
-        elif usuario.editando_mensaje:
-            updater.bot.send_message(chat_id=usuario.id,
-                                     text="El bot se ha reiniciado y tu mensaje se ha perdido, usar /start para continuar.")
+        try:
+            if usuario.partida:
+                updater.bot.send_message(chat_id=usuario.id,
+                                         text="El bot se ha reiniciado y se ha cerrado tu partida, usa /start para continuar.")
+            elif usuario.editando_mensaje:
+                updater.bot.send_message(chat_id=usuario.id,
+                                         text="El bot se ha reiniciado y tu mensaje se ha perdido 😭 usa /start para continuar.")
+        except: print "Imposible enviar mensaje a %s" % usuario.id
     updater.stop()
     logging.info("Bot apagado")
 
 
 def main():
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
     updater = Updater(TOKEN)
     dp = updater.dispatcher
     a_h = dp.add_handler
@@ -60,25 +61,23 @@ def main():
     # CONSOLA
     while True:
         inp = raw_input()
-        input_c = inp.split()[0]
-        args = inp.split()[1:]
-        strig = ""
+        if inp:
+            input_c = inp.split()[0]
+            args = inp.split()[1:]
+            strig = ""
 
-        for e in args:
-            strig = strig + " " + e
+            for e in args:
+                strig = strig + " " + e
 
-        if input_c == "stop":
-            stop_bot(updater)
-            break
+            if input_c == "stop":
+                stop_bot(updater)
+                break
 
-        elif input_c == "comprobar":
-            Usuarios.imprimir_estado()
+            elif input_c == "comprobar":
+                Usuarios.imprimir_estado()
 
-        elif input_c == "pt":
-            print Usuarios.activos
-
-        else:
-            print "Comando desconocido"
+            else:
+                print "Comando desconocido"
 
 
 if __name__ == '__main__':
