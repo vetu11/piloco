@@ -114,8 +114,8 @@ class MensajesClasica:
                 return mensaje
         return None
 
-    def __del__(self):
-
+    def guardar(self):
+        print "Guardando mensajes..."
         list = []
 
         for mensaje in self.list:
@@ -140,6 +140,11 @@ class MensajesClasica:
         with open("pilocuras.json", "w") as f:
 
             self.json_dump(list, f, indent=2)
+        print "Mensajes guardados"
+
+    def __del__(self):
+
+        self.guardar()
 
 MensajesClasica = MensajesClasica()
 
@@ -182,8 +187,8 @@ class MensajesEnRevision:
                 antiLoop += 1
             return None
 
-    def __del__(self):
-
+    def guardar(self):
+        print "Guardan mensajes en revisión"
         list = []
 
         for mensaje in self.list:
@@ -214,6 +219,11 @@ class MensajesEnRevision:
         with open("newMessages.json", "w") as f:  # TODO: mal, mal, muy mal
 
             self.json_dump(list, f, indent=2)
+        print "Mensajes en revisión guardados"
+
+    def __del__(self):
+
+        self.guardar()
 
     def get_message(self, msgID):  # TODO: aplicar binary search?
 

@@ -4,11 +4,15 @@ import logging
 from telegram.ext import Updater, MessageHandler, CommandHandler, CallbackQueryHandler, Filters, RegexHandler
 from bin import TOKEN, HandlersPiloco, Conversations
 from bin.usuarios import Usuarios
+from bin.mensaje import MensajesClasica, MensajesEnRevision
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 
 def stop_bot(updater):
     logging.info("Apagando bot...")
-    for usuario in Usuarios.activos:
+    for u in Usuarios.activos:
+        usuario = Usuarios.activos.pop(0)
         try:
             if usuario.partida:
                 updater.bot.send_message(chat_id=usuario.id,
@@ -17,12 +21,15 @@ def stop_bot(updater):
                 updater.bot.send_message(chat_id=usuario.id,
                                          text="El bot se ha reiniciado y tu mensaje se ha perdido 😭 usa /start para continuar.")
         except: print "Imposible enviar mensaje a %s" % usuario.id
+    MensajesClasica.guardar()
+    MensajesEnRevision.guardar()
+
     updater.stop()
     logging.info("Bot apagado")
 
 
 def main():
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
     updater = Updater(TOKEN)
     dp = updater.dispatcher
     a_h = dp.add_handler

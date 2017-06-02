@@ -24,15 +24,13 @@ class HandlersPiloco:
     # GENERALES
     def mensaje(self, bot, update):
 
-        logging.info("Mensaje recibido de %s(%s)" %(update.message.from_user.first_name, update.message.from_user.id))
         update.message.reply_text("No sé que quieres decir.")
 
     def comando_start(self, bot, update):
 
         # TODO: comprobar si el jguador está en una partida pa no liarla parda.
 
-        msg = Menus.menu_principal()[0]
-        keyboard = Menus.menu_principal()[1]
+        msg, keyboard = Menus.menu_principal()
 
         update.message.reply_text(text=msg,
                                   reply_markup=InlineKeyboardMarkup(keyboard),

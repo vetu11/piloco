@@ -176,7 +176,7 @@ class Menus():
         msg = "🏠*MENÚ PRINCIPAL\n\n¡Bienvenido a Piloco!*\n\n¿listas para emborracharse?\nUsa los botones para navegar por los menús."
 
         keyboard = Teclados.menu_principal()
-        return [msg,keyboard]
+        return msg,keyboard
 
     def menu_partidaClasica(self, picante, emparejador, last_players):
 
@@ -198,7 +198,7 @@ class Menus():
         msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*\n▪️¿Tienes *ideas nuevas" \
               "* para Piloco, o *alguna duda*? Habla con [nosotros](@PilocoSupportbot)\n▪️Tienes *%s puntos de reputa" \
               "ción* [¿qué es eso?](telegra.ph/reputación-y-recompensas-05-27)\n\n" \
-              "v1.0-alpha20" % int(usuario.reputacion)
+              "v1.0-alpha21" % int(usuario.reputacion)
 
         keyboard = Teclados.menu_info()
         return msg, keyboard
