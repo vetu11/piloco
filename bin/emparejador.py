@@ -68,8 +68,6 @@ class Nodo:
             if eleccion.apunta == n2:
                 return eleccion
 
-        return 0
-
     def iniciar_relaciones(self):
 
         for otroNodo in self.union():

@@ -145,7 +145,8 @@ class PartidaClasica(BasePartidaClasica):
                 break
 
         self.last_message = mensaje
-        self.valor_picante *= self.factor_picante
+        if self.factor_picante:
+            self.valor_picante += self.factor_picante
         return text0
 
     def add_player(self, name):
@@ -163,6 +164,40 @@ class PartidaClasica(BasePartidaClasica):
             self.factor_picante = Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_MEDIO
         elif self.factor_picante == Constantes.PartidaClasica.FACTOR_PICANTE_ALTO:
             self.factor_picante = Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_ALTO
+
+    def mas_picante(self):
+
+        dic_fac_picante = [0,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_BAJO,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_MEDIO,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_ALTO]  # TODO: preguntar a ruso si esto es mejor como atributo de la clase
+
+        actual = dic_fac_picante.index(self.factor_picante)
+
+        if actual < len(dic_fac_picante) - 1:
+            nuevo = actual + 1
+            self.valor_picante *= 2
+        else:
+            nuevo = actual
+
+        self.factor_picante = dic_fac_picante[nuevo]
+
+    def menos_picante(self):
+
+        dic_fac_picante = [0,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_BAJO,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_MEDIO,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_ALTO]
+
+        actual = dic_fac_picante.index(self.factor_picante)
+
+        if actual > 0:
+            nuevo = actual - 1
+        else:
+            nuevo = actual
+
+        self.factor_picante = dic_fac_picante[nuevo]
+        self.valor_picante /= 2
 
 
 class PartidaClasicaEmparejador(BasePartidaClasica, UnionDeNodos):
@@ -210,8 +245,10 @@ class PartidaClasicaEmparejador(BasePartidaClasica, UnionDeNodos):
 
         self.last_message = mensaje
 
-        for relacion in self.relaciones:
-            relacion.potencia *= self.factor_picante
+        if self.factor_picante:
+            for relacion in self.relaciones:
+                if relacion.potencia:
+                    relacion.potencia += self.factor_picante
 
         return text0
 
@@ -250,3 +287,40 @@ class PartidaClasicaEmparejador(BasePartidaClasica, UnionDeNodos):
 
         self.acciones_pendientes.append(ColaEmparejador(ColaEmparejador.TERMINAR_ENCUESTAS))
         self.acciones_pendientes.reverse()
+
+    def mas_picante(self):
+
+        dic_fac_picante = [0,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_BAJO,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_MEDIO,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_ALTO]
+
+        actual = dic_fac_picante.index(self.factor_picante)
+
+        if actual < len(dic_fac_picante) - 1:
+            nuevo = actual + 1
+            for relacion in self.relaciones:
+                relacion.potencia *= 2
+        else:
+            nuevo = actual
+
+        self.factor_picante = dic_fac_picante[nuevo]
+
+    def menos_picante(self):
+
+        dic_fac_picante = [0,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_BAJO,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_MEDIO,
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_ALTO]
+
+        actual = dic_fac_picante.index(self.factor_picante)
+
+        if actual > 0:
+            nuevo = actual - 1
+        else:
+            nuevo = actual
+
+        self.factor_picante = dic_fac_picante[nuevo]
+
+        for relacion in self.relaciones:
+            relacion.potencia /= 2

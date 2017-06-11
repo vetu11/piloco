@@ -216,7 +216,7 @@ class MensajesEnRevision:
                                 "puntos": mensaje.puntos()}}
             list.append(msg_dicc)
 
-        with open("newMessages.json", "w") as f:  # TODO: mal, mal, muy mal
+        with open("newMessages.json", "w") as f:
 
             self.json_dump(list, f, indent=2)
         print "Mensajes en revisión guardados"

@@ -8,7 +8,6 @@ from bin.mensaje import MensajesClasica, MensajesEnRevision
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
-
 def stop_bot(updater):
     logging.info("Apagando bot...")
     for u in Usuarios.activos:

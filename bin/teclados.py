@@ -13,7 +13,7 @@ class Teclados:
 
         keyboard = [[InlineKeyboardButton("▶️ Nueva partida", callback_data="mp_newGame")],
 
-                    [InlineKeyboardButton("✉ Añadir/Revisar mensajes", callback_data="mp_mensajes")],
+                    [InlineKeyboardButton("✉ Añadir/Votar mensajes", callback_data="mp_mensajes")],
 
                     [InlineKeyboardButton("⚙️", callback_data="mp_ajustes"),
                      InlineKeyboardButton("ℹ️", callback_data="mp_info"),
@@ -23,7 +23,7 @@ class Teclados:
     def menu_partidaClasica(self, picante=0, emparejador=False, last_players=False):
 
         pic_dicc = {0:"❄️", 1:"♨️", 2:"🌶", 3:"🔥"}
-        emp_dicc = {0:"❎", 1:"✅"}
+        emp_dicc = {0:"❎️", 1:"✅"}
 
         keyboard = [[InlineKeyboardButton("▶️ Iniciar partida", callback_data="mpc_start")]]
 
@@ -44,7 +44,7 @@ class Teclados:
     def menu_mensajes(self):
 
         keyboard = [[InlineKeyboardButton("📨 Añadir mensajes", callback_data="ms_new")],
-                    [InlineKeyboardButton("🔍 Revisar mensajes", callback_data="ms_rev")],
+                    [InlineKeyboardButton("🔍 Votar mensajes", callback_data="ms_rev")],
                     [InlineKeyboardButton("📝 Corregir mensajes", callback_data="ms_crg")],
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
@@ -187,8 +187,8 @@ class Menus():
 
     def menu_mensajes(self):
 
-        msg = "✉️*MENSAJES*\n\nDesde aquí puedes añadir, revisar o corregir mensajes que más tarde aparecerán en el j" \
-              "uego." # TODO: cambiar el texto para que se entienda mejor en qué consiste revisar mensajes
+        msg = "✉️*MENSAJES*\n\nDesde aquí puedes añadir, votar o corregir mensajes que más tarde aparecerán en el j" \
+              "uego."
 
         keyboard = Teclados.menu_mensajes()
         return [msg, keyboard]
@@ -196,9 +196,9 @@ class Menus():
     def menu_info(self, usuario ):
 
         msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*\n▪️¿Tienes *ideas nuevas" \
-              "* para Piloco, o *alguna duda*? Habla con [nosotros](@PilocoSupportbot)\n▪️Tienes *%s puntos de reputa" \
-              "ción* [¿qué es eso?](telegra.ph/reputación-y-recompensas-05-27)\n\n" \
-              "v1.0-alpha21" % int(usuario.reputacion)
+              "* para Piloco, o *alguna duda*? [Habla con nosotros](t.me/PilocoSupportbot)\n▪️Tienes *%s puntos de rep" \
+              "utación* [¿qué es eso?](telegra.ph/reputación-y-recompensas-05-27)\n\n" \
+              "v1.0-alpha23" % int(usuario.reputacion)
 
         keyboard = Teclados.menu_info()
         return msg, keyboard
