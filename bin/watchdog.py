@@ -21,7 +21,7 @@ class Watchdog:
 
     def error(self):
 
-        print "Ha ocurrido un error"
+        print "Ha ocurrido un error (watchdog)"
 
     def succesfull(self):
 
@@ -37,6 +37,8 @@ class TelegramWatchdog(Watchdog):
 
     def error(self):
 
-        bot.send_message(self.user,
-                         text="Parece que ha ocurrido un error grave. Usa /restart y si ves que el bot no responde por "
-                              "favor habla con @PilocoSupportbot e informa del problema cuanto antes, muchas gracias.")
+        print "Ha saltado la watchdog"
+
+        # bot.send_message(self.user,
+        #                  text="Parece que ha ocurrido un error grave. Usa /restart y si ves que el bot no responde por "
+        #                       "favor habla con @PilocoSupportbot e informa del problema cuanto antes, muchas gracias.")

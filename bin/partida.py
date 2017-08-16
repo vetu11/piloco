@@ -53,11 +53,12 @@ class BasePartidaClasica:
     def recargar_mensaje(self, mensaje=None):
 
         if not mensaje:
-            if len(self.mensajes[1]):
-                if random.randint(0,9):
-                    self.mensajes[1].append(self.todo_mensaje.escojer_mensaje())
-            else:
-                self.mensajes[1].append(self.todo_mensaje.escojer_mensaje())
+            for n in range((15 - len(self.mensajes[1]))):
+                while 1:
+                    msg = self.todo_mensaje.escojer_mensaje()
+                    if msg not in self.mensajes[0] and msg not in self.mensajes[1]:
+                        self.mensajes[1].append(msg)
+                        break
         else:
             self.mensajes[1].append(mensaje)
 
@@ -81,10 +82,10 @@ class BasePartidaClasica:
                         "hecho_por": mensaje.hecho_por}
 
             self.mensajes[0].append(MensajeEnJuego(msg_dicc))
+            self.mensajes[0][-1].original_id = mensaje.id  # 30-06 esto... No la lia, verdad?
 
         elif mensaje.tipo == "RNI":
 
-            # INTRODUCIMOS LOS NOMBRES EN LOS TEXTOS
             text0 = mensaje.text0.replace("nombre1", nombre1) \
                 .replace("nombre2", nombre2) \
                 .format("", nombre1, nombre2)
@@ -100,6 +101,7 @@ class BasePartidaClasica:
                         "hecho_por": mensaje.hecho_por}
 
             self.mensajes[1].append(MensajeEnJuego(msg_dicc))
+            self.mensajes[1][-1].original_id = mensaje.id
 
         else:
             text0 = mensaje.text.replace("nombre1", nombre1) \
@@ -136,7 +138,17 @@ class PartidaClasica(BasePartidaClasica):
             mensaje = self.mensajes[0].pop(-1)
             self.recargar_mensaje()
 
-            if self.valor_picante >= mensaje.picante:
+            try:
+                mensaje.original_id
+                picante_aceptado = True
+            except:
+                picante_aceptado = False
+                if self.valor_picante >= mensaje.picante:
+                    diferencia_picante = self.valor_picante - mensaje.picante
+                    pic = random.randint(-12, round(diferencia_picante))
+                    if pic <= 0 or self.mensajes[1] <= 5: picante_aceptado = True
+
+            if picante_aceptado:
 
                 jugador1, jugador2 = self.elegir_jugadores()
                 nombre1, nombre2 = jugador1.nombre.capitalize(), jugador2.nombre.capitalize()
@@ -231,10 +243,21 @@ class PartidaClasicaEmparejador(BasePartidaClasica, UnionDeNodos):
             self.recargar_mensaje()
 
             relaciones_aptas = self.relaciones_aptas(mensaje.picante)
-
+            picante_aceptado = False
             if relaciones_aptas:
                 relacion = relaciones_aptas[random.randint(0, len(relaciones_aptas) - 1)]
 
+                try:
+                    mensaje.original_id
+                    picante_aceptado = True
+                except:
+                    if relacion.potencia >= mensaje.picante:
+                        diferencia_picante = relacion.potencia - mensaje.picante
+                        pic = random.randint(-12, round(diferencia_picante))
+                        if pic <= 0 or self.mensajes[1] <= 5: picante_aceptado = True
+
+
+            if picante_aceptado:
                 if random.randint(0,1):
                     nombre1, nombre2 = relacion.n1.nombre.capitalize(), relacion.n2.nombre.capitalize()
                 else:

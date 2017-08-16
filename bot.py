@@ -2,11 +2,26 @@
 
 import logging
 from telegram.ext import Updater, MessageHandler, CommandHandler, CallbackQueryHandler, Filters, RegexHandler
-from bin import TOKEN, HandlersPiloco, Conversations
+from bin import TOKEN, HandlersPiloco, Conversations, TelegramDonation
 from bin.usuarios import Usuarios
 from bin.mensaje import MensajesClasica, MensajesEnRevision
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+def guardar(bot=None, update=None, from_telegram=True):
+    if from_telegram:
+        if update.message.from_user.id == 254234845:
+            try:
+                MensajesClasica.guardar()
+                MensajesEnRevision.guardar()
+                update.message.reply_text("Guardado correctamente")
+            except:
+                update.message.reply_text("Ha ocurrido un error 😬")
+    else:
+        MensajesClasica.guardar()
+        MensajesEnRevision.guardar()
+
 
 def stop_bot(updater):
     logging.info("Apagando bot...")
@@ -20,12 +35,13 @@ def stop_bot(updater):
                 updater.bot.send_message(chat_id=usuario.id,
                                          text="El bot se ha reiniciado y tu mensaje se ha perdido 😭 usa /start para continuar.")
         except: print "Imposible enviar mensaje a %s" % usuario.id
-    MensajesClasica.guardar()
-    MensajesEnRevision.guardar()
+    guardar(from_telegram=False)
 
     updater.stop()
     logging.info("Bot apagado")
 
+def error(bot, update, error):
+    logger.warning('Update "%s" caused error "%s"' % (update, error))
 
 def main():
 
@@ -34,6 +50,7 @@ def main():
     a_h = dp.add_handler
 
     a_h(CommandHandler('start', HandlersPiloco.comando_start))
+    a_h(CommandHandler('guardar', guardar))
     a_h(Conversations.add_players)
     a_h(Conversations.add_message)
     a_h(CallbackQueryHandler(HandlersPiloco.menu_info, pattern="^mp_info$"))
@@ -56,11 +73,17 @@ def main():
     a_h(CallbackQueryHandler(HandlersPiloco.revisar_mensajes, pattern="^ms_rev$"))
     a_h(CallbackQueryHandler(HandlersPiloco.revisar_actualizar_valor, pattern="^revisar_valor_"))
     a_h(CallbackQueryHandler(HandlersPiloco.revisar_actualizar_picante, pattern="^revisar_picante_"))
+    a_h(CallbackQueryHandler(TelegramDonation.mostrar_donacion, pattern="^donation_new-\d*"))
     a_h(CallbackQueryHandler(HandlersPiloco.add_message, pattern="^ms_new$"))
     a_h(CommandHandler('restart', HandlersPiloco.restart_bot))
+    a_h(CommandHandler('annoucement', HandlersPiloco.annoucement))
+    a_h(CommandHandler('backend', HandlersPiloco.open_backend))
+    a_h(CommandHandler('revisiones',HandlersPiloco.comando_revisiones, pass_args=True))
     a_h(RegexHandler("^/", HandlersPiloco.comandos_no_soportados))
     a_h(CallbackQueryHandler(HandlersPiloco.proximamente_clb))
     a_h(MessageHandler(Filters.all, HandlersPiloco.mensaje))
+
+    dp.add_error_handler(error)
 
     updater.start_polling()
 
@@ -81,6 +104,9 @@ def main():
 
             elif input_c == "comprobar":
                 Usuarios.imprimir_estado()
+
+            elif input_c == "guardar":
+                guardar(from_telegram=False)
 
             else:
                 print "Comando desconocido"

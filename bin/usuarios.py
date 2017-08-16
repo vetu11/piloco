@@ -2,6 +2,7 @@
 
 import time, json
 from .constantes import Constantes
+import mensaje
 
 class AjustesUsuario:
 
@@ -28,6 +29,17 @@ class Usuario:
         self.reputacion = kargs.get("reputacion", Constantes.Usuarios.REPUTACION_INICIAL)
         self.ajustes = AjustesUsuario(picante=kargs.get("picante", 0), emparejador=kargs.get("emparejador", False))
         self.json_dump = json.dump  # sin esto no se puden guardar los usuarios, ya que json se cierra antes.
+
+    def mensajes_sin_votar(self):
+
+        n_msgs = 0
+        id = self.id
+
+        for mensaj in mensaje.MensajesEnRevision.list:
+            if id not in mensaj.a_favor and id not in mensaj.skipped and id  not in mensaj.en_contra:
+                n_msgs += 1
+        return n_msgs
+
 
     def add_player(self, name):
 
@@ -76,18 +88,12 @@ class Usuarios:
         if len(self.activos):
             min = 0
             max = len(self.activos) - 1
-            pic = max/2
-
-            if pic < 0:
-                pic = 0
             if max < 0:
                 max = 0
-
+            pic = max/2
 
             if idTelegram == self.activos[pic].id:
                 return pic
-
-
 
             while pic != min and pic != max:
 

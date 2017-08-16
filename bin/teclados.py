@@ -9,15 +9,20 @@ class Teclados:
     """Todos los teclados que necesita Piloco"""
 
     # GENERAL
-    def menu_principal(self):
+    def menu_principal(self, usuario):
+
+        n_msg = usuario.mensajes_sin_votar()
+        if n_msg:
+            n_msg = " - 🆕%s🆕" % n_msg
+        else:
+            n_msg = ""
 
         keyboard = [[InlineKeyboardButton("▶️ Nueva partida", callback_data="mp_newGame")],
 
-                    [InlineKeyboardButton("✉ Añadir/Votar mensajes", callback_data="mp_mensajes")],
+                    [InlineKeyboardButton("✉ Añadir/Votar mensajes%s"  % n_msg, callback_data="mp_mensajes")],
 
-                    [InlineKeyboardButton("⚙️", callback_data="mp_ajustes"),
-                     InlineKeyboardButton("ℹ️", callback_data="mp_info"),
-                     InlineKeyboardButton("🆘", callback_data="mp_help")]]
+                    [InlineKeyboardButton("ℹ️", callback_data="mp_info"),
+                     InlineKeyboardButton("▫️", callback_data="mp_donate")]]
         return keyboard
 
     def menu_partidaClasica(self, picante=0, emparejador=False, last_players=False):
@@ -37,14 +42,17 @@ class Teclados:
         keyboard.append([InlineKeyboardButton("Emparejador %s" %emp_dicc[emparejador], callback_data="mpc_emparejador")])
         keyboard.append([InlineKeyboardButton("🏠 Volver", callback_data="mp")])
 
-        # TODO: last_players recibe una lista. ¿esto es optimizable?
-
         return keyboard
 
-    def menu_mensajes(self):
+    def menu_mensajes(self, usuario):
+        n_msg = usuario.mensajes_sin_votar()
+        if n_msg:
+            n_msg = " - 🆕%s🆕" % n_msg
+        else:
+            n_msg = ""
 
         keyboard = [[InlineKeyboardButton("📨 Añadir mensajes", callback_data="ms_new")],
-                    [InlineKeyboardButton("🔍 Votar mensajes", callback_data="ms_rev")],
+                    [InlineKeyboardButton("🔍 Votar mensajes%s" % n_msg, callback_data="ms_rev")],
                     [InlineKeyboardButton("📝 Corregir mensajes", callback_data="ms_crg")],
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
@@ -64,10 +72,10 @@ class Teclados:
     # MENSAJES
     def revisar_mensajes_valor(self, msgID):
 
-        keyboard = [[InlineKeyboardButton("1️⃣⬇️", callback_data="revisar_valor_1down-%s" % msgID),
-                     InlineKeyboardButton("0️⃣", callback_data="revisar_valor_skip-%s" % msgID),
-                     InlineKeyboardButton("1️⃣⬆️", callback_data="revisar_valor_1up-%s" % msgID),
-                     InlineKeyboardButton("2️⃣⬆️", callback_data="revisar_valor_2up-%s" % msgID)],
+        keyboard = [[InlineKeyboardButton("👎️", callback_data="revisar_valor_1down-%s" % msgID),
+                     InlineKeyboardButton("⏭", callback_data="revisar_valor_skip-%s" % msgID),
+                     InlineKeyboardButton("👍", callback_data="revisar_valor_1up-%s" % msgID),
+                     InlineKeyboardButton("👍👍️", callback_data="revisar_valor_2up-%s" % msgID)],
 
                     [InlineKeyboardButton("🔙 enviar a corregir️", callback_data="revisar_rev-%s" % msgID)],
 
@@ -136,18 +144,18 @@ class Teclados:
 
         return keyboard
 
-    def menu_mensaje(self, botones_picante=False):  # TODO: comprobar si el mensaje es picante para añadir los botones de "demasiado caliente"
+    def menu_mensaje(self):
 
         keyboard = [[InlineKeyboardButton("⚙️ / 🚪", callback_data="pc_ajustes"),
-                     InlineKeyboardButton("⬇️🌟⬆️", callback_data="pc_votar"),
+                     InlineKeyboardButton("👎 / 👍️", callback_data="pc_votar"),
                      InlineKeyboardButton("✉️⏭", callback_data="pc_next")]]
         return keyboard
 
     def menu_votar_partida(self):
 
-        keyboard = [[InlineKeyboardButton("⬇️", callback_data="pc_vote_down"),
-                     InlineKeyboardButton("0️⃣", callback_data="pc_next"),
-                     InlineKeyboardButton("⬆️", callback_data="pc_vote_up")]]
+        keyboard = [[InlineKeyboardButton("👎", callback_data="pc_vote_down"),
+                     InlineKeyboardButton("✉️⏭", callback_data="pc_next"),
+                     InlineKeyboardButton("👍", callback_data="pc_vote_up")]]
         return keyboard
 
     def menu_ajustes_partida_clasica(self, emparejador=False):
@@ -171,11 +179,11 @@ class Menus():
 
     """Todos los menús que necesita Piloco"""
 
-    def menu_principal(self):
+    def menu_principal(self, usuario):
 
         msg = "🏠*MENÚ PRINCIPAL\n\n¡Bienvenido a Piloco!*\n\n¿listas para emborracharse?\nUsa los botones para navegar por los menús."
 
-        keyboard = Teclados.menu_principal()
+        keyboard = Teclados.menu_principal(usuario)
         return msg,keyboard
 
     def menu_partidaClasica(self, picante, emparejador, last_players):
@@ -183,22 +191,22 @@ class Menus():
         msg = "▶️*PARTIDA CLÁSICA*\n\nConfigura tu partida y pulsa iniciar partida."
 
         keyboard = Teclados.menu_partidaClasica(picante, emparejador, last_players)
-        return [msg, keyboard]
+        return msg, keyboard
 
-    def menu_mensajes(self):
+    def menu_mensajes(self, usuario):
 
         msg = "✉️*MENSAJES*\n\nDesde aquí puedes añadir, votar o corregir mensajes que más tarde aparecerán en el j" \
               "uego."
 
-        keyboard = Teclados.menu_mensajes()
-        return [msg, keyboard]
+        keyboard = Teclados.menu_mensajes(usuario)
+        return msg, keyboard
 
     def menu_info(self, usuario ):
 
         msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*\n▪️¿Tienes *ideas nuevas" \
               "* para Piloco, o *alguna duda*? [Habla con nosotros](t.me/PilocoSupportbot)\n▪️Tienes *%s puntos de rep" \
               "utación* [¿qué es eso?](telegra.ph/reputación-y-recompensas-05-27)\n\n" \
-              "v1.0-alpha23" % int(usuario.reputacion)
+              "v1.0-alpha27" % int(usuario.reputacion)
 
         keyboard = Teclados.menu_info()
         return msg, keyboard
@@ -217,7 +225,7 @@ class Menus():
         for jugador in lista_jugadores:
             nombre = jugador.nombre.capitalize()
             jugadores = jugadores.replace("{1}", "{2}").replace("{0}", "{1}")
-            jugadores += u"%s{0}"%nombre
+            jugadores += u"%s{0}" %nombre
 
         jugadores = jugadores.format("", " y ", ", ")
 

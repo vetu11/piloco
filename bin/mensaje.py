@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import json, random
+import json, random, uuid
 from .constantes import Constantes
 from .usuarios import Usuarios
 
@@ -66,7 +66,6 @@ class MensajesClasica:
     def __init__(self):
 
         self.list = []
-        self.len = 0
         self.json_dump = json.dump
 
         with open("pilocuras.json") as f:
@@ -76,11 +75,9 @@ class MensajesClasica:
 
             self.list.append(MensajeEnJuego(msg_dicc))
 
-        self.len = len(self.list)
-
     def escojer_mensaje(self):
 
-        return self.list[random.randint(0, self.len - 1)]
+        return self.list[random.randint(0, len(self.list) - 1)]
 
     def get_new_id(self):
 
@@ -105,7 +102,40 @@ class MensajesClasica:
         else:
             return 0
 
-    # TODO: comprobar aptitud
+    def transformar_a_en_revision(self, mensaje):  # 30-06:
+
+        if mensaje.tipo == "normal":
+            msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
+                        "tipo": mensaje.tipo,
+                        "picante": mensaje.picante,
+                        "text": mensaje.text,
+                        "revision": {"puntos": (0, 0),
+                                     "a_favor":[],
+                                     "skipped":[],
+                                     "en_contra":[]},
+                        "hecho_por": mensaje.hecho_por}
+        else:
+            msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
+                        "tipo": mensaje.tipo,
+                        "picante": mensaje.picante,
+                        "text0": mensaje.text0,
+                        "text1": mensaje.text1,
+                        "revision": {"puntos": (0, 0),
+                                     "a_favor":[],
+                                     "skipped":[],
+                                     "en_contra":[]},
+                        "hecho_por": mensaje.hecho_por}
+
+        return MensajeEnRevision(msg_dicc)
+
+    def comprobar_aptitud(self, mensaje):
+
+        if mensaje.puntuacion <= -10:
+            try:
+                self.list.remove(mensaje)
+                MensajesEnRevision.list.append(self.transformar_a_en_revision(mensaje))
+            except: pass
+            # sin esto, si se está el mensaje revisando cuando ya ha sido eliminado por otro jugador, tendríamos problemas
 
     def get_message(self, msgID):  # TODO: aplicar binary search?
 
@@ -163,15 +193,28 @@ class MensajesEnRevision:
 
             self.list.append(MensajeEnRevision(msg_dicc))
 
-        mensaje = self.list[random.randint(0, len(self.list) - 1)]
-        pic = random.randint(0,2)
-        if pic == 2 and mensaje.a_favor:
-            mensaje.a_favor.pop(random.randint(0, len(mensaje.a_favor) - 1))
-        elif pic == 1 and mensaje.skipped:
-            mensaje.skipped.pop(random.randint(0, len(mensaje.skipped) - 1))
-        elif not pic and mensaje.en_contra:
-            mensaje.en_contra.pop(random.randint(0, len(mensaje.en_contra) - 1))
-        pass
+        self.renovar_revisiones(None, None, None, False)
+
+    def renovar_revisiones(self, bot, update, args, from_telegram):
+
+        if from_telegram:
+            if update.message.from_user.id == 254234845:
+                if args:
+                    renovaciones = int(args[0])
+                else:
+                    renovaciones = 1
+
+                for n in range(renovaciones):
+                    a = self._actually_renew_revisions()
+                    if not a: break
+
+                if a:
+                    bot.send_message(254234845, "Se han completado %s renovaciones" % renovaciones)
+                else:
+                    bot.send_message(254234845, "No se ha llegado al limite de renovaciones")
+
+        else:
+            self._actually_renew_revisions()
 
     def escojer_mensaje(self, idTelegram=None):
         antiLoop = 0
@@ -225,6 +268,17 @@ class MensajesEnRevision:
 
         self.guardar()
 
+    def _actually_renew_revisions(self):  # TODO: actually, do it fine, not like this
+        mensaje = self.list[random.randint(0, len(self.list) - 1)]
+        pic = random.randint(0, 2)
+        if pic == 2 and mensaje.a_favor:
+            mensaje.a_favor.pop(random.randint(0, len(mensaje.a_favor) - 1))
+        elif pic == 1 and mensaje.skipped:
+            mensaje.skipped.pop(random.randint(0, len(mensaje.skipped) - 1))
+        elif not pic and mensaje.en_contra:
+            mensaje.en_contra.pop(random.randint(0, len(mensaje.en_contra) - 1))
+        return True
+
     def get_message(self, msgID):  # TODO: aplicar binary search?
 
         for mensaje in self.list:
@@ -254,7 +308,7 @@ class MensajesEnRevision:
 
     def comprobar_aptitud(self, mensaje):
 
-        puntos_necesarios = Constantes.Usuarios.NUMERO_USUARIOS * 0.6
+        puntos_necesarios = Constantes.Usuarios.NUMERO_USUARIOS * 0.3
 
         puntos_tupla = mensaje.puntos.puntos
 
