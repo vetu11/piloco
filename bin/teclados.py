@@ -129,18 +129,18 @@ class Teclados:
     def menu_ecuesta_emparejador(self, descartes_restantes):
 
         if descartes_restantes:
-            keyboard = [[InlineKeyboardButton("❌", callback_data="emp-0"),
-                         InlineKeyboardButton("1️⃣", callback_data="emp-1"),
-                         InlineKeyboardButton("2️⃣", callback_data="emp-2"),
-                         InlineKeyboardButton("3️⃣", callback_data="emp-3"),
-                         InlineKeyboardButton("4️⃣", callback_data="emp-4"),
-                         InlineKeyboardButton("5️⃣", callback_data="emp-5")]]
+            keyboard = [[InlineKeyboardButton("❌ - Ni de coña, nada", callback_data="emp-0")],
+                         [InlineKeyboardButton("1️⃣ - Mejor no, pero bueno", callback_data="emp-1")],
+                         [InlineKeyboardButton("2️⃣ - No me importaría", callback_data="emp-2")],
+                         [InlineKeyboardButton("3️⃣ - Sería divertido", callback_data="emp-3")],
+                         [InlineKeyboardButton("4️⃣ - No estaría nada mal", callback_data="emp-4")],
+                         [InlineKeyboardButton("5️⃣ - Por favor, que ocurra ya", callback_data="emp-5")]]
         else:
-            keyboard = [[InlineKeyboardButton("1️⃣", callback_data="emp-1"),
-                         InlineKeyboardButton("2️⃣", callback_data="emp-2"),
-                         InlineKeyboardButton("3️⃣", callback_data="emp-3"),
-                         InlineKeyboardButton("4️⃣", callback_data="emp-4"),
-                         InlineKeyboardButton("5️⃣", callback_data="emp-5")]]
+            keyboard = [[InlineKeyboardButton("1️⃣ - Mejor no, pero bueno", callback_data="emp-1")],
+                         [InlineKeyboardButton("2️⃣ - No me importaría", callback_data="emp-2")],
+                         [InlineKeyboardButton("3️⃣ - Sería devertido", callback_data="emp-3")],
+                         [InlineKeyboardButton("4️⃣ - No estaría nada mal", callback_data="emp-4")],
+                         [InlineKeyboardButton("5️⃣ - Por favor, que ocurra ya", callback_data="emp-5")]]
 
         return keyboard
 
@@ -206,7 +206,7 @@ class Menus():
         msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*\n▪️¿Tienes *ideas nuevas" \
               "* para Piloco, o *alguna duda*? [Habla con nosotros](t.me/PilocoSupportbot)\n▪️Tienes *%s puntos de rep" \
               "utación* [¿qué es eso?](telegra.ph/reputación-y-recompensas-05-27)\n\n" \
-              "v1.0-alpha27" % int(usuario.reputacion)
+              "v1.0-alpha28" % int(usuario.reputacion)
 
         keyboard = Teclados.menu_info()
         return msg, keyboard

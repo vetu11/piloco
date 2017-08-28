@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import logging, random, re, uuid
+import logging, random, re, uuid, datetime, time
 from telegram.ext import ConversationHandler, CallbackQueryHandler, MessageHandler, Filters, CommandHandler
 from telegram import InlineKeyboardMarkup, ParseMode
 from .teclados import Menus, Teclados
@@ -9,7 +9,7 @@ from .partida import PartidaClasica, PartidaClasicaEmparejador, ColaEmparejador
 from .constantes import Constantes
 from .mensaje import MensajesEnRevision, Puntos, MensajeEnRevision, MensajesClasica
 from .watchdog import TelegramWatchdog
-from .annoucement import annoucement
+from .announcement import announcement
 
 def dame_mensaje_a_revisar():
     if random.randint(0, 3):
@@ -35,32 +35,33 @@ class HandlersPiloco:
     def comando_start(self, bot, update):
 
         watchdog = TelegramWatchdog(update.message.from_user.id)
-        usuario = Usuarios.get_user(update.message.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.message.from_user.id)
 
         msg, keyboard = Menus.menu_principal(usuario)
 
-        update.message.reply_text(text=msg,
-                                  reply_markup=InlineKeyboardMarkup(keyboard),
-                                  parse_mode=ParseMode.MARKDOWN)
+        ms = update.message.reply_text(text=msg,
+                                       reply_markup=InlineKeyboardMarkup(keyboard),
+                                       parse_mode=ParseMode.MARKDOWN)
 
+        Usuarios.get_user(update.message.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
 
     def menu_principal(self, bot, update):
-
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
         logging.debug("Petición para el menú principal recibida")
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         msg, keyboard = Menus.menu_principal(usuario)
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
 
         update.callback_query.answer()
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
 
     def menu_info(self, bot, update):
@@ -69,30 +70,32 @@ class HandlersPiloco:
 
         logging.debug("Petición del menú info recibida")
 
-        msg, keyboard = Menus.menu_info(Usuarios.get_user(update.callback_query.from_user.id))
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
+        msg, keyboard = Menus.menu_info(usuario)
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN,
-                              disable_web_page_preview=True)
-
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN,
+                                   disable_web_page_preview=True)
         update.callback_query.answer()
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
 
     def menu_mensajes(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         msg, keyboard = Menus.menu_mensajes(usuario)
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
         update.callback_query.answer()
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
 
     def proximamente_clb(self, bot, update):
@@ -107,17 +110,17 @@ class HandlersPiloco:
         
         idTelegram = update.message.from_user.id
         
-        usuario = Usuarios.get_user(idTelegram)
+        usuario, search_index = Usuarios.get_user(idTelegram)
         reputacion = usuario.reputacion
         Usuarios.activos.remove(usuario)
         Usuarios._add_user(idTelegram, reputacion=reputacion)
-        usuario = Usuarios.get_user(idTelegram)
         
         msg = "Se han reiniciado tus datos.\n\nNo has perdido o ganado acceso a las funciones que antes tenías\n\n" \
               "Ahora usa /start para comenzar."
 
-        update.message.reply_text(text=msg)
+        ms = update.message.reply_text(text=msg)
 
+        Usuarios.get_user(usuario.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return ConversationHandler.END
 
@@ -128,13 +131,13 @@ class HandlersPiloco:
                                   "lo que debería, puedes probar a usar /restart (reiniciar siempre lo arregla todo).")
         watchdog.succesfull()
 
-    def annoucement(self, bot, update):
+    def announcement(self, bot, update):
         print update.message.from_user.id
 
         if update.message.from_user.id == 254234845:
             print "Yes"
-            mensaje = update.message.text.replace("/annoucement ", "")
-            annoucement(bot, update, mensaje)
+            mensaje = update.message.text.replace("/announcement ", "")
+            announcement(bot, update, mensaje)
 
     def open_backend(self, bot, update):
 
@@ -186,15 +189,15 @@ class HandlersPiloco:
             mensaje2 = dame_mensaje_a_revisar()
             antiloop = 0
 
-            while (mensaje1.picante == 0 or mensaje1 == mensaje2) and antiloop < 100:
+            while (mensaje1.picante == 0 or mensaje1 == mensaje2) and antiloop < 150:
                 mensaje1 = dame_mensaje_a_revisar()
                 antiloop += 1
 
-            while (mensaje2.picante == 0 or mensaje1 == mensaje2) and antiloop < 100:
+            while (mensaje2.picante == 0 or mensaje1 == mensaje2) and antiloop < 150:
                 mensaje2 = dame_mensaje_a_revisar()
                 antiloop += 1
 
-            if antiloop < 100:
+            if antiloop < 150:
                 if mensaje1.tipo == "normal":
                     msg1 = mensaje1.text
                 else:
@@ -213,19 +216,20 @@ class HandlersPiloco:
                       "pios mensajes."
                 keyboard = Teclados.solo_menu_principal()
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
         update.callback_query.answer()
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id)
         watchdog.succesfull()
 
     def revisar_actualizar_valor(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
         data = update.callback_query.data
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario = Usuarios.get_user(update.callback_query.from_user.id)[0]
         msgID = data.split("-")[1]
         mensaje = MensajesEnRevision.get_message(msgID)
 
@@ -265,7 +269,6 @@ class HandlersPiloco:
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
         data = update.callback_query.data
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
 
         if not data == "revisar_picante_pass":
             msg1ID = data.split("-")[1]
@@ -302,7 +305,7 @@ class HandlersPiloco:
     def add_message(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         usuario.editando_mensaje = None
 
         if usuario.reputacion >= Constantes.Usuarios.ACESO_A_ADD_MESSAGE:
@@ -312,18 +315,19 @@ class HandlersPiloco:
                   " vuelve más tarde."
             keyboard = Teclados.solo_menu_principal()
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
         update.callback_query.answer()
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
 
     def add_normal(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
                     "tipo": "normal",
@@ -342,19 +346,20 @@ class HandlersPiloco:
               "negrita*.\n-Rodea con barras bajas lo que quieres que salga en _cursiva._"
         keyboard = Teclados.menu_add_cancelar()
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
 
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return 0
 
     def add_RI(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
                     "tipo": "RI",
@@ -374,19 +379,20 @@ class HandlersPiloco:
               "negrita*.\n-Rodea con barras bajas lo que quieres que salga en _cursiva._"
         keyboard = Teclados.menu_add_cancelar()
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
 
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return 1
 
     def add_RNI(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
                     "tipo": "RNI",
@@ -406,19 +412,20 @@ class HandlersPiloco:
               "negrita*.\n-Rodea con barras bajas lo que quieres que salga en _cursiva._"
         keyboard = Teclados.menu_add_cancelar()
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
 
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return 1
 
     def add_picante(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         data = update.callback_query.data
         
         if data == "pic_mas_picante":
@@ -454,36 +461,38 @@ class HandlersPiloco:
                                                    text1=usuario.editando_mensaje.text1,
                                                    picante=usuario.editando_mensaje.picante)
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
 
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return 3
 
     def add_text(self, bot, update):
         watchdog = TelegramWatchdog(update.message.from_user.id)
 
-        usuario = Usuarios.get_user(update.message.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.message.from_user.id)
 
         usuario.editando_mensaje.text = update.message.text
 
         msg, keyboard = Menus.menu_add_picante(text0=usuario.editando_mensaje.text,
                                                picante=usuario.editando_mensaje.picante)
 
-        update.message.reply_text(text=msg,
-                                  reply_markup=InlineKeyboardMarkup(keyboard),
-                                  parse_mode=ParseMode.MARKDOWN)
+        ms = update.message.reply_text(text=msg,
+                                       reply_markup=InlineKeyboardMarkup(keyboard),
+                                       parse_mode=ParseMode.MARKDOWN)
 
+        Usuarios.get_user(update.message.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return 3
 
     def add_text0(self, bot, update):
         watchdog = TelegramWatchdog(update.message.from_user.id)
 
-        usuario = Usuarios.get_user(update.message.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.message.from_user.id)
 
         usuario.editando_mensaje.text0 = update.message.text
 
@@ -492,9 +501,9 @@ class HandlersPiloco:
               "negrita*.\n-Rodea con barras bajas lo que quieres que salga en _cursiva._" % usuario.editando_mensaje.text0
         keyboard = Teclados.menu_add_cancelar()
 
-        update.message.reply_text(text=msg,
-                                  reply_markup=InlineKeyboardMarkup(keyboard),
-                                  parse_mode=ParseMode.MARKDOWN)
+        ms = update.message.reply_text(text=msg,
+                                       reply_markup=InlineKeyboardMarkup(keyboard),
+                                       parse_mode=ParseMode.MARKDOWN)
 
         watchdog.succesfull()
         return 2
@@ -502,7 +511,7 @@ class HandlersPiloco:
     def add_text1(self, bot, update):
         watchdog = TelegramWatchdog(update.message.from_user.id)
 
-        usuario = Usuarios.get_user(update.message.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.message.from_user.id)
 
         usuario.editando_mensaje.text1 = update.message.text
 
@@ -510,10 +519,11 @@ class HandlersPiloco:
                                                text1=usuario.editando_mensaje.text1,
                                                picante=usuario.editando_mensaje.picante)
 
-        update.message.reply_text(text=msg,
-                                  reply_markup=InlineKeyboardMarkup(keyboard),
-                                  parse_mode=ParseMode.MARKDOWN)
+        ms = update.message.reply_text(text=msg,
+                                       reply_markup=InlineKeyboardMarkup(keyboard),
+                                       parse_mode=ParseMode.MARKDOWN)
 
+        Usuarios.get_user(update.message.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return 3
 
@@ -523,24 +533,25 @@ class HandlersPiloco:
 
         update.callback_query.answer()
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         if usuario.ultimos_jugadores: ultimos_jugadores = True
         else: ultimos_jugadores = False  # 30-6: ahora ultimos_jugadores es bool no list.
 
         msg, keyboard = Menus.menu_partidaClasica(usuario.ajustes.picante, usuario.ajustes.emparejador, ultimos_jugadores)
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
         update.callback_query.answer()
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
 
     def partida_clasica_jugadores(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         dicc_fac_picante = {0: Constantes.PartidaClasica.FACTOR_PICANTE_NO_PICANTE,
                             1: Constantes.PartidaClasica.FACTOR_PICANTE_BAJO,
                             2: Constantes.PartidaClasica.FACTOR_PICANTE_MEDIO,
@@ -562,19 +573,20 @@ class HandlersPiloco:
 
         msg, keyboard = Menus.menu_add_player(usuario.partida.jugadores)
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        ms = bot.edit_message_text(text=msg,
+                                   chat_id=update.callback_query.message.chat_id,
+                                   message_id=update.callback_query.message.message_id,
+                                   reply_markup=InlineKeyboardMarkup(keyboard),
+                                   parse_mode=ParseMode.MARKDOWN)
 
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return 0
 
     def partida_clasica_ultimos_jugadores(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         dicc_fac_picante = {0:Constantes.PartidaClasica.FACTOR_PICANTE_NO_PICANTE,
                             1:Constantes.PartidaClasica.FACTOR_PICANTE_BAJO,
                             2:Constantes.PartidaClasica.FACTOR_PICANTE_MEDIO,
@@ -592,21 +604,22 @@ class HandlersPiloco:
 
             msg, keyboard = Menus.menu_emparejador(Accion)
 
-            bot.edit_message_text(text=msg,
-                                  chat_id=update.callback_query.message.chat_id,
-                                  message_id=update.callback_query.message.message_id,
-                                  reply_markup=InlineKeyboardMarkup(keyboard),
-                                  parse_mode=ParseMode.MARKDOWN)
+            ms = bot.edit_message_text(text=msg,
+                                       chat_id=update.callback_query.message.chat_id,
+                                       message_id=update.callback_query.message.message_id,
+                                       reply_markup=InlineKeyboardMarkup(keyboard),
+                                       parse_mode=ParseMode.MARKDOWN)
+            Usuarios.get_user(usuario.id, True, ms.message_id, search_index)
             watchdog.succesfull()
             return 1
         else:
 
             msg = "Iniciando partida..."
 
-            bot.edit_message_text(text=msg,
-                                  chat_id=update.callback_query.message.chat_id,
-                                  message_id=update.callback_query.message.message_id,
-                                  parse_mode=ParseMode.MARKDOWN)
+            ms = bot.edit_message_text(text=msg,
+                                       chat_id=update.callback_query.message.chat_id,
+                                       message_id=update.callback_query.message.message_id,
+                                       parse_mode=ParseMode.MARKDOWN)
 
             usuario.partida = PartidaClasica(usuario,
                                              factor_picante=dicc_fac_picante[usuario.ajustes.picante],
@@ -617,13 +630,14 @@ class HandlersPiloco:
 
             self.next_mesagge(bot, update, True)
 
+            Usuarios.get_user(usuario.id, True, ms.message_id, search_index)
             watchdog.succesfull()
             return ConversationHandler.END
 
     def partida_clasica_menos_picante(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         too_cold_messages = ["buah.",
                             "no os veo muy animados",
                             "que aburiiidoooos!",
@@ -642,13 +656,14 @@ class HandlersPiloco:
             update.callback_query.answer()
         else:
             update.callback_query.answer(too_cold_messages[random.randint(0, 10)])
+            Usuarios.get_user(update.callback_query.from_user.id, True, search_index=search_index)
 
         watchdog.succesfull()
 
     def partida_clasica_picante_info(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario = Usuarios.get_user(update.callback_query.from_user.id, True)[0]
         pic_dic = {0:"Nivel de picante: ❄ nada picante️",
                    1:"Nivel de picante: ♨️ ligeramente picante",
                    2:"Nivel de picante: 🌶 picante",
@@ -661,7 +676,7 @@ class HandlersPiloco:
     def partida_clasica_mas_picante(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         too_hot_messages = ["wow, so hot",
                             "🔥🔥🔥",
                             "Llamad a los bomberos! 🚒💦",
@@ -681,13 +696,14 @@ class HandlersPiloco:
             update.callback_query.answer()
         else:
             update.callback_query.answer(too_hot_messages[random.randint(0,11)])
+            Usuarios.get_user(update.callback_query.from_user.id, True, search_index=search_index)
 
         watchdog.succesfull()
 
     def partida_clasica_emparejador(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario = Usuarios.get_user(update.callback_query.from_user.id, True)[0]
 
         if usuario.ajustes.emparejador:
             usuario.ajustes.emparejador = False
@@ -703,7 +719,7 @@ class HandlersPiloco:
     def partida_clasica_add_player(self, bot, update):
         watchdog = TelegramWatchdog(update.message.from_user.id)
 
-        usuario = Usuarios.get_user(update.message.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.message.from_user.id)
 
         usuario.partida.add_player(update.message.text)
         usuario.add_player(update.message.text)
@@ -714,36 +730,39 @@ class HandlersPiloco:
 
         msg, keyboard = Menus.menu_add_player(usuario.partida.jugadores)
 
-        bot.send_message(text=msg,
-                         chat_id=update.message.from_user.id,
-                         reply_markup=InlineKeyboardMarkup(keyboard),
-                         parse_mode=ParseMode.MARKDOWN)
+        ms = bot.send_message(text=msg,
+                              chat_id=update.message.from_user.id,
+                              reply_markup=InlineKeyboardMarkup(keyboard),
+                              parse_mode=ParseMode.MARKDOWN)
 
         msg = u"👥*AÑADIR JUGADORES*\n\nSe ha añadido a %s" %update.message.text.capitalize()
         keyboard = [[]]
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.message.chat_id,
-                              message_id=update.message.message_id - 1,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        try:
+            bot.edit_message_text(text=msg,
+                                  chat_id=update.message.chat_id,
+                                  message_id=update.message.message_id - 1,
+                                  reply_markup=InlineKeyboardMarkup(keyboard),
+                                  parse_mode=ParseMode.MARKDOWN)
+        except: pass
 
+        Usuarios.get_user(update.message.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()
         return 0
 
     # EN PARTIDA
     def next_mesagge(self, bot, update, is_first=False):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         try:
-            usuario = Usuarios.get_user(update.callback_query.from_user.id)
             msg = usuario.partida.dame_mensaje()
             keyboard = Teclados.menu_mensaje()
 
-            bot.send_message(text=msg,
-                             chat_id=update.callback_query.from_user.id,
-                             reply_markup=InlineKeyboardMarkup(keyboard),
-                             parse_mode=ParseMode.MARKDOWN)
+            ms = bot.send_message(text=msg,
+                                  chat_id=update.callback_query.from_user.id,
+                                  reply_markup=InlineKeyboardMarkup(keyboard),
+                                  parse_mode=ParseMode.MARKDOWN)
 
             if not is_first:
                 keyboard = [[]]
@@ -752,8 +771,10 @@ class HandlersPiloco:
                                               message_id=update.callback_query.message.message_id,
                                               reply_markup=InlineKeyboardMarkup(keyboard))
             update.callback_query.answer()
+            Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         except:
             self._partida_cerrada(bot, update)
+            Usuarios.get_user(update.callback_query.from_user.id, True, search_index)
         watchdog.succesfull()
 
     def start_vote_partida_clasica(self, bot, update):
@@ -774,7 +795,7 @@ class HandlersPiloco:
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
         try:
-            usuario = Usuarios.get_user(update.callback_query.from_user.id)
+            usuario = Usuarios.get_user(update.callback_query.from_user.id)[0]
 
             try:
                 id = usuario.partida.last_message.original
@@ -791,9 +812,9 @@ class HandlersPiloco:
 
     def partida_clasica_vote_down(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         try:
-            usuario = Usuarios.get_user(update.callback_query.from_user.id)
 
             try:
                 id = usuario.partida.last_message.original
@@ -809,58 +830,63 @@ class HandlersPiloco:
             update.callback_query.answer()
         except:
             self._partida_cerrada(bot, update)
+            Usuarios.get_user(usuario.id, True, search_index=search_index)
+
 
         watchdog.succesfull()
 
     def ajustes_partida_clasica(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         try:
-            usuario = Usuarios.get_user(update.callback_query.from_user.id)
             emparejador = usuario.partida.emparejador
 
-            msg = Menus.menu_ajustes_partida_clasica(emparejador)[0]
-            keyboard = Menus.menu_ajustes_partida_clasica(emparejador)[1]
+            msg, keyboard = Menus.menu_ajustes_partida_clasica(emparejador)
 
-            bot.send_message(text=msg,
-                             chat_id=update.callback_query.message.chat_id,
-                             reply_markup=InlineKeyboardMarkup(keyboard),
-                             parse_mode=ParseMode.MARKDOWN)
+            ms = bot.send_message(text=msg,
+                                  chat_id=update.callback_query.message.chat_id,
+                                  reply_markup=InlineKeyboardMarkup(keyboard),
+                                  parse_mode=ParseMode.MARKDOWN)
 
             keyboard = [[]]
 
             bot.edit_message_reply_markup(chat_id=update.callback_query.message.chat_id,
                                           message_id=update.callback_query.message.message_id,
                                           reply_markup=InlineKeyboardMarkup(keyboard))
+            Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
         except:
+            Usuarios.get_user(update.callback_query.from_user.id, True, search_index=search_index)
             self._partida_cerrada(bot, update)
 
         watchdog.succesfull()
 
     def partida_clasica_volver(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         try:
-            usuario = Usuarios.get_user(update.callback_query.from_user.id)
             msg = usuario.partida.dame_mensaje()
 
             keyboard = Teclados.menu_mensaje()
 
-            bot.edit_message_text(text=msg,
-                                  chat_id=update.callback_query.message.chat_id,
-                                  message_id=update.callback_query.message.message_id,
-                                  reply_markup=InlineKeyboardMarkup(keyboard),
-                                  parse_mode=ParseMode.MARKDOWN)
+            ms = bot.edit_message_text(text=msg,
+                                       chat_id=update.callback_query.message.chat_id,
+                                       message_id=update.callback_query.message.message_id,
+                                       reply_markup=InlineKeyboardMarkup(keyboard),
+                                       parse_mode=ParseMode.MARKDOWN)
+            Usuarios.get_user(usuario.id, True, ms.message_id, search_index)
             update.callback_query.answer()
         except:
             self._partida_cerrada(bot, update)
+            Usuarios.get_user(usuario.id, True, search_index=search_index)
 
         watchdog.succesfull()
 
     def partida_clasica_salir(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario = Usuarios.get_user(update.callback_query.from_user.id, True)[0]
         usuario.partida = None
 
         self.menu_principal(bot, update)
@@ -869,9 +895,9 @@ class HandlersPiloco:
 
     def ajustes_mas_picante(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id, True)
 
         try:
-            usuario = Usuarios.get_user(update.callback_query.from_user.id)
 
             usuario.partida.mas_picante()
 
@@ -883,9 +909,9 @@ class HandlersPiloco:
 
     def ajustes_menos_picante(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id, True)
 
         try:
-            usuario = Usuarios.get_user(update.callback_query.from_user.id)
 
             usuario.partida.menos_picante()
 
@@ -899,7 +925,7 @@ class HandlersPiloco:
     def partida_clasica_iniciar(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         if len(usuario.partida.jugadores) > 1:
             if usuario.partida.emparejador:
@@ -908,25 +934,27 @@ class HandlersPiloco:
 
                 msg, keyboard = Menus.menu_emparejador(Accion)
 
-                bot.edit_message_text(text=msg,
-                                      chat_id=update.callback_query.message.chat_id,
-                                      message_id=update.callback_query.message.message_id,
-                                      reply_markup=InlineKeyboardMarkup(keyboard),
-                                      parse_mode=ParseMode.MARKDOWN)
+                ms = bot.edit_message_text(text=msg,
+                                           chat_id=update.callback_query.message.chat_id,
+                                           message_id=update.callback_query.message.message_id,
+                                           reply_markup=InlineKeyboardMarkup(keyboard),
+                                           parse_mode=ParseMode.MARKDOWN)
+                Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
                 watchdog.succesfull()
                 return 1
             else:
                 msg = "Iniciando partida..."
                 keyboard = [[]]
 
-                bot.edit_message_text(text=msg,
-                                      chat_id=update.callback_query.message.chat_id,
-                                      message_id=update.callback_query.message.message_id,
-                                      reply_markup=InlineKeyboardMarkup(keyboard),
-                                      parse_mode=ParseMode.MARKDOWN)
+                ms = bot.edit_message_text(text=msg,
+                                           chat_id=update.callback_query.message.chat_id,
+                                           message_id=update.callback_query.message.message_id,
+                                           reply_markup=InlineKeyboardMarkup(keyboard),
+                                           parse_mode=ParseMode.MARKDOWN)
 
                 self.next_mesagge(bot, update, True)
 
+                Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
                 watchdog.succesfull()
                 return ConversationHandler.END
         else:
@@ -934,18 +962,25 @@ class HandlersPiloco:
                   "Ahora envíame uno por uno los nombres de los jugadores."
             keyboard = [[]]
 
-            bot.edit_message_text(text=msg,
-                                  chat_id=update.callback_query.message.chat_id,
-                                  message_id=update.callback_query.message.message_id,
-                                  reply_markup=InlineKeyboardMarkup(keyboard),
-                                  parse_mode=ParseMode.MARKDOWN)
+            ms = bot.edit_message_text(text=msg,
+                                       chat_id=update.callback_query.message.chat_id,
+                                       message_id=update.callback_query.message.message_id,
+                                       reply_markup=InlineKeyboardMarkup(keyboard),
+                                       parse_mode=ParseMode.MARKDOWN)
+            Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
             watchdog.succesfull()
             return 0
 
     def emparejador_encuesta(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
-        usuario = Usuarios.get_user(update.callback_query.from_user.id)
+        # Esto debería ser suficiente para resolver el dichoso bug
+        if not (datetime.datetime.fromtimestamp(round(time.time()) + 1) > update.callback_query.message.edit_date):
+            update.callback_query.answer("Hey, tómatelo con más calma, pulsa los botónes más despacio.", show_alert=True)
+            watchdog.succesfull()
+            return
+
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         ultima_accion = usuario.partida.acciones_pendientes.pop(-1)
         accion = usuario.partida.acciones_pendientes[-1]
 
@@ -960,11 +995,12 @@ class HandlersPiloco:
 
         msg, keyboard = Menus.menu_emparejador(accion)
 
-        bot.edit_message_text(text=msg,
-                              chat_id=update.callback_query.message.chat_id,
-                              message_id=update.callback_query.message.message_id,
-                              reply_markup=InlineKeyboardMarkup(keyboard),
-                              parse_mode=ParseMode.MARKDOWN)
+        update.callback_query.answer()
+        ms = update.callback_query.message.edit_text(text=msg,
+                                                      reply_markup=InlineKeyboardMarkup(keyboard),
+                                                      parse_mode=ParseMode.MARKDOWN)
+
+        Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
 
         if accion.accion == ColaEmparejador.TERMINAR_ENCUESTAS:
 

@@ -76,7 +76,7 @@ def main():
     a_h(CallbackQueryHandler(TelegramDonation.mostrar_donacion, pattern="^donation_new-\d*"))
     a_h(CallbackQueryHandler(HandlersPiloco.add_message, pattern="^ms_new$"))
     a_h(CommandHandler('restart', HandlersPiloco.restart_bot))
-    a_h(CommandHandler('annoucement', HandlersPiloco.annoucement))
+    a_h(CommandHandler('announcement', HandlersPiloco.announcement))
     a_h(CommandHandler('backend', HandlersPiloco.open_backend))
     a_h(CommandHandler('revisiones',HandlersPiloco.comando_revisiones, pass_args=True))
     a_h(RegexHandler("^/", HandlersPiloco.comandos_no_soportados))

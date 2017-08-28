@@ -28,6 +28,7 @@ class Usuario:
         self.ultimos_jugadores = kargs.get("ultimos_jugadores", [])
         self.reputacion = kargs.get("reputacion", Constantes.Usuarios.REPUTACION_INICIAL)
         self.ajustes = AjustesUsuario(picante=kargs.get("picante", 0), emparejador=kargs.get("emparejador", False))
+        self.id_ultimo_mensaje = kargs.get("id_ultimo_mensaje", None)
         self.json_dump = json.dump  # sin esto no se puden guardar los usuarios, ya que json se cierra antes.
 
     def mensajes_sin_votar(self):
@@ -40,13 +41,14 @@ class Usuario:
                 n_msgs += 1
         return n_msgs
 
-
     def add_player(self, name):
 
         self.ultimos_jugadores.append(name.lower())
 
-    def actualizar(self):
+    def actualizar(self, id_ultimo_mensaje=None):
         self.ultimo_uso = time.time()
+        if id_ultimo_mensaje:
+            self.id_ultimo_mensaje = id_ultimo_mensaje
 
     def __del__(self):
 
@@ -56,7 +58,8 @@ class Usuario:
                     "ultimos_jugadores": self.ultimos_jugadores,
                     "reputacion": self.reputacion,
                     "picante": self.ajustes.picante,
-                    "emparejador": self.ajustes.emparejador}
+                    "emparejador": self.ajustes.emparejador,
+                    "id_ultimo_mensaje": self.id_ultimo_mensaje}
 
             self.json_dump(dicc, f, indent=2)
 
@@ -122,7 +125,8 @@ class Usuarios:
                                         ultimos_jugadores=user["ultimos_jugadores"],
                                         reputacion=user["reputacion"],
                                         picante=user["picante"],
-                                        emparejador=user["emparejador"]))
+                                        emparejador=user["emparejador"],
+                                        id_ultimo_mensaje=user["id_ultimo_mensaje"]))
         else:
             self.activos.insert(self._get_inx(idTelegram),
                                 Usuario(idTelegram,
@@ -130,47 +134,50 @@ class Usuarios:
 
         return self._bin_search(idTelegram)
 
-    def get_user(self, idTelegram):
+    def get_user(self, idTelegram, actualiar_usuario=False, id_ultimo_mensaje=None, search_index=None):  #TODO: actualizar llamadas (id mensaje, refresh_user?)
 
-        search = self._bin_search(idTelegram)
-        if search != None:
-            usuario = self.activos[search]
-            usuario.actualizar()
-            return usuario
+        if search_index == None:
+            search_index = self._bin_search(idTelegram)
 
-        try:
-            with open("users/%s.piuser" % idTelegram) as f:
-                search = self._add_user(idTelegram, file=json.load(f))
-            usuario = self.activos[search]
+        if search_index != None:
+            usuario = self.activos[search_index]
+            if actualiar_usuario:
+                usuario.actualizar(id_ultimo_mensaje)
+        else:
+            try:
+                with open("users/%s.piuser" % idTelegram) as f:
+                    search_index = self._add_user(idTelegram, file=json.load(f))
+                usuario = self.activos[search_index]
 
-            cambio_reputacion = int((time.time() - usuario.ultimo_uso) / 86400)
+                cambio_reputacion = int((time.time() - usuario.ultimo_uso) / 86400)
 
-            if usuario.reputacion - cambio_reputacion > 100:
-                usuario.reputacion -= cambio_reputacion
-            elif usuario.reputacion > 100:
-                usuario.reputacion = 100
+                if usuario.reputacion - cambio_reputacion > 100:
+                    usuario.reputacion -= cambio_reputacion
+                elif usuario.reputacion > 100:
+                    usuario.reputacion = 100
 
-            usuario.actualizar()
-            return usuario
-        except:
-            search = self._add_user(idTelegram)
-            usuario = self.activos[search]
+                if actualiar_usuario:
+                    usuario.actualizar(id_ultimo_mensaje)
 
-            with open("users/usuarios") as f:
-                la_lista = json.load(f)
+            except:
+                search_index = self._add_user(idTelegram)
+                usuario = self.activos[search_index]
 
-            la_lista.append(usuario.id)
-            la_lista = list(set(la_lista))
-            la_lista.sort()
+                with open("users/usuarios") as f:
+                    la_lista = json.load(f)
 
-            with open("users/usuarios", "w") as f:
-                json.dump(la_lista, f)
+                la_lista.append(usuario.id)
+                la_lista = list(set(la_lista))
+                la_lista.sort()
 
-            return usuario
+                with open("users/usuarios", "w") as f:
+                    json.dump(la_lista, f)
+
+        return usuario, search_index
 
     def actualizar_reputacion(self, idTelegram, reputacion):
 
-        usuario = self.get_user(idTelegram)
+        usuario = self.get_user(idTelegram)[0]
 
         usuario.reputacion += reputacion
 

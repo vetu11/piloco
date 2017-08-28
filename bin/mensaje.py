@@ -222,7 +222,7 @@ class MensajesEnRevision:
         if not idTelegram:
             return self.list[random.randint(0, len(self.list) - 1)]
         else:
-            while antiLoop < 50:
+            while antiLoop < 100:
 
                 mensaje = self.list[random.randint(0, len(self.list) - 1)]
                 if idTelegram not in mensaje.a_favor and idTelegram not in mensaje.en_contra and idTelegram not in mensaje.skipped:

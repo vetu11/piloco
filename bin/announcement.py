@@ -3,7 +3,7 @@
 import json
 
 
-def annoucement(bot, update, mensaje):
+def announcement(bot, update, mensaje):
 
     with open("users/usuarios") as f:
         lista_usuarios = json.load(f)
