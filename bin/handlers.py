@@ -974,13 +974,14 @@ class HandlersPiloco:
     def emparejador_encuesta(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
+
         # Esto debería ser suficiente para resolver el dichoso bug
-        if not (datetime.datetime.fromtimestamp(round(time.time()) + 1) > update.callback_query.message.edit_date):
+        if usuario.ultimo_uso + 1.5 > time.time():
             update.callback_query.answer("Hey, tómatelo con más calma, pulsa los botónes más despacio.", show_alert=True)
             watchdog.succesfull()
             return
 
-        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         ultima_accion = usuario.partida.acciones_pendientes.pop(-1)
         accion = usuario.partida.acciones_pendientes[-1]
 
