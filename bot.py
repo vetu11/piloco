@@ -22,7 +22,6 @@ def guardar(bot=None, update=None, from_telegram=True):
         MensajesClasica.guardar()
         MensajesEnRevision.guardar()
 
-
 def stop_bot(updater):
     logging.info("Apagando bot...")
     for u in Usuarios.activos:

@@ -131,11 +131,13 @@ class MensajesClasica:
     def comprobar_aptitud(self, mensaje):
 
         if mensaje.puntuacion <= -10:
+            # sin este try/except, si se está el mensaje revisando cuando ya ha sido eliminado por otro
+            # jugador, tendríamos problemas
             try:
                 self.list.remove(mensaje)
                 MensajesEnRevision.list.append(self.transformar_a_en_revision(mensaje))
             except: pass
-            # sin esto, si se está el mensaje revisando cuando ya ha sido eliminado por otro jugador, tendríamos problemas
+
 
     def get_message(self, msgID):  # TODO: aplicar binary search?
 

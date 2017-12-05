@@ -801,8 +801,10 @@ class HandlersPiloco:
                 id = usuario.partida.last_message.original
                 message = MensajesClasica.get_message(id)
                 message.puntuacion += usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL
+                MensajesClasica.comprobar_aptitud(message)
             except:
                 usuario.partida.last_message.puntuacion += usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL
+                MensajesClasica.comprobar_aptitud(usuario.partida.last_message)
 
             self.next_mesagge(bot, update)
             update.callback_query.answer()
@@ -820,8 +822,10 @@ class HandlersPiloco:
                 id = usuario.partida.last_message.original
                 message = MensajesClasica.get_message(id)
                 message.puntuacion -= usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL
+                MensajesClasica.comprobar_aptitud(message)
             except:
                 usuario.partida.last_message.puntuacion -= usuario.reputacion / Constantes.Usuarios.REPUTACION_INICIAL
+                MensajesClasica.comprobar_aptitud(usuario.partida.last_message)
 
             self.next_mesagge(bot, update)
 
