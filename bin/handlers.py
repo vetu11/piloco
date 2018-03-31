@@ -11,6 +11,7 @@ from .mensaje import MensajesEnRevision, Puntos, MensajeEnRevision, MensajesClas
 from .watchdog import TelegramWatchdog
 from .announcement import announcement
 
+
 def dame_mensaje_a_revisar():
     if random.randint(0, 3):
         mensaje = MensajesEnRevision.escojer_mensaje()
@@ -107,14 +108,14 @@ class HandlersPiloco:
 
     def restart_bot(self, bot, update):
         watchdog = TelegramWatchdog(update.message.from_user.id)
-        
+
         idTelegram = update.message.from_user.id
-        
+
         usuario, search_index = Usuarios.get_user(idTelegram)
         reputacion = usuario.reputacion
         Usuarios.activos.remove(usuario)
         Usuarios._add_user(idTelegram, reputacion=reputacion)
-        
+
         msg = "Se han reiniciado tus datos.\n\nNo has perdido o ganado acceso a las funciones que antes tenías\n\n" \
               "Ahora usa /start para comenzar."
 
@@ -175,6 +176,13 @@ class HandlersPiloco:
                     msg += u"\n\nSe ha indicado el mensaje como *picante* 🌶"
                 elif mensaje.picante > 0:
                     msg += u"\n\nSe ha indicado el mensaje como *ligeramente picante* ♨️"
+                else:
+                    msg += u"\n\nSe ha indicado el mensaje como *nada picante* ♨️"
+
+                if mensaje.repetible:
+                    msg += u"\nMarcado como *repetible* ✅"
+                else:
+                    msg += u"\nMarcado como *no repetible* ❎"
 
                 keyboard = Teclados.revisar_mensajes_valor(mensaje.id)
             else:
@@ -329,17 +337,7 @@ class HandlersPiloco:
 
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
-        msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
-                    "tipo": "normal",
-                    "text": None,
-                    "picante": 0,
-                    "hecho_por": usuario.id,
-                    "revisar": {"a_favor": [],
-                                "en_contra": [],
-                                "skipped": [],
-                                "puntos": (0, 0)}}
-
-        usuario.editando_mensaje = MensajeEnRevision(msg_dicc)
+        usuario.editando_mensaje = MensajeEnRevision(hecho_por=usuario.id)
 
         msg = "*Añadiendo mensaje normal.* Ahora mandame el mensaje.\n\n*CONSEJOS:*\n-Para poner *nombres aleatorios* escribe *nombre1* o *{1}* para" \
               " el primero y *nombre2* o *{2}* para el segundo.\n-Rodea con asteriscos lo que quieres que salga en *" \
@@ -361,18 +359,7 @@ class HandlersPiloco:
 
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
-        msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
-                    "tipo": "RI",
-                    "text0": None,
-                    "text1": None,
-                    "picante": 0,
-                    "hecho_por": usuario.id,
-                    "revisar": {"a_favor": [],
-                                "en_contra": [],
-                                "skipped": [],
-                                "puntos": (0, 0)}}
-
-        usuario.editando_mensaje = MensajeEnRevision(msg_dicc)
+        usuario.editando_mensaje = MensajeEnRevision(tipo="RI", hecho_por=usuario.id)
 
         msg = "*Añadiendo mensaje RI.* Ahora mandame el primer mensaje.\n\n*CONSEJOS:*\n-Para poner *nombres aleatorios* escribe *nombre1* o *{1}* para" \
               " el primero y *nombre2* o *{2}* para el segundo.\n-Rodea con asteriscos lo que quieres que salga en *" \
@@ -394,18 +381,7 @@ class HandlersPiloco:
 
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
-        msg_dicc = {"id": uuid.uuid4().get_hex()[:8],
-                    "tipo": "RNI",
-                    "text0": None,
-                    "text1": None,
-                    "picante": 0,
-                    "hecho_por": usuario.id,
-                    "revisar": {"a_favor": [],
-                                "en_contra": [],
-                                "skipped": [],
-                                "puntos": (0, 0)}}
-
-        usuario.editando_mensaje = MensajeEnRevision(msg_dicc)
+        usuario.editando_mensaje = MensajeEnRevision(tipo="RNI", hecho_por=usuario.id)
 
         msg = "*Añadiendo mensaje RNI.* Ahora mandame el primer mensaje.\n\n*CONSEJOS:*\n-Para poner *nombres aleatorios* escribe *nombre1* o *{1}* para" \
               " el primero y *nombre2* o *{2}* para el segundo.\n-Rodea con asteriscos lo que quieres que salga en *" \
@@ -427,7 +403,7 @@ class HandlersPiloco:
 
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
         data = update.callback_query.data
-        
+
         if data == "pic_mas_picante":
             if usuario.editando_mensaje.picante == Constantes.PartidaClasica.VALOR_PICANTE_MEDIO:
                 usuario.editando_mensaje.picante = Constantes.PartidaClasica.VALOR_PICANTE_ALTO
@@ -435,7 +411,7 @@ class HandlersPiloco:
                 usuario.editando_mensaje.picante = Constantes.PartidaClasica.VALOR_PICANTE_MEDIO
             elif usuario.editando_mensaje.picante == 0:
                 usuario.editando_mensaje.picante = Constantes.PartidaClasica.VALOR_PICANTE_BAJO
-                
+
         elif data == "pic_menos_picante":
             if usuario.editando_mensaje.picante == Constantes.PartidaClasica.VALOR_PICANTE_ALTO:
                 usuario.editando_mensaje.picante = Constantes.PartidaClasica.VALOR_PICANTE_MEDIO
@@ -443,6 +419,12 @@ class HandlersPiloco:
                 usuario.editando_mensaje.picante = Constantes.PartidaClasica.VALOR_PICANTE_BAJO
             elif usuario.editando_mensaje.picante == Constantes.PartidaClasica.VALOR_PICANTE_BAJO:
                 usuario.editando_mensaje.picante = 0
+
+        elif data == "pic_switch_repetible":
+            if usuario.editando_mensaje.repetible:
+                usuario.editando_mensaje.repetible = False
+            else:
+                usuario.editando_mensaje.repetible = True
 
         elif data == "pic_done":
 
@@ -453,13 +435,7 @@ class HandlersPiloco:
             watchdog.succesfull()
             return ConversationHandler.END
 
-        if usuario.editando_mensaje.tipo == "normal":
-            msg, keyboard = Menus.menu_add_picante(text0=usuario.editando_mensaje.text,
-                                                   picante=usuario.editando_mensaje.picante)
-        else:
-            msg, keyboard = Menus.menu_add_picante(text0=usuario.editando_mensaje.text0,
-                                                   text1=usuario.editando_mensaje.text1,
-                                                   picante=usuario.editando_mensaje.picante)
+        msg, keyboard = Menus.menu_add_picante(usuario.editando_mensaje)
 
         ms = bot.edit_message_text(text=msg,
                                    chat_id=update.callback_query.message.chat_id,
@@ -478,8 +454,7 @@ class HandlersPiloco:
 
         usuario.editando_mensaje.text = update.message.text
 
-        msg, keyboard = Menus.menu_add_picante(text0=usuario.editando_mensaje.text,
-                                               picante=usuario.editando_mensaje.picante)
+        msg, keyboard = Menus.menu_add_picante(usuario.editando_mensaje)
 
         ms = update.message.reply_text(text=msg,
                                        reply_markup=InlineKeyboardMarkup(keyboard),
@@ -515,9 +490,7 @@ class HandlersPiloco:
 
         usuario.editando_mensaje.text1 = update.message.text
 
-        msg, keyboard = Menus.menu_add_picante(text0=usuario.editando_mensaje.text0,
-                                               text1=usuario.editando_mensaje.text1,
-                                               picante=usuario.editando_mensaje.picante)
+        msg, keyboard = Menus.menu_add_picante(usuario.editando_mensaje)
 
         ms = update.message.reply_text(text=msg,
                                        reply_markup=InlineKeyboardMarkup(keyboard),
@@ -752,10 +725,10 @@ class HandlersPiloco:
 
     # EN PARTIDA
     def next_mesagge(self, bot, update, is_first=False):
-        watchdog = TelegramWatchdog(update.callback_query.from_user.id)
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         try:
+            assert usuario.partida, "El usuario no tiene partida"
             msg = usuario.partida.dame_mensaje()
             keyboard = Teclados.menu_mensaje()
 
@@ -772,30 +745,19 @@ class HandlersPiloco:
                                               reply_markup=InlineKeyboardMarkup(keyboard))
             update.callback_query.answer()
             Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
-        except:
-            self._partida_cerrada(bot, update)
-            Usuarios.get_user(update.callback_query.from_user.id, True, search_index)
-        watchdog.succesfull()
-
-    def start_vote_partida_clasica(self, bot, update):
-        watchdog = TelegramWatchdog(update.callback_query.from_user.id)
-
-        try:
-            keyboard = Teclados.menu_votar_partida()
-
-            bot.edit_message_reply_markup(chat_id=update.callback_query.message.chat_id,
-                                          message_id=update.callback_query.message.message_id,
-                                          reply_markup=InlineKeyboardMarkup(keyboard))
-        except:
-            self._partida_cerrada(bot, update)
-
-        watchdog.succesfull()
+        except Exception, e:
+            if str(e) == "El usuario no tiene partida":
+                self._partida_cerrada(bot, update)
+                Usuarios.get_user(update.callback_query.from_user.id, True, search_index)
+            else:
+                raise e
 
     def partida_clasica_vote_up(self, bot, update):
         watchdog = TelegramWatchdog(update.callback_query.from_user.id)
 
         try:
             usuario = Usuarios.get_user(update.callback_query.from_user.id)[0]
+            assert usuario.partida, "El usuario no tiene partida"
 
             try:
                 id = usuario.partida.last_message.original
@@ -808,8 +770,11 @@ class HandlersPiloco:
 
             self.next_mesagge(bot, update)
             update.callback_query.answer()
-        except:
-            self._partida_cerrada(bot, update)
+        except Exception, e:
+            if str(e) == "El usuario no tiene partida":
+                self._partida_cerrada(bot, update)
+            else:
+                raise e
         watchdog.succesfull()
 
     def partida_clasica_vote_down(self, bot, update):
@@ -817,6 +782,7 @@ class HandlersPiloco:
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         try:
+            assert usuario.partida, "El usuario no tiene partida"
 
             try:
                 id = usuario.partida.last_message.original
@@ -832,9 +798,12 @@ class HandlersPiloco:
             # TODO: hay que comrobar si el mensaje se tiene que largar a narnia, teniendo en cuenta la posibilidad de que
             # este mismo mensaje esté en otra partida y esté siendo votado.
             update.callback_query.answer()
-        except:
-            self._partida_cerrada(bot, update)
-            Usuarios.get_user(usuario.id, True, search_index=search_index)
+        except Exception, e:
+            if str(e) == "El usuario no tiene partida":
+                self._partida_cerrada(bot, update)
+                Usuarios.get_user(usuario.id, True, search_index=search_index)
+            else:
+                raise e
 
 
         watchdog.succesfull()
@@ -844,6 +813,8 @@ class HandlersPiloco:
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         try:
+            assert usuario.partida, "El usuario no tiene partida"
+
             emparejador = usuario.partida.emparejador
 
             msg, keyboard = Menus.menu_ajustes_partida_clasica(emparejador)
@@ -859,10 +830,12 @@ class HandlersPiloco:
                                           message_id=update.callback_query.message.message_id,
                                           reply_markup=InlineKeyboardMarkup(keyboard))
             Usuarios.get_user(update.callback_query.from_user.id, True, ms.message_id, search_index)
-        except:
-            Usuarios.get_user(update.callback_query.from_user.id, True, search_index=search_index)
-            self._partida_cerrada(bot, update)
-
+        except Exception, e:
+            if str(e) == "El usuario no tiene partida":
+                Usuarios.get_user(update.callback_query.from_user.id, True, search_index=search_index)
+                self._partida_cerrada(bot, update)
+            else:
+                raise e
         watchdog.succesfull()
 
     def partida_clasica_volver(self, bot, update):
@@ -870,6 +843,7 @@ class HandlersPiloco:
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
 
         try:
+            assert usuario.partida, "El usuario no tiene partida"
             msg = usuario.partida.dame_mensaje()
 
             keyboard = Teclados.menu_mensaje()
@@ -881,9 +855,12 @@ class HandlersPiloco:
                                        parse_mode=ParseMode.MARKDOWN)
             Usuarios.get_user(usuario.id, True, ms.message_id, search_index)
             update.callback_query.answer()
-        except:
-            self._partida_cerrada(bot, update)
-            Usuarios.get_user(usuario.id, True, search_index=search_index)
+        except Exception, e:
+            if str(e) == "El usuario no tiene partida":
+                self._partida_cerrada(bot, update)
+                Usuarios.get_user(usuario.id, True, search_index=search_index)
+            else:
+                raise e
 
         watchdog.succesfull()
 
@@ -916,13 +893,13 @@ class HandlersPiloco:
         usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id, True)
 
         try:
-
+            assert usuario.partida, "El usuario no tiene partida"
             usuario.partida.menos_picante()
 
             update.callback_query.answer("Nivel de picante reducido")
-        except:
-            self._partida_cerrada(bot, update)
-
+        except Exception, e:
+            if str(e) == "El usuario no tiene partida":
+                self._partida_cerrada(bot, update)
 
         watchdog.succesfull()
 
@@ -1024,6 +1001,29 @@ class HandlersPiloco:
         msg = "Hey, parece que esta partida se ha cerrado, para iniciar una nueva pulsa /start."
 
         update.callback_query.message.edit_text(text=msg)
+        update.callback_query.answer(msg, show_alert=True)
+
+    def add_player_in_game(bot, update): pass
+
+    @staticmethod
+    def delete_player_in_game(bot, update):
+        """ Permite al usuario eliminar jugadores durante la partida """
+
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
+
+        msg, keyboard = Menus.menu_eliminar_jugador(usuario.partida.jugadores)
+
+        update.effective_message.reply_text(msg,
+                                            reply_markup=InlineKeyboardMarkup(keyboard))
+
+    @staticmethod
+    def delete_player_callback(bot, update):
+        name = update.callback_query.data.split("*")[1]
+        usuario, search_index = Usuarios.get_user(update.callback_query.from_user.id)
+
+        usuario.partida
+
+
 
 HandlersPiloco = HandlersPiloco()
 

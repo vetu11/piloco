@@ -4,11 +4,13 @@ from telegram import InlineKeyboardButton
 from .partida import ColaEmparejador
 from .constantes import Constantes
 
+
 class Teclados:
 
     """Todos los teclados que necesita Piloco"""
 
     # GENERAL
+    
     def menu_principal(self, usuario):
 
         n_msg = usuario.mensajes_sin_votar()
@@ -24,7 +26,8 @@ class Teclados:
                     [InlineKeyboardButton("ℹ️", callback_data="mp_info"),
                      InlineKeyboardButton("▫️", callback_data="mp_donate")]]
         return keyboard
-
+    
+    
     def menu_partidaClasica(self, picante=0, emparejador=False, last_players=False):
 
         pic_dicc = {0:"❄️", 1:"♨️", 2:"🌶", 3:"🔥"}
@@ -43,7 +46,8 @@ class Teclados:
         keyboard.append([InlineKeyboardButton("🏠 Volver", callback_data="mp")])
 
         return keyboard
-
+    
+    
     def menu_mensajes(self, usuario):
         n_msg = usuario.mensajes_sin_votar()
         if n_msg:
@@ -53,10 +57,10 @@ class Teclados:
 
         keyboard = [[InlineKeyboardButton("📨 Añadir mensajes", callback_data="ms_new")],
                     [InlineKeyboardButton("🔍 Votar mensajes%s" % n_msg, callback_data="ms_rev")],
-                    [InlineKeyboardButton("📝 Corregir mensajes", callback_data="ms_crg")],
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
 
+    
     def menu_info(self):
 
         keyboard = [[InlineKeyboardButton("📢 Canal", url="t.me/Piloco")],
@@ -64,12 +68,14 @@ class Teclados:
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
 
+    
     def solo_menu_principal(self):
 
         keyboard = [[InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
 
     # MENSAJES
+    
     def revisar_mensajes_valor(self, msgID):
 
         keyboard = [[InlineKeyboardButton("👎️", callback_data="revisar_valor_1down-%s" % msgID),
@@ -82,7 +88,7 @@ class Teclados:
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
 
         return keyboard
-
+    
     def revisar_mensajes_picante(self, msg1ID, msg2ID):
 
         keyboard = [[InlineKeyboardButton("El primero es más picante",
@@ -96,6 +102,7 @@ class Teclados:
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
 
+    
     def menu_add_message(self):
 
         keyboard = [[InlineKeyboardButton("normal 💬", callback_data="newMessage_normal"),
@@ -107,25 +114,32 @@ class Teclados:
                     [InlineKeyboardButton("🏠 Volver", callback_data="mp")]]
         return keyboard
 
+    
     def menu_add_cancelar(self):
         keyboard = [[InlineKeyboardButton("❌ Cancelar", callback_data="ms_new")]]
         return keyboard
 
-    def menu_add_picante(self, picante):
+    
+    def menu_add_picante(self, mensaje):  # todo: actualizar las llamadas
         pic_dicc = {0: "❄️",
                     Constantes.PartidaClasica.VALOR_PICANTE_BAJO: "♨️",
                     Constantes.PartidaClasica.VALOR_PICANTE_MEDIO: "🌶",
                     Constantes.PartidaClasica.VALOR_PICANTE_ALTO: "🔥"}
+        repe_dicc = {False: "¿Mensaje repetible? ❎ No",
+                     True: "¿Mensaje repetible? ✅ Si"}
 
         keyboard = [[InlineKeyboardButton("⬅️❄️", callback_data="pic_menos_picante"),
-                     InlineKeyboardButton("%s" % pic_dicc[picante], callback_data="nanainanull"),
+                     InlineKeyboardButton("%s" % pic_dicc[mensaje.picante], callback_data="nanainanull"),
                      InlineKeyboardButton("🔥➡️", callback_data="pic_mas_picante")],
+
+                    [InlineKeyboardButton(repe_dicc[mensaje.repetible], callback_data="pic_switch_repetible")],
 
                     [InlineKeyboardButton("❌ Cancelar", callback_data="ms_new"),
                      InlineKeyboardButton("Hecho 👌", callback_data="pic_done")]]
         return keyboard
 
-    # EN PARTIDA
+    # EN PARTIDA    
+    
     def menu_ecuesta_emparejador(self, descartes_restantes):
 
         if descartes_restantes:
@@ -144,21 +158,25 @@ class Teclados:
 
         return keyboard
 
-    def menu_mensaje(self):
+    @staticmethod
+    def menu_mensaje():
 
         keyboard = [[InlineKeyboardButton("⚙️ / 🚪", callback_data="pc_ajustes"),
-                     InlineKeyboardButton("👎 / 👍️", callback_data="pc_votar"),
+                     InlineKeyboardButton("🛑👎", callback_data="pc_vote_down"),
+                     InlineKeyboardButton("👍💚", callback_data="pc_vote_up"),
                      InlineKeyboardButton("✉️⏭", callback_data="pc_next")]]
         return keyboard
 
-    def menu_votar_partida(self):
-
+    @staticmethod
+    def menu_votar_partida():
+        #todo: DEPRECATED
         keyboard = [[InlineKeyboardButton("👎", callback_data="pc_vote_down"),
                      InlineKeyboardButton("✉️⏭", callback_data="pc_next"),
                      InlineKeyboardButton("👍", callback_data="pc_vote_up")]]
         return keyboard
 
-    def menu_ajustes_partida_clasica(self, emparejador=False):
+    @staticmethod
+    def menu_ajustes_partida_clasica(emparejador=False):
 
         keyboard = []
         if not emparejador:
@@ -172,13 +190,26 @@ class Teclados:
                          InlineKeyboardButton("Volver⏭", callback_data="apc_volver")])
         return keyboard
 
+    @staticmethod
+    def menu_eliminar_jugador(jugadores):
+        """La lista de jugadores se supone una lista de objetos jugador"""
+
+        keyboard = [[InlineKeyboardButton("✅ Hecho", callback_data="delete_player_done")]]
+
+        for jugador in jugadores:
+
+            keyboard.append([InlineKeyboardButton(text=jugador.nombre, callback_data="delete_player*%s" % jugador.nombre)])
+
+        return keyboard
+
+
 Teclados = Teclados()
 
 
 class Menus():
-
     """Todos los menús que necesita Piloco"""
 
+    
     def menu_principal(self, usuario):
 
         msg = "🏠*MENÚ PRINCIPAL\n\n¡Bienvenido a Piloco!*\n\n¿listas para emborracharse?\nUsa los botones para navegar por los menús."
@@ -186,6 +217,7 @@ class Menus():
         keyboard = Teclados.menu_principal(usuario)
         return msg,keyboard
 
+    
     def menu_partidaClasica(self, picante, emparejador, last_players):
 
         msg = "▶️*PARTIDA CLÁSICA*\n\nConfigura tu partida y pulsa iniciar partida."
@@ -193,6 +225,7 @@ class Menus():
         keyboard = Teclados.menu_partidaClasica(picante, emparejador, last_players)
         return msg, keyboard
 
+    
     def menu_mensajes(self, usuario):
 
         msg = "✉️*MENSAJES*\n\nDesde aquí puedes añadir, votar o corregir mensajes que más tarde aparecerán en el j" \
@@ -201,22 +234,32 @@ class Menus():
         keyboard = Teclados.menu_mensajes(usuario)
         return msg, keyboard
 
+    
     def menu_info(self, usuario ):
 
         msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*\n▪️¿Tienes *ideas nuevas" \
-              "* para Piloco, o *alguna duda*? [Habla con nosotros](t.me/PilocoSupportbot)\n▪️Tienes *%s puntos de rep" \
-              "utación* [¿qué es eso?](telegra.ph/reputación-y-recompensas-05-27)\n\n" \
-              "v1.0-alpha29" % int(usuario.reputacion)
-
+              "* para Piloco, o *alguna duda*? [Habla con nosotros](t.me/PilocoSupportbot)\n▪️Tienes *%s puntos de " \
+              "reputación* [¿qué es eso?](telegra.ph/reputación-y-recompensas-05-27)\n\n" \
+              "v1.0-alpha32" % int(usuario.reputacion)
         keyboard = Teclados.menu_info()
         return msg, keyboard
 
+    @staticmethod
+    def menu_eliminar_jugador(jugadores):
+
+        msg = "Okay, pulsa abajo los botones con los nombres de los jugadores que quieres eliminar, " \
+              "después, pulsa hecho."
+        keyboard = Teclados.menu_eliminar_jugador(jugadores)
+        return msg, keyboard
+
+    
     def menu_ajustes_partida_clasica(self, emparejador=False):
 
         msg = "⚙️*AJUSTES DE PARTIDA CLASICA*\n\nCambia los ajustes de partida desde aquí."
         keyboard = Teclados.menu_ajustes_partida_clasica(emparejador)
         return [msg, keyboard]
 
+    
     def menu_add_player(self, lista_jugadores):
         """La lista de jugadores se proporciona como objetos"""
 
@@ -235,6 +278,7 @@ class Menus():
 
         return msg, keyboard
 
+    
     def menu_emparejador(self, Accion):
 
         if Accion.accion == ColaEmparejador.PEDIR_MOVIL:
@@ -257,6 +301,7 @@ class Menus():
 
         return msg, keyboard
 
+    
     def menu_add_message(self):
         msg = "📨*AÑADIR MENSAJES*\n\nDesde este menú puedes añadir mensajes que más tarde aparecerán en el juego\n\n" \
               "Elige el tipo de mensaje que quieres añadir.\nLos mensajes *normales* tienen un solo mensaje 💬\nLos " \
@@ -265,23 +310,35 @@ class Menus():
         keyboard = Teclados.menu_add_message()
         return msg, keyboard
 
-    def menu_add_picante(self, text0, text1=None, picante=0):
+    
+    def menu_add_picante(self, mensaje):
+
+        if mensaje.tipo == "normal":
+            text0 = mensaje.text
+            text1 = None
+        elif mensaje.text1:
+            text0 = mensaje.text0
+            text1 = mensaje.text1
+        else:
+            text0 = mensaje.text
+            text1 = None
 
         if text1:
             msg = u"Tu mensaje:\n\n\"%s\"\n\"%s\"\n\nNivel de picante: " % (text0, text1)
         else:
             msg = u"Tu mensaje:\n\n\"%s\"\n\nNivel de picante: " % (text0)
 
-        if picante >= Constantes.PartidaClasica.VALOR_PICANTE_ALTO:
+        if mensaje.picante >= Constantes.PartidaClasica.VALOR_PICANTE_ALTO:
             msg += u"*muy picante* 🔥"
-        elif picante >= Constantes.PartidaClasica.VALOR_PICANTE_MEDIO:
+        elif mensaje.picante >= Constantes.PartidaClasica.VALOR_PICANTE_MEDIO:
             msg += u"*picante* 🌶"
-        elif picante > 0:
+        elif mensaje.picante > 0:
             msg += u"*ligeramente picante* ♨️"
         else:
             msg += u"*nada picante* ❄️"
 
-        keyboard = Teclados.menu_add_picante(picante)
+        keyboard = Teclados.menu_add_picante(mensaje)
         return msg, keyboard
+
 
 Menus = Menus()

@@ -28,37 +28,40 @@ class Puntos:
 
 class BaseMensaje:
 
-    def __init__(self, dicc):
+    def __init__(self, **kargs):
 
-        self.tipo = dicc["tipo"]
-        self.picante = dicc["picante"]
-        self.id = dicc["id"]
-        self.hecho_por = dicc["hecho_por"]
+        self.tipo = kargs.get("tipo", "normal")
+        self.picante = kargs.get("picante", 0)
+        self.id = kargs.get("id", uuid.uuid4().get_hex()[:8])
+        self.hecho_por = kargs.get("hecho_por")
+        self.repetible = kargs.get("repetible", False)
 
-        try:
-            self.text = dicc["text"]
-        except:
-            self.text0 = dicc["text0"]
-            self.text1 = dicc["text1"]
+        if self.tipo == "normal":
+            self.text = kargs.get("text")
+        else:
+            self.text0 = kargs.get("text0")
+            self.text1 = kargs.get("text1")
 
 
 class MensajeEnRevision(BaseMensaje):
 
-    def __init__(self, dicc):
+    def __init__(self, **kargs):
 
-        BaseMensaje.__init__(self, dicc)
-        self.puntos = Puntos(dicc["revisar"]["puntos"])
-        self.a_favor = dicc["revisar"]["a_favor"]
-        self.en_contra = dicc["revisar"]["en_contra"]
-        self.skipped = dicc["revisar"]["skipped"]
+        BaseMensaje.__init__(self, **kargs)
+        dicc_revisar = kargs.get("revisar", {"a_favor":[], "en_contra":[], "skipped":[], "puntos":(0, 0)})
+        self.puntos = Puntos(dicc_revisar["puntos"])
+        self.a_favor = dicc_revisar["a_favor"]
+        self.en_contra = dicc_revisar["en_contra"]
+        self.skipped = dicc_revisar["skipped"]
 
 
 class MensajeEnJuego(BaseMensaje):
 
-    def __init__(self, dicc):
+    def __init__(self, **kargs):
 
-        BaseMensaje.__init__(self, dicc)
-        self.puntuacion = dicc["puntuacion"]
+        BaseMensaje.__init__(self, **kargs)
+        self.puntuacion = kargs.get("puntuacion")
+        self.original_id = kargs.get("original_id")
 
 
 class MensajesClasica:
@@ -73,7 +76,7 @@ class MensajesClasica:
 
         for msg_dicc in list:
 
-            self.list.append(MensajeEnJuego(msg_dicc))
+            self.list.append(MensajeEnJuego(**msg_dicc))
 
     def escojer_mensaje(self):
 
@@ -126,7 +129,7 @@ class MensajesClasica:
                                      "en_contra":[]},
                         "hecho_por": mensaje.hecho_por}
 
-        return MensajeEnRevision(msg_dicc)
+        return MensajeEnRevision(**msg_dicc)
 
     def comprobar_aptitud(self, mensaje):
 
@@ -137,7 +140,6 @@ class MensajesClasica:
                 self.list.remove(mensaje)
                 MensajesEnRevision.list.append(self.transformar_a_en_revision(mensaje))
             except: pass
-
 
     def get_message(self, msgID):  # TODO: aplicar binary search?
 
@@ -157,6 +159,7 @@ class MensajesClasica:
                             "text": mensaje.text,
                             "tipo": mensaje.tipo,
                             "puntuacion": mensaje.puntuacion,
+                            "repetible": mensaje.repetible,
                             "picante": mensaje.picante,
                             "id": mensaje.id}
             else:
@@ -164,6 +167,7 @@ class MensajesClasica:
                               "text0": mensaje.text0,
                               "text1": mensaje.text1,
                               "tipo": mensaje.tipo,
+                              "repetible": mensaje.repetible,
                               "puntuacion": mensaje.puntuacion,
                               "picante": mensaje.picante,
                               "id": mensaje.id}
@@ -193,7 +197,7 @@ class MensajesEnRevision:
 
         for msg_dicc in list:
 
-            self.list.append(MensajeEnRevision(msg_dicc))
+            self.list.append(MensajeEnRevision(**msg_dicc))
 
         self.renovar_revisiones(None, None, None, False)
 
@@ -243,22 +247,24 @@ class MensajesEnRevision:
                             "text": mensaje.text,
                             "tipo": mensaje.tipo,
                             "picante": mensaje.picante,
+                            "repetible": mensaje.repetible,
                             "id": mensaje.id,
                             "revisar": {"a_favor": mensaje.a_favor,
                                         "en_contra": mensaje.en_contra,
                                         "skipped": mensaje.skipped,
-                                        "puntos": mensaje.puntos()}}
+                                        "puntos": mensaje.puntos}}
             else:
                 msg_dicc =   {"hecho_por": mensaje.hecho_por,
                               "text0": mensaje.text0,
                               "text1": mensaje.text1,
                               "tipo": mensaje.tipo,
                               "picante": mensaje.picante,
+                              "repetible": mensaje.repetible,
                               "id": mensaje.id,
                               "revisar":{"a_favor": mensaje.a_favor,
-                                "en_contra": mensaje.en_contra,
-                                "skipped": mensaje.skipped,
-                                "puntos": mensaje.puntos()}}
+                                         "en_contra": mensaje.en_contra,
+                                         "skipped": mensaje.skipped,
+                                         "puntos": mensaje.puntos}}
             list.append(msg_dicc)
 
         with open("newMessages.json", "w") as f:
@@ -271,6 +277,8 @@ class MensajesEnRevision:
         self.guardar()
 
     def _actually_renew_revisions(self):  # TODO: actually, do it fine, not like this
+        if not self.list:
+            return True
         mensaje = self.list[random.randint(0, len(self.list) - 1)]
         pic = random.randint(0, 2)
         if pic == 2 and mensaje.a_favor:
@@ -306,7 +314,7 @@ class MensajesEnRevision:
                         "puntuacion": 0,
                         "hecho_por": mensaje.hecho_por}
 
-        return MensajeEnJuego(msg_dicc)
+        return MensajeEnJuego(**msg_dicc)
 
     def comprobar_aptitud(self, mensaje):
 
@@ -333,7 +341,7 @@ class MensajesEnRevision:
             for idTelegram in mensaje.en_contra:
                 Usuarios.actualizar_reputacion(idTelegram, 1.0)
 
-        elif puntos_tupla[1] <= -puntos_necesarios/4:
+        elif puntos_tupla[1] <= -puntos_necesarios/3:
             pass
             # self.list.remove(mensaje)  # TODO: añadir a una lista de mensajes
             #

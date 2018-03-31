@@ -22,6 +22,7 @@ def guardar(bot=None, update=None, from_telegram=True):
         MensajesClasica.guardar()
         MensajesEnRevision.guardar()
 
+
 def stop_bot(updater):
     logging.info("Apagando bot...")
     for u in Usuarios.activos:
@@ -39,8 +40,10 @@ def stop_bot(updater):
     updater.stop()
     logging.info("Bot apagado")
 
+
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"' % (update, error))
+
 
 def main():
 
@@ -61,7 +64,6 @@ def main():
     a_h(CallbackQueryHandler(HandlersPiloco.partida_clasica_menos_picante, pattern="^mpc_menos_picante$"))
     a_h(CallbackQueryHandler(HandlersPiloco.partida_clasica_emparejador, pattern="^mpc_emparejador$"))
     a_h(CallbackQueryHandler(HandlersPiloco.next_mesagge, pattern="^pc_next$"))
-    a_h(CallbackQueryHandler(HandlersPiloco.start_vote_partida_clasica, pattern="^pc_votar$"))
     a_h(CallbackQueryHandler(HandlersPiloco.partida_clasica_vote_up, pattern="^pc_vote_up$"))
     a_h(CallbackQueryHandler(HandlersPiloco.partida_clasica_vote_down, pattern="^pc_vote_down$"))
     a_h(CallbackQueryHandler(HandlersPiloco.ajustes_partida_clasica, pattern="^pc_ajustes$"))
@@ -69,6 +71,8 @@ def main():
     a_h(CallbackQueryHandler(HandlersPiloco.partida_clasica_salir, pattern="^apc_salir$"))
     a_h(CallbackQueryHandler(HandlersPiloco.ajustes_mas_picante, pattern="^apc_mas_picante$"))
     a_h(CallbackQueryHandler(HandlersPiloco.ajustes_menos_picante, pattern="^apc_menos_picante$"))
+    # a_h(CallbackQueryHandler(HandlersPiloco.delete_player_in_game, pattern="apc_delete_player$"))
+    # a_h(CallbackQueryHandler(HandlersPiloco))
     a_h(CallbackQueryHandler(HandlersPiloco.revisar_mensajes, pattern="^ms_rev$"))
     a_h(CallbackQueryHandler(HandlersPiloco.revisar_actualizar_valor, pattern="^revisar_valor_"))
     a_h(CallbackQueryHandler(HandlersPiloco.revisar_actualizar_picante, pattern="^revisar_picante_"))
@@ -81,6 +85,7 @@ def main():
     a_h(RegexHandler("^/", HandlersPiloco.comandos_no_soportados))
     a_h(CallbackQueryHandler(HandlersPiloco.proximamente_clb))
     a_h(MessageHandler(Filters.all, HandlersPiloco.mensaje))
+    # a_h(CallbackQueryHandler(HandlersPiloco.start_vote_partida_clasica, pattern="^pc_votar$"))  # todo: DEPRECATED
 
     dp.add_error_handler(error)
 

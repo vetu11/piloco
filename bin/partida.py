@@ -40,6 +40,7 @@ class BasePartidaClasica:
         self.mensajes = [[], []]
         self.last_message = None
         self.emparejador = None
+        self.no_repetibles_enviados = []
 
         jugadores = kargs.get("jugadores", [])
         for nombre_jugador in jugadores:
@@ -79,9 +80,10 @@ class BasePartidaClasica:
                         "puntuacion": mensaje.puntuacion,
                         "picante": mensaje.picante,
                         "id": mensaje.id,
-                        "hecho_por": mensaje.hecho_por}
+                        "hecho_por": mensaje.hecho_por,
+                        "original_id": mensaje.id}
 
-            self.mensajes[0].append(MensajeEnJuego(msg_dicc))
+            self.mensajes[0].append(MensajeEnJuego(**msg_dicc))
             self.mensajes[0][-1].original_id = mensaje.id  # 30-06 esto... No la lia, verdad?
 
         elif mensaje.tipo == "RNI":
@@ -98,9 +100,10 @@ class BasePartidaClasica:
                         "puntuacion": mensaje.puntuacion,
                         "picante": mensaje.picante,
                         "id": mensaje.id,
-                        "hecho_por": mensaje.hecho_por}
+                        "hecho_por": mensaje.hecho_por,
+                        "original_id": mensaje.id}
 
-            self.mensajes[1].append(MensajeEnJuego(msg_dicc))
+            self.mensajes[1].append(MensajeEnJuego(**msg_dicc))
             self.mensajes[1][-1].original_id = mensaje.id
 
         else:
@@ -130,6 +133,7 @@ class PartidaClasica(BasePartidaClasica):
 
     def dame_mensaje(self):
         while 1:
+            picante_repetible_aceptado = False
 
             if not len(self.mensajes[0]):
                 self.mensajes.reverse()
@@ -138,25 +142,28 @@ class PartidaClasica(BasePartidaClasica):
             mensaje = self.mensajes[0].pop(-1)
             self.recargar_mensaje()
 
-            try:
-                mensaje.original_id
-                picante_aceptado = True
-            except:
-                picante_aceptado = False
+            # INICIO COMPROBACIÓN DE PICANTE Y REPETIBLE
+            if mensaje.original_id is not None:
+                picante_repetible_aceptado = True
+            else:
                 if self.valor_picante >= mensaje.picante:
                     diferencia_picante = self.valor_picante - mensaje.picante
                     pic = random.randint(-12, round(diferencia_picante))
-                    if pic <= 0 or self.mensajes[1] <= 5: picante_aceptado = True
+                    if pic <= 0 or self.mensajes[1] <= 5:
+                        if mensaje.repetible or mensaje.id not in self.no_repetibles_enviados:
+                            picante_repetible_aceptado = True
 
-            if picante_aceptado:
+            if picante_repetible_aceptado:
 
                 jugador1, jugador2 = self.elegir_jugadores()
                 nombre1, nombre2 = jugador1.nombre.capitalize(), jugador2.nombre.capitalize()
 
                 text0 = self.introducir_nombres(mensaje, nombre1, nombre2)
                 break
+                # FIN COMPROBACIÓN DE PICANTE
 
         self.last_message = mensaje
+        self.no_repetibles_enviados.append(mensaje.id)
         if self.factor_picante:
             self.valor_picante += self.factor_picante
         return text0
@@ -242,6 +249,7 @@ class PartidaClasicaEmparejador(BasePartidaClasica, UnionDeNodos):
             mensaje = self.mensajes[0].pop(-1)
             self.recargar_mensaje()
 
+            # INICIO COMPROBACIÓN DE PICANTE Y REPETIBLE
             relaciones_aptas = self.relaciones_aptas(mensaje.picante)
             picante_aceptado = False
             if relaciones_aptas:
@@ -254,19 +262,23 @@ class PartidaClasicaEmparejador(BasePartidaClasica, UnionDeNodos):
                     if relacion.potencia >= mensaje.picante:
                         diferencia_picante = relacion.potencia - mensaje.picante
                         pic = random.randint(-12, round(diferencia_picante))
-                        if pic <= 0 or self.mensajes[1] <= 5: picante_aceptado = True
+                        if pic <= 0 or self.mensajes[1] <= 5:
+                            if mensaje.repetible or mensaje.id not in self.no_repetibles_enviados:
+                                picante_aceptado = True
 
 
-            if picante_aceptado:
-                if random.randint(0,1):
-                    nombre1, nombre2 = relacion.n1.nombre.capitalize(), relacion.n2.nombre.capitalize()
-                else:
-                    nombre2, nombre1 = relacion.n1.nombre.capitalize(), relacion.n2.nombre.capitalize()
+                if picante_aceptado:
+                    if random.randint(0,1):
+                        nombre1, nombre2 = relacion.n1.nombre.capitalize(), relacion.n2.nombre.capitalize()
+                    else:
+                        nombre2, nombre1 = relacion.n1.nombre.capitalize(), relacion.n2.nombre.capitalize()
 
-                text0 = self.introducir_nombres(mensaje, nombre1, nombre2)
-                break
+                    text0 = self.introducir_nombres(mensaje, nombre1, nombre2)
+                    break
+                # FIN COMPROBACIÓN DE PICANTE
 
         self.last_message = mensaje
+        self.no_repetibles_enviados.append(mensaje.id)
 
         if self.factor_picante:
             for relacion in self.relaciones:
