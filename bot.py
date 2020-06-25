@@ -57,7 +57,7 @@ def main():
     a_h(Conversations.add_message)
     a_h(CallbackQueryHandler(HandlersPiloco.menu_info, pattern="^mp_info$"))
     a_h(CallbackQueryHandler(HandlersPiloco.menu_principal, pattern="^mp$"))
-    a_h(CallbackQueryHandler(HandlersPiloco.menu_mensajes, pattern="^mp_mensajes$"))
+    a_h(CallbackQueryHandler(HandlersPiloco.no_disponible_clb, pattern="^mp_mensajes$")) # HandlersPiloco.menu_mensajes
     a_h(CallbackQueryHandler(HandlersPiloco.menu_partidaClasica, pattern="^mp_newGame$"))
     a_h(CallbackQueryHandler(HandlersPiloco.partida_clasica_picante_info, pattern="^mpc_picante_info$"))
     a_h(CallbackQueryHandler(HandlersPiloco.partida_clasica_mas_picante, pattern="^mpc_mas_picante$"))
@@ -71,13 +71,11 @@ def main():
     a_h(CallbackQueryHandler(HandlersPiloco.partida_clasica_salir, pattern="^apc_salir$"))
     a_h(CallbackQueryHandler(HandlersPiloco.ajustes_mas_picante, pattern="^apc_mas_picante$"))
     a_h(CallbackQueryHandler(HandlersPiloco.ajustes_menos_picante, pattern="^apc_menos_picante$"))
-    # a_h(CallbackQueryHandler(HandlersPiloco.delete_player_in_game, pattern="apc_delete_player$"))
-    # a_h(CallbackQueryHandler(HandlersPiloco))
-    a_h(CallbackQueryHandler(HandlersPiloco.revisar_mensajes, pattern="^ms_rev$"))
-    a_h(CallbackQueryHandler(HandlersPiloco.revisar_actualizar_valor, pattern="^revisar_valor_"))
-    a_h(CallbackQueryHandler(HandlersPiloco.revisar_actualizar_picante, pattern="^revisar_picante_"))
+    a_h(CallbackQueryHandler(HandlersPiloco.no_disponible_clb, pattern="^ms_rev$"))  # HandlersPiloco.revisar_mensajes
+    a_h(CallbackQueryHandler(HandlersPiloco.no_disponible_clb, pattern="^revisar_valor_"))  # HandlersPiloco.revisar_actualizar_valor
+    a_h(CallbackQueryHandler(HandlersPiloco.no_disponible_clb, pattern="^revisar_picante_"))  # HandlersPiloco.revisar_actualizar_picante
     a_h(CallbackQueryHandler(TelegramDonation.mostrar_donacion, pattern="^donation_new-\d*"))
-    a_h(CallbackQueryHandler(HandlersPiloco.add_message, pattern="^ms_new$"))
+    a_h(CallbackQueryHandler(HandlersPiloco.no_disponible_clb, pattern="^ms_new$"))  # HandlersPiloco.add_message
     a_h(CommandHandler('restart', HandlersPiloco.restart_bot))
     a_h(CommandHandler('announcement', HandlersPiloco.announcement))
     a_h(CommandHandler('backend', HandlersPiloco.open_backend))

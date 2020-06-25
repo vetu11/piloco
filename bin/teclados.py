@@ -240,7 +240,7 @@ class Menus():
         msg = "ℹ️*INFORMACIÓN*\n\n▪️[Canal oficial de Piloco](t.me/Piloco), *noticias y otros.*\n▪️¿Tienes *ideas nuevas" \
               "* para Piloco, o *alguna duda*? [Habla con nosotros](t.me/PilocoSupportbot)\n▪️Tienes *%s puntos de " \
               "reputación* [¿qué es eso?](telegra.ph/reputación-y-recompensas-05-27)\n\n" \
-              "v1.0-alpha33" % int(usuario.reputacion)
+              "v1.0-alpha34" % int(usuario.reputacion)
         keyboard = Teclados.menu_info()
         return msg, keyboard
 

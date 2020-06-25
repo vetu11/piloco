@@ -106,6 +106,9 @@ class HandlersPiloco:
 
         watchdog.succesfull()
 
+    def no_disponible_clb(self, bot, update):
+        update.callback_query.answer("No disponible temporalmente. Consulta @Vetubots", show_alert=True)
+
     def restart_bot(self, bot, update):
         watchdog = TelegramWatchdog(update.message.from_user.id)
 
@@ -698,8 +701,7 @@ class HandlersPiloco:
             msg = u"❌ *JUGADORE NO AÑADIDO* ❌\n\n El nombre es demasiado largo"
 
             bot.send_message(text=msg,
-                             chat_id=update.message.from_user-id,
-                             update.message.from_user.id,
+                             chat_id=update.message.from_user.id,
                              parse_mode=ParseMode.MARKDOWN)
             return 0
 
