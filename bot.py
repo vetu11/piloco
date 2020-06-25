@@ -6,7 +6,7 @@ from bin import TOKEN, HandlersPiloco, Conversations, TelegramDonation
 from bin.usuarios import Usuarios
 from bin.mensaje import MensajesClasica, MensajesEnRevision
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def guardar(bot=None, update=None, from_telegram=True):

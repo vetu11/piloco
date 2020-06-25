@@ -694,12 +694,17 @@ class HandlersPiloco:
 
         usuario, search_index = Usuarios.get_user(update.message.from_user.id)
 
+        if len(update.message.text) > 15:
+            msg = u"❌ *JUGADORE NO AÑADIDO* ❌\n\n El nombre es demasiado largo"
+
+            bot.send_message(text=msg,
+                             chat_id=update.message.from_user-id,
+                             update.message.from_user.id,
+                             parse_mode=ParseMode.MARKDOWN)
+            return 0
+
         usuario.partida.add_player(update.message.text)
         usuario.add_player(update.message.text)
-
-        # TODO: no debería soportar mensajes largos y debería comprobar si los jugadores ya exisiten.
-        # Esto último debería comprobarse dentro el método add_player y que este devuelva 1 o 0.
-        # Al mismo tiempo, las excecpiónes deberían añadirse como fallbacks al ConversationHandler.
 
         msg, keyboard = Menus.menu_add_player(usuario.partida.jugadores)
 
@@ -717,7 +722,8 @@ class HandlersPiloco:
                                   message_id=update.message.message_id - 1,
                                   reply_markup=InlineKeyboardMarkup(keyboard),
                                   parse_mode=ParseMode.MARKDOWN)
-        except: pass
+        except:
+            pass
 
         Usuarios.get_user(update.message.from_user.id, True, ms.message_id, search_index)
         watchdog.succesfull()

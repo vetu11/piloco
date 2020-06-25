@@ -189,7 +189,7 @@ class PartidaClasica(BasePartidaClasica):
         dic_fac_picante = [0,
                            Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_BAJO,
                            Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_MEDIO,
-                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_ALTO]  # TODO: preguntar a ruso si esto es mejor como atributo de la clase
+                           Constantes.PartidaClasica.FACTOR_RONDA_PICANTE_ALTO]
 
         actual = dic_fac_picante.index(self.factor_picante)
 

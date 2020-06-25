@@ -139,9 +139,10 @@ class MensajesClasica:
             try:
                 self.list.remove(mensaje)
                 MensajesEnRevision.list.append(self.transformar_a_en_revision(mensaje))
-            except: pass
+            except:
+                pass
 
-    def get_message(self, msgID):  # TODO: aplicar binary search?
+    def get_message(self, msgID):
 
         for mensaje in self.list:
             if mensaje.id == int(msgID):
@@ -212,7 +213,8 @@ class MensajesEnRevision:
 
                 for n in range(renovaciones):
                     a = self._actually_renew_revisions()
-                    if not a: break
+                    if not a:
+                        break
 
                 if a:
                     bot.send_message(254234845, "Se han completado %s renovaciones" % renovaciones)
@@ -252,7 +254,7 @@ class MensajesEnRevision:
                             "revisar": {"a_favor": mensaje.a_favor,
                                         "en_contra": mensaje.en_contra,
                                         "skipped": mensaje.skipped,
-                                        "puntos": mensaje.puntos}}
+                                        "puntos": mensaje.puntos()}}
             else:
                 msg_dicc =   {"hecho_por": mensaje.hecho_por,
                               "text0": mensaje.text0,
@@ -264,7 +266,7 @@ class MensajesEnRevision:
                               "revisar":{"a_favor": mensaje.a_favor,
                                          "en_contra": mensaje.en_contra,
                                          "skipped": mensaje.skipped,
-                                         "puntos": mensaje.puntos}}
+                                         "puntos": mensaje.puntos()}}
             list.append(msg_dicc)
 
         with open("newMessages.json", "w") as f:
@@ -276,7 +278,7 @@ class MensajesEnRevision:
 
         self.guardar()
 
-    def _actually_renew_revisions(self):  # TODO: actually, do it fine, not like this
+    def _actually_renew_revisions(self):
         if not self.list:
             return True
         mensaje = self.list[random.randint(0, len(self.list) - 1)]
@@ -289,7 +291,7 @@ class MensajesEnRevision:
             mensaje.en_contra.pop(random.randint(0, len(mensaje.en_contra) - 1))
         return True
 
-    def get_message(self, msgID):  # TODO: aplicar binary search?
+    def get_message(self, msgID):
 
         for mensaje in self.list:
             if mensaje.id == msgID:
